@@ -1,0 +1,13 @@
+Package: scudo
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.0.0.9000
+Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com", role = c("aut", "cre")),
+    person(),
+    person())
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
