@@ -3,7 +3,7 @@ Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.0.0.9001
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com", role = c("aut", "cre")),
-    person(),
+    person("Thomas", "Cantore", email = "cantorethomas@gmail.com", role = "aut"),
     person())
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
