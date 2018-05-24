@@ -46,4 +46,3 @@ setGeneric("Params", function(object) standardGeneric("Params"))
 
 setMethod("Params", signature = "ScudoResults", definition =
               function(object) object@Params)
-
