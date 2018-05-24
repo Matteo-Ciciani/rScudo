@@ -18,7 +18,7 @@ setValidity("ScudoResults", function(object) {
         valid <- FALSE
         msg <- c(msg, "DistMatrix is not a square matrix")
     }
-    if (any(is.na(object@DistMatrix))) {
+    if (any(is.na(object@DistMatrix)) & !any(is.nan(object@DistMatrix))) {
         valid <- FALSE
         msg <- c(msg, "DistMatrix contains NAs")
     }
