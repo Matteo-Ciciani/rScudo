@@ -4,6 +4,7 @@ NULL
 
 # Show ------------------------------------------------------------------------
 
+#' @export
 setMethod("show", "ScudoResults", function(object) {
     cat("Object of ScudoResults\n\n")
 
