@@ -38,6 +38,12 @@ setValidity("ScudoResults", function(object) {
         valid <- FALSE
         msg <- c(msg, "DistMatrix is not symmetric")
     }
+    if (all(is.numeric(object@DistMatrix)) &&
+        !all(sapply(diag(object@DistMatrix),
+                    function(x) isTRUE(all.equal(x, 0))))) {
+        valid <- FALSE
+        msg <- c(msg, "DistMatrix contains non-zero elements in the diagonal")
+    }
     if (is.null(colnames(object@DistMatrix)) |
         is.null(rownames(object@DistMatrix))) {
         valid <- FALSE
@@ -53,16 +59,16 @@ setValidity("ScudoResults", function(object) {
     }
     if (!all(dim(object@UpSignatures)[2] == dim(object@DistMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "Number of columns in UpSignatures is different from the
-                 dimension of DistMatrix")
+        msg <- c(msg, paste0("Number of columns in UpSignatures is different",
+                             " from the dimension of DistMatrix"))
     }
     if (!identical(colnames(object@DistMatrix),
                    colnames(object@UpSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "colnames in UpSignatures are different from colnames in
-                 DistMatrix")
+        msg <- c(msg, paste0("colnames in UpSignatures are different from",
+                             " colnames in DistMatrix"))
     }
-    if (!all(is.character(as.matrix(object@UpSignatures)))) {
+    if (!all(sapply(object@UpSignatures, is.character))) {
         valid <- FALSE
         msg <- c(msg, "UpSignatures contains non-character values")
     }
@@ -72,16 +78,16 @@ setValidity("ScudoResults", function(object) {
     }
     if (!all(dim(object@DownSignatures)[2] == dim(object@DistMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "Number of columns in DownSignatures is different from the
-                 dimension of DistMatrix")
+        msg <- c(msg, paste0("Number of columns in DownSignatures is different",
+                             " from the dimension of DistMatrix"))
     }
     if (!identical(colnames(object@DistMatrix),
                    colnames(object@DownSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "colnames in DownSignatures are different from colnames in
-                 DistMatrix")
+        msg <- c(msg, paste0("colnames in DownSignatures are different from",
+                             " colnames in DistMatrix"))
     }
-    if (!all(is.character(as.matrix(object@DownSignatures)))) {
+    if (!all(sapply(object@DownSignatures, is.character))) {
         valid <- FALSE
         msg <- c(msg, "DownSignatures contains non-character values")
     }
@@ -91,8 +97,8 @@ setValidity("ScudoResults", function(object) {
     }
     if (length(object@ConsensusUpSignature) != dim(object@UpSignatures)[1]) {
         valid <- FALSE
-        msg <- c(msg, "ConsensusUpSignature different from number of rows in
-                 UpSignatures")
+        msg <- c(msg, paste0("ConsensusUpSignature length different from",
+                             " number of rows in UpSignatures"))
     }
     if (any(is.na(object@ConsensusDownSignature))) {
         valid <- FALSE
@@ -101,8 +107,8 @@ setValidity("ScudoResults", function(object) {
     if (length(object@ConsensusDownSignature) !=
         dim(object@DownSignatures)[1]) {
         valid <- FALSE
-        msg <- c(msg, "ConsensusDownSignature different from number of rows in
-                 DownSignatures")
+        msg <- c(msg, paste0("ConsensusDownSignature length different from",
+                             " number of rows in DownSignatures"))
     }
     if (any(is.na(object@SelectedFeatures))) {
         valid <- FALSE

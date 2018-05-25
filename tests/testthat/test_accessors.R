@@ -3,6 +3,7 @@ library(scudo)
 
 test_that("Accessors work correctly", {
     m <- matrix(1, ncol = 4, nrow = 4)
+    diag(m) <- 0
     rownames(m) <- colnames(m) <- letters[1:4]
     SigUp <- data.frame(a = letters[1:5], b = letters[6:10], c = letters[11:15],
                         d = letters[16:20], stringsAsFactors = FALSE)
