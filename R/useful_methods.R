@@ -2,6 +2,7 @@
 #' @include class.R accessors.R
 NULL
 
+<<<<<<< HEAD
 # show
 # summary
 #ADD n NUMBER OF SAMPLES
@@ -15,7 +16,39 @@ setMethod("summary", signature = "ScudoResults", definition =
                       "\nThe consensus sequence is:\n\t",
                         c(ConsensusUpSignature(object),
                           ConsensusDownSignature(object)))})
+=======
+# Show ------------------------------------------------------------------------
+
+#' @export
+setMethod("show", "ScudoResults", function(object) {
+    cat("Object of ScudoResults\n\n")
+
+    cat("Distance Matrix\n")
+    print(object@DistMatrix[1:5,1:5])
+    cat("\n")
+
+    cat("Up Signatures\n")
+    print(object@UpSignatures[1:5,1:5])
+    cat("\n")
+
+    cat("Down Signatures\n")
+    print(object@DownSignatures[1:5,1:5])
+    cat("\n")
+
+    cat("Selected Features\n", object@SelectedFeatures,
+        "\n\n")
+
+    invisible(NULL)
+})
+
+# Summary ---------------------------------------------------------------------
+
+>>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
 
 
 # ConsensusSignatures: returns a list of ConsensusUp.. and Down
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
