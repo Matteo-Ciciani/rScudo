@@ -8,6 +8,7 @@ test_that("Class can be instantiated", {
 
 test_that("Validity check works", {
     m <- matrix(1, ncol = 4, nrow = 4)
+    diag(m) <- 0
     rownames(m) <- colnames(m) <- letters[1:4]
     SigUp <- data.frame(a = letters[1:5], b = letters[6:10], c = letters[11:15],
                         d = letters[16:20], stringsAsFactors = FALSE)
@@ -65,8 +66,9 @@ test_that("Validity check works", {
                               Params = Pars))
 
     m <- matrix(1, ncol = 4, nrow = 4)
+    diag(m) <- 0
     rownames(m) <- colnames(m) <- letters[1:4]
-    m[1] <- -1
+    m[1, 2] <- m[2, 1] <- -1
     expect_error(ScudoResults(DistMatrix = m,
                               UpSignatures = SigUp,
                               DownSignatures = SigDown,
@@ -75,7 +77,7 @@ test_that("Validity check works", {
                               SelectedFeatures = Feats,
                               Params = Pars))
 
-    m[1] <- 1
+    m[1, 2] <- m[2, 1] <- 1
     m[2] <- 5
     expect_error(ScudoResults(DistMatrix = m,
                               UpSignatures = SigUp,
@@ -86,6 +88,16 @@ test_that("Validity check works", {
                               Params = Pars))
 
     m[2] <- 1
+    m[1] <- 1
+    expect_error(ScudoResults(DistMatrix = m,
+                              UpSignatures = SigUp,
+                              DownSignatures = SigDown,
+                              ConsensusUpSignature = ConsUp,
+                              ConsensusDownSignature = ConsDown,
+                              SelectedFeatures = Feats,
+                              Params = Pars))
+
+    m[1] <- 0
     rownames(m) <- colnames(m) <- NULL
     expect_error(ScudoResults(DistMatrix = m,
                               UpSignatures = SigUp,

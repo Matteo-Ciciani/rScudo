@@ -2,25 +2,34 @@
 NULL
 
 .computeES <- function(top, bottom, profile) {
-    # sort profile
+    # top: character vecotr of gene names
+    # bottom: character vecotr of gene names
+    # profile: named numeric vector of expression levels
+
+    # sort profile -------------------------------------------------------------
     ranks <- rank(profile)
     ranks <- ranks[ranks]
 
-    # top signature
+    # top signature ------------------------------------------------------------
     membership <- names(ranks) %in% top
-    phits <- cumsum(membership)/length(top)
-    pmisses <- cumsum(!membership)/(length(profile)-length(top))
-    indexMax <- which.max(abs(phits - pmisses))
-    topES <- phits[indexMax] - pmisses[indexMax]
+    pHits <- cumsum(membership) / length(top)
+    pMisses <- cumsum(!membership) / (length(profile) - length(top))
+    indexMax <- which.max(abs(pHits - pMisses))
+    topES <- pHits[indexMax] - pMisses[indexMax]
 
-    # bottom signature
+    # bottom signature ---------------------------------------------------------
     membership <- names(ranks) %in% bottom
-    phits <- cumsum(membership)/length(bottom)
-    pmisses <- cumsum(!membership)/(length(profile)-length(bottom))
-    indexMax <- which.max(abs(phits - pmisses))
-    bottomES <- phits[indexMax] - pmisses[indexMax]
+    pHits <- cumsum(membership)/length(bottom)
+    pMisses <- cumsum(!membership)/(length(profile)-length(bottom))
+    indexMax <- which.max(abs(pHits - pMisses))
+    bottomES <- pHits[indexMax] - pMisses[indexMax]
 
-    # compute overall ES
-    ES <- (topES - bottomES)/2
+    # compute overall ES -------------------------------------------------------
+    # returns -1 if top and bottom are respectively at the top and bottom of the
+    # profile
+    # returns 1 if top and bottom are respectively at the bottom and top of the
+    # profile
+
+    ES <- (topES - bottomES) / 2
     ES
 }

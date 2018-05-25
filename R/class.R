@@ -38,6 +38,12 @@ setValidity("ScudoResults", function(object) {
         valid <- FALSE
         msg <- c(msg, "DistMatrix is not symmetric")
     }
+    if (all(is.numeric(object@DistMatrix)) &&
+        !all(sapply(diag(object@DistMatrix),
+                    function(x) isTRUE(all.equal(x, 0))))) {
+        valid <- FALSE
+        msg <- c(msg, "DistMatrix contains non-zero elements in the diagonal")
+    }
     if (is.null(colnames(object@DistMatrix)) |
         is.null(rownames(object@DistMatrix))) {
         valid <- FALSE
