@@ -17,6 +17,7 @@ Collate:
     'class.R'
     'accessors.R'
     'useful_methods.R'
+    'utilities.R'
 RoxygenNote: 6.0.1
 Imports: methods
 Suggests: testthat

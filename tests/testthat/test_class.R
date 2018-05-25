@@ -39,12 +39,12 @@ test_that("Validity check works", {
 
     m[2] <- NA
     expect_error(ScudoResults(DistMatrix = m,
-                                 UpSignatures = SigUp,
-                                 DownSignatures = SigDown,
-                                 ConsensusUpSignature = ConsUp,
-                                 ConsensusDownSignature = ConsDown,
-                                 SelectedFeatures = Feats,
-                                 Params = Pars))
+                              UpSignatures = SigUp,
+                              DownSignatures = SigDown,
+                              ConsensusUpSignature = ConsUp,
+                              ConsensusDownSignature = ConsDown,
+                              SelectedFeatures = Feats,
+                              Params = Pars))
 
     m[2] <- NaN
     expect_error(ScudoResults(DistMatrix = m,
@@ -74,7 +74,6 @@ test_that("Validity check works", {
                               ConsensusDownSignature = ConsDown,
                               SelectedFeatures = Feats,
                               Params = Pars))
-
 
     m[1] <- 1
     m[2] <- 5
