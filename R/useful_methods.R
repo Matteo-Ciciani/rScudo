@@ -2,11 +2,6 @@
 #' @include class.R accessors.R
 NULL
 
-<<<<<<< HEAD
-# show
-# Summary ---------------------------------------------------------------------
-
-=======
 # Show ------------------------------------------------------------------------
 
 #' @export
@@ -33,6 +28,7 @@ setMethod("show", "ScudoResults", function(object) {
 
 # Summary ---------------------------------------------------------------------
 #ADD n NUMBER OF SAMPLES
+#' @export
 setMethod("summary", signature = "ScudoResults", definition =
               function(object) {
                   cat("The analysis is performed on", n, "samples",
@@ -43,12 +39,18 @@ setMethod("summary", signature = "ScudoResults", definition =
                       "\nThe consensus sequence is:\n\t",
                       c(ConsensusUpSignature(object),
                         ConsensusDownSignature(object)))})
->>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
 
 
 # ConsensusSignatures: returns a list of ConsensusUp.. and Down
+#' @export
+setGeneric("ConsensusSignatures",
+           function(object) standardGeneric("ConsensusSignatures"))
 
-<<<<<<< HEAD
-=======
+setMethod("ConsensusSignatures", signature = "ScudoResults", definition =
+              function(object) {
+                  cat("The upper consensus signature is:\n\t",
+                      ConsensusUpSignature(object),
+                      "\nThe lower consensus signature is:\n\t",
+                      ConsensusDownSignature(object))})
 
->>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
+

@@ -23,5 +23,11 @@ test_that("Accessors work correctly", {
                              Params = Pars)
 
     expect_identical(DistMatrix(ScudoRes), m)
-    # test other accessors
+    expect_identical(UpSignatures(ScudoRes), SigUp)
+    expect_identical(DownSignatures(ScudoRes), SigDown)
+    expect_identical(ConsensusUpSignature(ScudoRes), ConsUp)
+    expect_identical(ConsensusDownSignature(ScudoRes), ConsDown)
+    expect_identical(SelectedFeatures(ScudoRes), Feats)
+    #expect_identical(Params(ScudoRes), Pars)
+
 })
