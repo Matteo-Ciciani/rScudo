@@ -2,21 +2,6 @@
 #' @include class.R accessors.R
 NULL
 
-<<<<<<< HEAD
-# show
-# summary
-#ADD n NUMBER OF SAMPLES
-setMethod("summary", signature = "ScudoResults", definition =
-              function(object) {
-                  cat("The analysis is performed on", n, "samples",
-                      "\nThe upper signatures are made of",
-                        dim(UpSignatures(object))[1], "genes",
-                      "\nThe upper signatures are made of",
-                        dim(DownSignatures(object))[1], "genes",
-                      "\nThe consensus sequence is:\n\t",
-                        c(ConsensusUpSignature(object),
-                          ConsensusDownSignature(object)))})
-=======
 # Show ------------------------------------------------------------------------
 
 #' @export
@@ -74,6 +59,18 @@ setMethod("show", "ScudoResults", function(object) {
 
 # Summary ----------------------------------------------------------------------
 
+#ADD n NUMBER OF SAMPLES
+#' @export
+setMethod("summary", signature = "ScudoResults", definition =
+              function(object) {
+                  cat("The analysis is performed on", n, "samples",
+                      "\nThe upper signatures are made of",
+                      dim(UpSignatures(object))[1], "genes",
+                      "\nThe upper signatures are made of",
+                      dim(DownSignatures(object))[1], "genes",
+                      "\nThe consensus sequence is:\n\t",
+                      c(ConsensusUpSignature(object),
+                        ConsensusDownSignature(object)))})
 
 
 # ConsensusSignatures ----------------------------------------------------------
@@ -117,11 +114,6 @@ ConsensusSignatures <- function(object, bind = TRUE) {
 
 
 
->>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f91acbf580a7002a470f97f6ed7b1eeea4541245
