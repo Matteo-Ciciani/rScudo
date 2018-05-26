@@ -4,7 +4,7 @@
 \alias{ConsensusSignatures}
 \title{Consensus Signatures}
 \usage{
-\code{ConsensusSignatures(object, ...)}
+ConsensusSignatures(object, bind = TRUE)
 }
 \arguments{
 \item{object}{A "ScudoResults" class object}
@@ -15,19 +15,4 @@ Singatures}
 \description{
 If bind = TRUE (default) returns a list containing all Consensus
 Signatures, else returns a list divided into up and down.
-}
-\examples{
-## With 'bind = TRUE' for a generic ScudoResults object
-
-ConsensusSignatures(ScudoResObj, bind = TRUE)
-
-[1] "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y"
-
-## 'bind = FALSE'
-
-$UpSignatures
-[1] "l" "m" "n" "o" "p" "q" "r"
-
-$DownSignatures
-[1] "s" "t" "u" "v" "w" "x" "y"
 }

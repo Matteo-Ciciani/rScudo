@@ -10,24 +10,29 @@ test_that("Accessors work correctly", {
     SigDown <- data.frame(a = letters[1:10], b = letters[11:20],
                           c = letters[1:10], d = letters[11:20],
                           stringsAsFactors = FALSE)
-    ConsUp <- letters[11:15]
-    ConsDown <- letters[16:25]
+    Groups <- as.factor(c("G1", "G1", "G2", "G2"))
+    ConsUp <- data.frame(G1 = letters[11:15], G2 = letters[21:25],
+                         stringsAsFactors = FALSE)
+    ConsDown <- data.frame(G1 = letters[16:25], G2 = letters[1:10],
+                           stringsAsFactors = FALSE)
     Feats <- letters[1:20]
     Pars <- list() # to update
 
     ScudoRes <- ScudoResults(DistMatrix = m,
                              UpSignatures = SigUp,
                              DownSignatures = SigDown,
-                             ConsensusUpSignature = ConsUp,
-                             ConsensusDownSignature = ConsDown,
+                             Groups = Groups,
+                             ConsensusUpSignatures = ConsUp,
+                             ConsensusDownSignatures = ConsDown,
                              SelectedFeatures = Feats,
                              Params = Pars)
 
     expect_identical(DistMatrix(ScudoRes), m)
     expect_identical(UpSignatures(ScudoRes), SigUp)
     expect_identical(DownSignatures(ScudoRes), SigDown)
-    expect_identical(ConsensusUpSignature(ScudoRes), ConsUp)
-    expect_identical(ConsensusDownSignature(ScudoRes), ConsDown)
+    expect_identical(Groups(ScudoRes), Groups)
+    expect_identical(ConsensusUpSignatures(ScudoRes), ConsUp)
+    expect_identical(ConsensusDownSignatures(ScudoRes), ConsDown)
     expect_identical(SelectedFeatures(ScudoRes), Feats)
     #expect_identical(Params(ScudoRes), Pars)
 

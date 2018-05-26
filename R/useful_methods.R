@@ -75,32 +75,15 @@ setMethod("summary", signature = "ScudoResults", definition =
 
 # ConsensusSignatures ----------------------------------------------------------
 
-#' @export ConsensusSignatures
+#' @export
 #' @title  Consensus Signatures
 #'
 #' @description If bind = TRUE (default) returns a list containing all Consensus
 #' Signatures, else returns a list divided into up and down.
 #'
-#' @usage \code{ConsensusSignatures(object, ...)}
-#'
 #' @param object A "ScudoResults" class object
 #' @param bind logical, indicating wether or not concatenating Up and Down
 #' Singatures
-#' @examples
-#' ## With 'bind = TRUE' for a generic ScudoResults object
-#'
-#'ConsensusSignatures(ScudoResObj, bind = TRUE)
-#'
-#'[1] "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y"
-#'
-#' ## 'bind = FALSE'
-#'
-#' $UpSignatures
-#'[1] "l" "m" "n" "o" "p" "q" "r"
-#'
-#'$DownSignatures
-#'[1] "s" "t" "u" "v" "w" "x" "y"
-
 ConsensusSignatures <- function(object, bind = TRUE) {
     if (bind) {
         out_con <- c(ConsensusUpSignature(object),
