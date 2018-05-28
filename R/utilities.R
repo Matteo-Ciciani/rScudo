@@ -39,7 +39,7 @@ NULL
     ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
 }
 
-.performScudo <- function(expressionData, groups, nTop, nBottom, pValue) {
+.performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
 
     sigMatrix <- apply(expressionData, 2, .computeSignature, nTop, nBottom)
 
@@ -56,22 +56,23 @@ NULL
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
 
     rankedExprData <- apply(expressionData, 2, rank)
-    groupedRankSums <- aggregate(t(rankedExprData), by = list(groups), sum)
-    rownames(groupedRankSums) <- GroupedRankSums[, 1]
+    groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),
+                                        sum)
+    rownames(groupedRankSums) <- groupedRankSums[, 1]
     consensusSigMatrix <- apply(groupedRankSums[, -1], 1, .computeSignature,
                                 nTop, nBottom)
 
     ScudoResults(DistMatrix = distances,
-                 UpSignatures = as.data.frame(sigMatrix[1:nTop, ]),
-                 DownSignatures =
-                     as.data.frame(sigMatrix[(nTop + 1):nrow(sigMatrix), ]),
-                 Groups = groups,
-                 ConsensusUpSignatures =
-                     as.data.frame(consensusSigMatrix[1:nTop, ]),
-                 ConsensusDownSignatures =
-                     as.data.frame(consensusSigMatrix)[(nTop + 1):
-                                                       nrow(sigMatrix), ]
-                 Features = rownames(expressionData)
-                 Params = list(nTop = nTop, nBottom = nBottom, pValue = pValue)
-                 )
+        UpSignatures = as.data.frame(sigMatrix[1:nTop, ],
+            stringsAsFactors = FALSE),
+        DownSignatures = as.data.frame(sigMatrix[(nTop + 1):nrow(sigMatrix), ],
+            stringsAsFactors = FALSE),
+        Groups = groups,
+        ConsensusUpSignatures = as.data.frame(consensusSigMatrix[1:nTop, ],
+            stringsAsFactors = FALSE),
+        ConsensusDownSignatures = as.data.frame(consensusSigMatrix[(nTop + 1):
+            nrow(sigMatrix), ], stringsAsFactors = FALSE),
+        SelectedFeatures = rownames(expressionData),
+        Params = list(nTop = nTop, nBottom = nBottom, pValue = ..1)
+    )
 }

@@ -38,4 +38,38 @@ test_that(".performScudo works", {
     nTop <- 2
     nBottom <- 3
     p <- 0.05
+
+    res <- .performScudo(exprData, grps, nTop, nBottom, p)
+    expect_s4_class(res, "ScudoResults")
+
+    d_ad <- 1 - ((-6/8 + 2/3)/2 + (-6/8 + 2/3)/2)/2
+    d_cd <- 1 - ((-1 + 5/7)/2 + (6/8 - 2/3)/2)/2
+    m <- matrix(c(0,    0,    2,    d_ad,
+                  0,    0,    2,    d_ad,
+                  2,    2,    0,    d_cd,
+                  d_ad, d_ad, d_cd, 0   ),
+                ncol = 4)
+    rownames(m) <- colnames(m) <- letters[1:4]
+    expect_equal(DistMatrix(res), m)
+
+    up <- data.frame(a = c("t", "s"), b = c("t", "s"), c = c("k", "l"),
+                     d = c("m", "n"), stringsAsFactors = FALSE)
+    expect_identical(UpSignatures(res), up)
+
+    down <- data.frame(a = c("m", "l", "k"), b = c("m", "l", "k"),
+        c = c("r", "s", "t"), d = c("t", "l", "k"), stringsAsFactors = FALSE)
+    expect_identical(DownSignatures(res), down)
+
+    consUp <- data.frame(G1 = c("t", "s"), G2 = c("m", "n"),
+                         stringsAsFactors = FALSE)
+    expect_identical(ConsensusUpSignatures(res), consUp)
+
+    consDown <- data.frame(G1 = c("m", "l", "k"), G2 = c("r", "s", "t"),
+                           stringsAsFactors = FALSE)
+    expect_identical(ConsensusDownSignatures(res), consDown)
+
+    expect_identical(Groups(res), grps)
+    expect_identical(SelectedFeatures(res), letters[11:20])
+    expect_identical(Params(res), list(nTop = nTop, nBottom = nBottom,
+                                       pValue = p))
 })
