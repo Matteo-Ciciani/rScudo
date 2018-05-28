@@ -59,36 +59,31 @@ setMethod("show", "ScudoResults", function(object) {
 
 # Summary ----------------------------------------------------------------------
 
+#ADD n NUMBER OF SAMPLES
+#' @export
+setMethod("summary", signature = "ScudoResults", definition =
+              function(object) {
+                  cat("The analysis is performed on", n, "samples",
+                      "\nThe upper signatures are made of",
+                      dim(UpSignatures(object))[1], "genes",
+                      "\nThe upper signatures are made of",
+                      dim(DownSignatures(object))[1], "genes",
+                      "\nThe consensus sequence is:\n\t",
+                      c(ConsensusUpSignature(object),
+                        ConsensusDownSignature(object)))})
 
 
 # ConsensusSignatures ----------------------------------------------------------
 
-#' @export ConsensusSignatures
+#' @export
 #' @title  Consensus Signatures
 #'
 #' @description If bind = TRUE (default) returns a list containing all Consensus
 #' Signatures, else returns a list divided into up and down.
 #'
-#' @usage \code{ConsensusSignatures(object, ...)}
-#'
 #' @param object A "ScudoResults" class object
 #' @param bind logical, indicating wether or not concatenating Up and Down
 #' Singatures
-#' @examples
-#' ## With 'bind = TRUE' for a generic ScudoResults object
-#'
-#'ConsensusSignatures(ScudoResObj, bind = TRUE)
-#'
-#'[1] "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y"
-#'
-#' ## 'bind = FALSE'
-#'
-#' $UpSignatures
-#'[1] "l" "m" "n" "o" "p" "q" "r"
-#'
-#'$DownSignatures
-#'[1] "s" "t" "u" "v" "w" "x" "y"
-
 ConsensusSignatures <- function(object, bind = TRUE) {
     if (bind) {
         out_con <- c(ConsensusUpSignature(object),
@@ -99,7 +94,6 @@ ConsensusSignatures <- function(object, bind = TRUE) {
             "DownSignatures" = ConsensusDownSignature(object)))
     }
 }
-
 
 
 

@@ -21,18 +21,24 @@ setMethod("DownSignatures", signature = "ScudoResults", definition =
               function(object) object@DownSignatures)
 
 #' @export
-setGeneric("ConsensusUpSignature",
-           function(object) standardGeneric("ConsensusUpSignature"))
+setGeneric("Groups", function(object) standardGeneric("Groups"))
 
-setMethod("ConsensusUpSignature", signature = "ScudoResults", definition =
-              function(object) object@ConsensusUpSignature)
+setMethod("Groups", signature = "ScudoResults", definition =
+              function(object) object@Groups)
 
 #' @export
-setGeneric("ConsensusDownSignature",
-           function(object) standardGeneric("ConsensusDownSignature"))
+setGeneric("ConsensusUpSignatures",
+           function(object) standardGeneric("ConsensusUpSignatures"))
 
-setMethod("ConsensusDownSignature", signature = "ScudoResults", definition =
-              function(object) object@ConsensusDownSignature)
+setMethod("ConsensusUpSignatures", signature = "ScudoResults", definition =
+              function(object) object@ConsensusUpSignatures)
+
+#' @export
+setGeneric("ConsensusDownSignatures",
+           function(object) standardGeneric("ConsensusDownSignatures"))
+
+setMethod("ConsensusDownSignatures", signature = "ScudoResults", definition =
+              function(object) object@ConsensusDownSignatures)
 
 #' @export
 setGeneric("SelectedFeatures",
