@@ -54,6 +54,10 @@ NULL
     colnames(ESmatrix) <- rownames(ESmatrix) <- colnames(expressionData)
 
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
+    distances[sapply(m, function(x) !isTRUE(all.equal(x, 0)))] <-
+        distances[sapply(m, function(x) !isTRUE(all.equal(x, 0)))] -
+        floor(100*min(distances[sapply(m,
+            function(x) !isTRUE(all.equal(x, 0)))]))/100
 
     rankedExprData <- apply(expressionData, 2, rank)
     groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),

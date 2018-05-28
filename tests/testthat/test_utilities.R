@@ -49,6 +49,7 @@ test_that(".performScudo works", {
                   2,    2,    0,    d_cd,
                   d_ad, d_ad, d_cd, 0   ),
                 ncol = 4)
+    m[m != 0] <- m[m != 0] - 1.04
     rownames(m) <- colnames(m) <- letters[1:4]
     expect_equal(DistMatrix(res), m)
 
