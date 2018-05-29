@@ -2,15 +2,16 @@
 NULL
 
 # Implement as a method?
+#' @export
 scudoGraph <- function(scudoResult, N, colors = NULL) {
     # perform some checks
 
     # get distance matrix and generate adjacency matrix according to N
     adjMatrix <- DistMatrix(scudoResult)
-    nonZeroIndeces <- sapply(adjMatrix, function(x)
-        !isTRUE(all.equal(x, 0)))
-    NQuantile <- stats::quantile(adjMatrix[nonZeroIndeces], probs = N)
-    adjMatrix[adjMatrix < NQuantile] <- 0
+    NQuantile <- stats::quantile(adjMatrix[!.isZero(adjMatrix)], probs = N)
+    adjMatrix[adjMatrix > NQuantile] <- 0 # objects that are close have a weight
+    # (= distance) that is small, but small weights are plotted as long
+    # distances, so we need a normalization
 
     # generate graph using graph_from_adjacency_matrix
     result <- igraph::graph_from_adjacency_matrix(adjMatrix,
@@ -29,9 +30,11 @@ scudoGraph <- function(scudoResult, N, colors = NULL) {
 }
 
 # as method?
+#' @export
 scudo2Cytoscape <- function(scudoIgraph) {
     # perform checks?
     # add more customization?
+    # add layout
 
     RCy3::createNetworkFromIgraph(scudoIgraph)
     RCy3::setNodeColorMapping("color", mapping.type = "p")

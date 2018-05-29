@@ -39,6 +39,8 @@ NULL
     ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
 }
 
+.isZero <- Vectorize(function(x) isTRUE(all.equal(x, 0)))
+
 .performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
 
     sigMatrix <- apply(expressionData, 2, .computeSignature, nTop, nBottom)
@@ -54,10 +56,9 @@ NULL
     colnames(ESmatrix) <- rownames(ESmatrix) <- colnames(expressionData)
 
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
-    distances[sapply(distances, function(x) !isTRUE(all.equal(x, 0)))] <-
-        distances[sapply(distances, function(x) !isTRUE(all.equal(x, 0)))] -
-        floor(100*min(distances[sapply(distances,
-            function(x) !isTRUE(all.equal(x, 0)))]))/100
+    nonZero <- !.isZero(distances)
+    distances[nonZero] <- distances[nonZero] -
+        floor(100 * min(distances[nonZero])) / 100
 
     rankedExprData <- apply(expressionData, 2, rank)
     groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),
