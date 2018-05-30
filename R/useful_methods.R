@@ -76,24 +76,28 @@ setMethod("summary", signature = "ScudoResults", definition =
 # ConsensusSignatures ----------------------------------------------------------
 
 #' @export
-#' @title  Consensus Signatures
-#'
-#' @description If bind = TRUE (default) returns a list containing all Consensus
-#' Signatures, else returns a list divided into up and down.
-#'
-#' @param object A "ScudoResults" class object
-#' @param bind logical, indicating wether or not concatenating Up and Down
-#' Singatures
-ConsensusSignatures <- function(object, bind = TRUE) {
-    if (bind) {
-        out_con <- c(ConsensusUpSignature(object),
-            ConsensusDownSignature(object))
-        return(out_con)
-    } else {
-        return(list("UpSignatures" = ConsensusUpSignature(object),
-            "DownSignatures" = ConsensusDownSignature(object)))
-    }
-}
+#' @title Consensus Signatures
+#' @description Returns Consensus Signatures. If bind = TRUE (default)
+#' returns single, else returns a list composed of separated "UpSignatures" and
+#' "DownSignatures".
+#' @param object An object of class "Scudo Results".
+#' @param bind Logic, default = TRUE, returns concatenated or separated
+#' Consensus Signatures.
+setGeneric("ConsensusSignatures", function(object, bind = TRUE) {
+    standardGeneric("ConsensusSignatures")
+})
+
+setMethod("ConsensusSignatures", signature = "ScudoResults", definition =
+              function(object, bind = TRUE) {
+                  if (bind) {
+                      return(c(ConsensusUpSignature(object),
+                        ConsensusDownSignature(object)))
+                  } else {
+                      list("UpSignatures" = ConsensusUpSignature(object),
+                        "DownSignatures" = ConsensusDownSignature(object))
+                  }
+})
+
 
 
 
