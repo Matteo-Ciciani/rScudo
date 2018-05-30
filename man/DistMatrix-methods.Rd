@@ -7,5 +7,5 @@
 DistMatrix(object)
 }
 \description{
-Get DistMatrix
+Describe this as you would do with a function
 }
