@@ -7,12 +7,13 @@
 ConsensusSignatures(object, bind = TRUE)
 }
 \arguments{
-\item{object}{A "ScudoResults" class object}
+\item{object}{A class "ScudoResults" object.}
 
-\item{bind}{logical, indicating wether or not concatenating Up and Down
-Singatures}
+\item{bind}{Logic, default = TRUE, returns concatenated or separated
+Consensus Signatures.}
 }
 \description{
-If bind = TRUE (default) returns a list containing all Consensus
-Signatures, else returns a list divided into up and down.
+Returns Consensus Signatures. If bind = TRUE (default)
+returns single, else returns a list composed of separated "UpSignatures" and
+"DownSignatures".
 }
