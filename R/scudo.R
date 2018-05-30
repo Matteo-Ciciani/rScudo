@@ -3,7 +3,7 @@ NULL
 
 # add some parameters
 scudo <- function(expressionData, groups, nTop, nBottom, pValue) {
-    # perform some checks on imput data
+    # perform some checks on input data
 
     # perform normalization and feature selection
 

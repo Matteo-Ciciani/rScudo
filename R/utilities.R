@@ -42,10 +42,10 @@ NULL
 .isZero <- Vectorize(function(x) isTRUE(all.equal(x, 0)))
 
 .performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
-
+    # compute signatures
     sigMatrix <- apply(expressionData, 2, .computeSignature, nTop, nBottom)
 
-    # square non-symmetric matrix, with element[i, j] equal
+    # compute square non-symmetric matrix, with element[i, j] equal
     # to the ES of signature of sample i in the profile of sample j
     ESmatrix <- outer(colnames(expressionData), colnames(expressionData),
                     Vectorize(function(x, y) {
@@ -55,11 +55,13 @@ NULL
                     }))
     colnames(ESmatrix) <- rownames(ESmatrix) <- colnames(expressionData)
 
+    # compute distance matrix
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
     nonZero <- !.isZero(distances)
     distances[nonZero] <- distances[nonZero] -
         floor(100 * min(distances[nonZero])) / 100
 
+    # compute consensus signatures
     rankedExprData <- apply(expressionData, 2, rank)
     groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),
                                         sum)
@@ -67,6 +69,7 @@ NULL
     consensusSigMatrix <- apply(groupedRankSums[, -1], 1, .computeSignature,
                                 nTop, nBottom)
 
+    # create ScudoResults object to return
     ScudoResults(DistMatrix = distances,
         UpSignatures = as.data.frame(sigMatrix[1:nTop, ],
             stringsAsFactors = FALSE),

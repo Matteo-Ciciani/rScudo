@@ -8,9 +8,6 @@
 \alias{DistMatrix,ScudoResults-method}
 \alias{DistMatrix,ScudoResults-method}
 \title{Class "ScudoResults"}
-\usage{
-DistMatrix(object)
-}
 \description{
 This is a class that represents the output of the functions
 -- link to scudo functions --.
@@ -21,28 +18,42 @@ Details about the class
 \section{Slots}{
 
 \describe{
-\item{\code{DistMatrix}}{Object of class "matrix".}
+\item{\code{DistMatrix:}}{Object of class "matrix".}
 
-\item{\code{UpSignatures}}{Object of class "data.frame".}
+\item{\code{UpSignatures:}}{Object of class "data.frame".}
 
-\item{\code{DownSignatures}}{Object of class "data.frame."}
+\item{\code{DownSignatures:}}{Object of class "data.frame."}
 
-\item{\code{Groups}}{Object of class "factor".}
+\item{\code{Groups:}}{Object of class "factor".}
 
-\item{\code{ConsensusUpSignatures}}{Object of class "data.frame".}
+\item{\code{ConsensusUpSignatures:}}{Object of class "data.frame".}
 
-\item{\code{ConsensusDownSignatures}}{Object of class "data.frame".}
+\item{\code{ConsensusDownSignatures:}}{Object of class "data.frame".}
 
-\item{\code{SelectedFeatures}}{Object of class "character".}
+\item{\code{SelectedFeatures:}}{Object of class "character".}
 
-\item{\code{Params}}{Object of class "list".}
+\item{\code{Params:}}{Object of class "list".}
 }}
 
 \section{Methods}{
 
 \describe{
-  \item{One}{First item}
-  \item{Two}{Second item}
+  \item{\code{DistMatrix}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the distance matrix.}
+  \item{\code{UpSignatures}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{DownSignatures}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{Groups}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{ConsensusUpSignatures}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{ConsensusDownSignatures}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{SelectedFeatures}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
+  \item{\code{Params}}{\code{signature(object = "ScudoResults")}: a
+  method for obtaining the .}
 }
 }
 

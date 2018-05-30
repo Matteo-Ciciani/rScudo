@@ -6,21 +6,37 @@ NULL
 #' This is a class that represents the output of the functions
 #' -- link to scudo functions --.
 #'
-#' Details about the class
+#' This class provides a structure to represent the results of the scudo
+#' functions. It contains a distance matrix, i.e. a non-negative symmetric
+#' matrix.
 #'
-#' @slot DistMatrix Object of class "matrix".
-#' @slot UpSignatures Object of class "data.frame".
-#' @slot DownSignatures Object of class "data.frame."
-#' @slot Groups Object of class "factor".
-#' @slot ConsensusUpSignatures Object of class "data.frame".
-#' @slot ConsensusDownSignatures Object of class "data.frame".
-#' @slot SelectedFeatures Object of class "character".
-#' @slot Params Object of class "list".
+#' @slot DistMatrix: Object of class "matrix".
+#' @slot UpSignatures: Object of class "data.frame".
+#' @slot DownSignatures: Object of class "data.frame."
+#' @slot Groups: Object of class "factor".
+#' @slot ConsensusUpSignatures: Object of class "data.frame".
+#' @slot ConsensusDownSignatures: Object of class "data.frame".
+#' @slot SelectedFeatures: Object of class "character".
+#' @slot Params: Object of class "list".
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{One}{First item}
-#'   \item{Two}{Second item}
+#'   \item{\code{DistMatrix}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the distance matrix.}
+#'   \item{\code{UpSignatures}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{DownSignatures}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{Groups}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{ConsensusUpSignatures}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{ConsensusDownSignatures}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{SelectedFeatures}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
+#'   \item{\code{Params}}{\code{signature(object = "ScudoResults")}: a
+#'   method for obtaining the .}
 #' }
 #'
 #' @name ScudoResults-class
