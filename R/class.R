@@ -1,4 +1,30 @@
 #' @import methods
+NULL
+
+#' Class "ScudoResults"
+#'
+#' This is a class that represents the output of -- link to scudo functions --.
+#'
+#' Details about the class
+#'
+#' @slot DistMatrix Object of class "matrix".
+#' @slot UpSignatures Object of class "data.frame".
+#' @slot DownSignatures Object of class "data.frame."
+#' @slot Groups Object of class "factor".
+#' @slot ConsensusUpSignatures Object of class "data.frame".
+#' @slot ConsensusDownSignatures Object of class "data.frame".
+#' @slot SelectedFeatures Object of class "character".
+#' @slot Params Object of class "list".
+#'
+#' @section Methods:
+#' \describe{
+#'   \item{One}{First item}
+#'   \item{Two}{Second item}
+#' }
+#'
+#' @name ScudoResults-class
+#' @rdname ScudoResults-class
+#'
 #' @export ScudoResults
 #' @exportClass ScudoResults
 ScudoResults <- setClass("ScudoResults",
@@ -110,7 +136,7 @@ setValidity("ScudoResults", function(object) {
                              "in DistMatrix"))
     }
 
-    # validity of ConsensusUpSignatures -----------------------------------------
+    # validity of ConsensusUpSignatures ----------------------------------------
     if (any(is.na(object@ConsensusUpSignatures))) {
         valid <- FALSE
         msg <- c(msg, "ConsensusUpSignatures contains NAs")
@@ -131,7 +157,7 @@ setValidity("ScudoResults", function(object) {
                              "elements that are not in Groups"))
     }
 
-    # validity of ConsensusDownSignatures ---------------------------------------
+    # validity of ConsensusDownSignatures --------------------------------------
     if (any(is.na(object@ConsensusDownSignatures))) {
         valid <- FALSE
         msg <- c(msg, "ConsensusDownSignatures contains NAs")
