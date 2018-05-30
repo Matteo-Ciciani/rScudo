@@ -5,8 +5,8 @@ test_that(".computeES works", {
 
     sigTop <- letters[1:3]
     sigBottom <- letters[18:20]
-    exprProfile <- data.frame(rev(1:20))
-    rownames(exprProfile) <- letters[1:20]
+    exprProfile <- 1:20
+    names(exprProfile) <- letters[1:20]
 
     expect_equal(.computeES(sigTop, sigBottom, exprProfile), 1)
     expect_equal(.computeES(sigBottom, sigTop, exprProfile), -1)
@@ -21,11 +21,13 @@ test_that(".computeES works", {
 test_that(".computeSignature works", {
     df <- data.frame(a = 1:10, b = rev(1:10))
     rownames(df) <- letters[11:20]
+    indeces <- apply(df, 2, order, decreasing = TRUE)
+    rownames(indeces) <- rownames(df)
     sig <- c("t", "s", "l", "k")
     m <- matrix(c(sig, rev(sig)), ncol = 2)
     colnames(m) <- c("a", "b")
 
-    expect_equal(apply(df, 2, .computeSignature, 2, 2), m)
+    expect_equal(apply(indeces, 2, .computeSignature, 2, 2), m)
 })
 
 test_that(".isZero works", {

@@ -1,26 +1,26 @@
 #' @include class.R accessors.R
 NULL
 
-.computeES <- function(top, bottom, profile) {
-    # top: character vecotr of gene names
-    # bottom: character vecotr of gene names
-    # profile: named numeric vector of expression levels
+.computeES <- function(nTop, nBottom, profile) {
+    # top: numeric, indeces of top genes
+    # bottom: numeric, indeces of bottom genes
+    # profile: numeric, indeces returned by order(espressionData)
 
     # sort profile -------------------------------------------------------------
-    sortedNames <- rownames(profile)[order(profile, decreasing = TRUE)]
+    sortedNames <- names(profile)[profile]
 
     # top signature ------------------------------------------------------------
     membership <- sortedNames %in% top
 
     pHits <- cumsum(membership) / length(top)
-    pMisses <- cumsum(!membership) / (dim(profile)[1] - length(top))
+    pMisses <- cumsum(!membership) / (length(profile) - length(top))
     indexMax <- which.max(abs(pHits - pMisses))
     topES <- pHits[indexMax] - pMisses[indexMax]
 
     # bottom signature ---------------------------------------------------------
     membership <- sortedNames %in% bottom
     pHits <- cumsum(membership) / length(bottom)
-    pMisses <- cumsum(!membership) / (dim(profile)[1] - length(bottom))
+    pMisses <- cumsum(!membership) / (length(profile) - length(bottom))
     indexMax <- which.max(abs(pHits - pMisses))
     bottomES <- pHits[indexMax] - pMisses[indexMax]
 
@@ -34,16 +34,20 @@ NULL
     ES
 }
 
-.computeSignature <- function(profile, nTop, nBottom) {
-    ordNames <- names(sort(profile, decreasing = TRUE))
+.computeSignature <- function(indeces, nTop, nBottom) {
+    ordNames <- names(indeces)[indeces]
     ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
 }
 
 .isZero <- Vectorize(function(x) isTRUE(all.equal(x, 0)))
 
 .performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
+    # transform expressionData in index matrix
+    indexMatrix <- apply(expressionData, 2, order, decreasing = TRUE)
+    rownames(indexMatrix) <- rownames(expressionData)
+
     # compute signatures
-    sigMatrix <- apply(expressionData, 2, .computeSignature, nTop, nBottom)
+    sigMatrix <- apply(indexMatrix, 2, .computeSignature, nTop, nBottom)
 
     # compute square non-symmetric matrix, with element[i, j] equal
     # to the ES of signature of sample i in the profile of sample j
@@ -51,7 +55,7 @@ NULL
                     Vectorize(function(x, y) {
                         .computeES(sigMatrix[1:nTop, x],
                                    sigMatrix[(nTop + 1):nrow(sigMatrix), x],
-                                   expressionData[y])
+                                   indexMatrix[, y])
                     }))
     colnames(ESmatrix) <- rownames(ESmatrix) <- colnames(expressionData)
 
@@ -66,7 +70,10 @@ NULL
     groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),
                                         sum)
     rownames(groupedRankSums) <- groupedRankSums[, 1]
-    consensusSigMatrix <- apply(groupedRankSums[, -1], 1, .computeSignature,
+    ordGroupedRankSums <- apply(groupedRankSums[, -1], 1, order,
+                                decreasing = TRUE)
+    rownames(ordGroupedRankSums) <- rownames(expressionData)
+    consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
                                 nTop, nBottom)
 
     # create ScudoResults object to return
