@@ -4,10 +4,16 @@
 \name{ScudoResults-class}
 \alias{ScudoResults-class}
 \alias{ScudoResults}
+\alias{DistMatrix}
+\alias{DistMatrix,ScudoResults-method}
 \alias{DistMatrix,ScudoResults-method}
 \title{Class "ScudoResults"}
+\usage{
+DistMatrix(object)
+}
 \description{
-This is a class that represents the output of -- link to scudo functions --.
+This is a class that represents the output of the functions
+-- link to scudo functions --.
 }
 \details{
 Details about the class

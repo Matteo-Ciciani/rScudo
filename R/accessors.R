@@ -2,11 +2,9 @@
 #' @include class.R
 NULL
 
-#' Get DistMatrix
-#'
-#' Describe this as you would do with a function
-#' @name DistMatrix-methods
-#' @rdname DistMatrix-methods
+#' @rdname ScudoResults-class
+#' @aliases DistMatrix,ScudoResults-method
+#' @usage NULL
 #' @export
 setGeneric("DistMatrix", function(object) standardGeneric("DistMatrix"))
 

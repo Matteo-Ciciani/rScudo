@@ -3,7 +3,8 @@ NULL
 
 #' Class "ScudoResults"
 #'
-#' This is a class that represents the output of -- link to scudo functions --.
+#' This is a class that represents the output of the functions
+#' -- link to scudo functions --.
 #'
 #' Details about the class
 #'

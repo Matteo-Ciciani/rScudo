@@ -1,6 +1,7 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
+# add some parameters
 scudo <- function(expressionData, groups, nTop, nBottom, pValue) {
     # perform some checks on imput data
 

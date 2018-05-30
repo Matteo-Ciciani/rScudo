@@ -2,11 +2,11 @@
 #' @include class.R accessors.R
 NULL
 
-# Show ------------------------------------------------------------------------
+# Show -------------------------------------------------------------------------
 
 #' @export
 setMethod("show", "ScudoResults", function(object) {
-    cat("Object of ScudoResults\n\n")
+    cat("Object of class ScudoResults\n\n")
 
     d1 <- dim(DistMatrix(object))
     cat("Distance Matrix \ttot dim:", d1[1], "rows and ", d1[2], "cols\n")
@@ -71,32 +71,3 @@ setMethod("summary", signature = "ScudoResults", definition =
                       "\nThe consensus sequence is:\n\t",
                       c(ConsensusUpSignature(object),
                         ConsensusDownSignature(object)))})
-
-
-# ConsensusSignatures ----------------------------------------------------------
-
-#' @export
-#' @title  Consensus Signatures
-#'
-#' @description If bind = TRUE (default) returns a list containing all Consensus
-#' Signatures, else returns a list divided into up and down.
-#'
-#' @param object A "ScudoResults" class object
-#' @param bind logical, indicating wether or not concatenating Up and Down
-#' Singatures
-ConsensusSignatures <- function(object, bind = TRUE) {
-    if (bind) {
-        out_con <- c(ConsensusUpSignature(object),
-            ConsensusDownSignature(object))
-        return(out_con)
-    } else {
-        return(list("UpSignatures" = ConsensusUpSignature(object),
-            "DownSignatures" = ConsensusDownSignature(object)))
-    }
-}
-
-
-
-
-
-
