@@ -7,7 +7,7 @@ scudo <- function(expressionData, nUp, nDown, pValue) {
     # perform normalization and feature selection
 
     # compute signatures and distance matrix -----------------------------------
-    #finalExprData needed
+    # finalExprData needed
     finalExprData <- expressionData # temporary, remove when the previous part is implemented !!!
     # compute signature matrix
     sigMatrix <- apply(finalExprData, 2, function(x) {
