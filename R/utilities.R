@@ -97,8 +97,9 @@ NULL
 }
 
 .Normalization <- function(ExpressionData, groups) {
-    aggExData <- stats::aggregate(t(ExpressionData), by = list(groups), mean)
-    virtControl <- apply(t(aggExData[, -1]), 1, mean)
+    virtControl <- rowMeans(vapply(levels(groups), function(x) {
+        rowMeans(ExpressionData[groups == x]) },
+        rep(0.0, dim(ExpressionData)[1])))
     normExData <- ExpressionData / virtControl
     normExData
 }
