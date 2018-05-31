@@ -97,29 +97,8 @@ NULL
 }
 
 .Normalization <- function(ExpressionData, groups) {
-
-    aggExData <- aggregate(t(ExpressionData), by = list(groups), mean) #check if aggregates with random group vector
-    aggExData[,1] <- NULL
-    VirtControl <- apply(t(aggExData),1, mean)
-    normExData <- apply(ExpressionData, 2, function(x) x/VirtControl)
-
+    aggExData <- stats::aggregate(t(ExpressionData), by = list(groups), mean)
+    virtControl <- apply(t(aggExData[, -1]), 1, mean)
+    normExData <- ExpressionData / virtControl
     normExData
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -13,7 +13,9 @@ This is a class that represents the output of the functions
 -- link to scudo functions --.
 }
 \details{
-Details about the class
+This class provides a structure to represent the results of the scudo
+functions. It contains a distance matrix, i.e. a non-negative symmetric
+matrix.
 }
 \section{Slots}{
 

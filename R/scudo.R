@@ -1,58 +1,48 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
+#' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue,
-                  prepro = TRUE, featureSel = TRUE, p.adj = "none")
-{
-    # Input checks ------------------------------------------------------------
-    # Possible implementation considering just 2 on n groups for feature sel?
+                  prepro = TRUE, featureSel = TRUE, p.adj = "none") {
+    # Input checks -------------------------------------------------------------
+    # use warning and stop
+    # checks on expressionData
 
+    # checks on groups
 
     groups <- groups[ , drop = TRUE]
     nGroups <- length(levels(groups))
 
-    if (prepro | featureSel) {
-        expressionData_temp <- expressionData
-        colnames(expressionData_temp) <- groups
+    if (nGroups == 1) {
+        warning(paste("Just one group in", deparse(substitute(groups)),
+                      ": skipping fearure selection"))
     }
 
-    # Normalization -----------------------------------------------------------
+    # checks on nTop and nBottom
 
-    if (prepro) {
-        expressionData_temp <- .Normalization(expressionData_temp, groups)
-    }
+    # checks on pValue, prepro, featureSel and p.adj
 
-    # Feature Selection -------------------------------------------------------
+    # Normalization ------------------------------------------------------------
 
-    if (featureSel) {
+    if (prepro) expressionData <- .Normalization(expressionData, groups)
 
-        if (nGroups == 1) {
-            warning("You have just one group selected:
-                    feature selection not performed!")
-        }
+    # Feature Selection --------------------------------------------------------
+
+    if (featureSel && nGroups > 1) {
         if (nGroups == 2) {
-            pVals <- apply(expressionData_temp, 1, function(x) {
-                stats::wilcox.test(x[names(x) == levels(groups)[1]],
-                    x[names(x) == levels(groups)[2]])$p.value
-            })
-
-            pVals <- p.adjust(pVals, p.adj)
-            expressionData_temp <- expressionData_temp[pVals <= pValue, ]
-        }
-
-        if (nGroups > 2) {
+            pVals <- apply(expressionData, 1, function(x) {
+                stats::wilcox.test(x[groups == levels(groups)[1]],
+                    x[groups == levels(groups)[2]])$p.value })
+        } else {
             pVals <- apply(expressionData_temp, 1, function(x) {
                 stats::kruskal.test(x, groups)$p.value
             })
-
-            pVals <- p.adjust(pVals, p.adj)
-            expressionData_temp <- expressionData_temp[pVals <= pValue, ]
         }
+        pVals <- stats::p.adjust(pVals, method = p.adj)
+        expressionData <- expressionData[pVals <= pValue, ]
     }
-
-    colnames(expressionData_temp) <- colnames(expressionData)
 
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(expressionDataFrame, groups, nTop, nBottom, pValue)
+    .performScudo(expressionData, groups, nTop, nBottom, pValue)
 }

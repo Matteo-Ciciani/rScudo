@@ -83,3 +83,18 @@ test_that(".performScudo works", {
     expect_identical(Params(res), list(nTop = nTop, nBottom = nBottom,
                                        pValue = p))
 })
+
+test_that(".Normalization works correctly", {
+    df <- data.frame(a = rep(1, 5),
+                     b = rep(3, 5),
+                     c = rep(5, 5),
+                     d = 1:5,
+                     e = 11:15)
+    rownames(df) <- letters[21:25]
+    groups <- factor(c(1, 1, 1, 2, 2))
+
+    virtContr <- (3 + 6:10) / 2
+    correctRes <- df / virtContr
+
+    expect_equal(.Normalization(df, groups), correctRes)
+})
