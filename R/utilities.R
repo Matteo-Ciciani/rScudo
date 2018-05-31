@@ -1,33 +1,34 @@
 #' @include class.R accessors.R
 NULL
 
-.computeES <- function(nTop, nBottom, profile) {
+.computeES <- function(top, bottom, profile) {
     # top: numeric, indeces of top genes
     # bottom: numeric, indeces of bottom genes
     # profile: numeric, indeces returned by order(espressionData)
 
-    # sort profile -------------------------------------------------------------
-    sortedNames <- names(profile)[profile]
-
     # top signature ------------------------------------------------------------
-    membership <- sortedNames %in% top
+    # faster implementation, to test, should be 5x faster
+    # membership <- rep(FALSE, length(profile))
+    # membership[top] <- TRUE
+    # membership <- membership[profile]
 
+    membership <- profile %in% top
     pHits <- cumsum(membership) / length(top)
     pMisses <- cumsum(!membership) / (length(profile) - length(top))
     indexMax <- which.max(abs(pHits - pMisses))
     topES <- pHits[indexMax] - pMisses[indexMax]
 
     # bottom signature ---------------------------------------------------------
-    membership <- sortedNames %in% bottom
+    membership <- profile %in% bottom
     pHits <- cumsum(membership) / length(bottom)
     pMisses <- cumsum(!membership) / (length(profile) - length(bottom))
     indexMax <- which.max(abs(pHits - pMisses))
     bottomES <- pHits[indexMax] - pMisses[indexMax]
 
     # compute overall ES -------------------------------------------------------
-    # returns -1 if top and bottom are respectively at the top and bottom of the
+    # returns 1 if top and bottom are respectively at the top and bottom of the
     # profile
-    # returns 1 if top and bottom are respectively at the bottom and top of the
+    # returns -1 if top and bottom are respectively at the bottom and top of the
     # profile
 
     ES <- (topES - bottomES) / 2
@@ -52,11 +53,14 @@ NULL
     # compute square non-symmetric matrix, with element[i, j] equal
     # to the ES of signature of sample i in the profile of sample j
     ESmatrix <- outer(colnames(expressionData), colnames(expressionData),
-                    Vectorize(function(x, y) {
-                        .computeES(sigMatrix[1:nTop, x],
-                                   sigMatrix[(nTop + 1):nrow(sigMatrix), x],
-                                   indexMatrix[, y])
-                    }))
+        Vectorize(function(x, y) .computeES(
+            indexMatrix[1:nTop, x],
+            indexMatrix[(dim(indexMatrix)[1] - nBottom +1):
+                (dim(indexMatrix)[1]), x],
+            indexMatrix[, y]
+            )
+        )
+    )
     colnames(ESmatrix) <- rownames(ESmatrix) <- colnames(expressionData)
 
     # compute distance matrix
