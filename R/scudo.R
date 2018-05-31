@@ -32,7 +32,8 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
         if (nGroups == 2) {
             pVals <- apply(expressionData, 1, function(x) {
                 stats::wilcox.test(x[groups == levels(groups)[1]],
-                    x[groups == levels(groups)[2]])$p.value })
+                    x[groups == levels(groups)[2]], correct = FALSE,
+                    exact = FALSE)$p.value })
         } else {
             pVals <- apply(expressionData_temp, 1, function(x) {
                 stats::kruskal.test(x, groups)$p.value
