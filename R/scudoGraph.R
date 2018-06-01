@@ -7,15 +7,20 @@ scudoGraph <- function(scudoResult, N, colors = NULL) {
     # perform some checks
 
     # get distance matrix and generate adjacency matrix according to N
-    adjMatrix <- DistMatrix(scudoResult)
-    NQuantile <- stats::quantile(adjMatrix[!.isZero(adjMatrix)], probs = N)
-    adjMatrix[adjMatrix > NQuantile] <- 0 # objects that are close have a weight
-    # (= distance) that is small, but small weights are plotted as long
-    # distances, so we need a normalization
+    adjMatrix <- matrix(0, nrow = dim(DistMatrix(scudoResult))[1],
+        ncol = dim(DistMatrix(scudoResult))[1])
+    NQuantile <- stats::quantile(DistMatrix(scudoResult)[!.isZero(
+        DistMatrix(scudoResult))], probs = N)
+    adjMatrix[DistMatrix(scudoResult) <= NQuantile] <- 1
+    colnames(adjMatrix) <- colnames(DistMatrix(scudoResult))
 
     # generate graph using graph_from_adjacency_matrix
     result <- igraph::graph_from_adjacency_matrix(adjMatrix,
-        mode = "undirected", weighted = TRUE)
+        mode = "undirected", diag = FALSE)
+
+    # add weights
+    igraph::E(result)$weight <- DistMatrix(scudoResult)[as.logical(adjMatrix) &
+        lower.tri(DistMatrix(scudoResult))]
 
     # add group and color annotation
     igraph::V(result)$group <- Groups(scudoResult)
@@ -36,6 +41,16 @@ scudo2Cytoscape <- function(scudoIgraph) {
     # add more customization?
     # add layout
 
-    RCy3::createNetworkFromIgraph(scudoIgraph)
+    RCy3::createNetworkFromIgraph(scudoIgraph, title =
+        deparse(substitute(scudoIgraph)), collection = "SCUDO")
+
+    RCy3::setNodeShapeDefault("Ellipse")
+    RCy3::lockNodeDimensions(TRUE)
+    RCy3::setNodeBorderWidthDefault(1.5)
     RCy3::setNodeColorMapping("color", mapping.type = "p")
+    style <- list(visualProperty = "NODE_TRANSPARENCY", value = 200)
+    RCy3::setVisualPropertyDefault(style)
+    RCy3::setEdgeLineWidthDefault(1.5)
+    RCy3::layoutNetwork("cose")
+
 }

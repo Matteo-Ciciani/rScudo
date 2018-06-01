@@ -3,41 +3,55 @@ NULL
 
 #' Class "ScudoResults"
 #'
-#' This is a class that represents the output of the functions
-#' -- link to scudo functions --.
+#' This is a class that represents the output of the functions -- link to scudo
+#' functions --.
 #'
 #' This class provides a structure to represent the results of the scudo
-#' functions. It contains a distance matrix, i.e. a non-negative symmetric
-#' matrix.
+#' functions. It contains a distance matrix, i.e. a symmetric matrix with
+#' non-negative numeric values.
 #'
-#' @slot DistMatrix: Object of class "matrix".
-#' @slot UpSignatures: Object of class "data.frame".
-#' @slot DownSignatures: Object of class "data.frame."
-#' @slot Groups: Object of class "factor".
-#' @slot ConsensusUpSignatures: Object of class "data.frame".
-#' @slot ConsensusDownSignatures: Object of class "data.frame".
-#' @slot SelectedFeatures: Object of class "character".
-#' @slot Params: Object of class "list".
+#' @slot DistMatrix Object of class "matrix". A symmetric matrix with
+#'   non-negative numeric elements.
+#' @slot UpSignatures Object of class "data.frame". A data.frame with the same
+#'   colnames as DistMatrix, representing the up-regualted features in each
+#'   sample.
+#' @slot DownSignatures Object of class "data.frame". A data.frame with the same
+#'   colnames as DistMatrix, representing the down-regualted features in each
+#'   sample.
+#' @slot Groups Object of class "factor". It represents the groups used for the
+#'   normalization and the feature selection. It corresponds to the
+#'   \code{groups} argument in --link-- and --link--, but unused levels are
+#'   dropped.
+#' @slot ConsensusUpSignatures Object of class "data.frame". It contains the
+#'   consensus signatures of up-regulated features for each group.
+#' @slot ConsensusDownSignatures Object of class "data.frame".It contains the
+#'   consensus signatures of dowm-regulated features for each group.
+#' @slot SelectedFeatures Object of class "character". A vector of selected
+#'   features. If the feature selection was not performed, it contains every
+#'   feature present in the input of the scudo functions.
+#' @slot Params Object of class "list". A list of the parameters used to run
+#'   --link-- or --link--.
 #'
-#' @section Methods:
-#' \describe{
-#'   \item{\code{DistMatrix}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the distance matrix.}
+#' @section Methods: \describe{ \item{\code{DistMatrix}}{\code{signature(object
+#'   = "ScudoResults")}: a method for obtaining the distance matrix.}
 #'   \item{\code{UpSignatures}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#'   \item{\code{DownSignatures}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#'   \item{\code{Groups}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#'   \item{\code{ConsensusUpSignatures}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#'   \item{\code{ConsensusDownSignatures}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
+#'   method for obtaining the signature of up-regualted features in each
+#'   sample.} \item{\code{DownSignatures}}{\code{signature(object =
+#'   "ScudoResults")}: a method for obtaining the signature of down-regulated
+#'   features in each sample.} \item{\code{Groups}}{\code{signature(object =
+#'   "ScudoResults")}: a method for obtaining the groups used for normalization
+#'   and feature selection.}
+#'   \item{\code{ConsensusUpSignatures}}{\code{signature(object =
+#'   "ScudoResults")}: a method for obtaining the consensus signatures of
+#'   up-regualted features in each group.}
+#'   \item{\code{ConsensusDownSignatures}}{\code{signature(object =
+#'   "ScudoResults")}: a method for obtaining the consensus signatures of
+#'   down-regulated features in each group.}
 #'   \item{\code{SelectedFeatures}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#'   \item{\code{Params}}{\code{signature(object = "ScudoResults")}: a
-#'   method for obtaining the .}
-#' }
+#'   method for obtaining the names of the features seleted. If no feature
+#'   selection was performed, the names of every feature are returned.}
+#'   \item{\code{Params}}{\code{signature(object = "ScudoResults")}: a method
+#'   for obtaining the parameters that were used to generate the result.} }
 #'
 #' @name ScudoResults-class
 #' @rdname ScudoResults-class
