@@ -7,6 +7,28 @@
 \alias{DistMatrix}
 \alias{DistMatrix,ScudoResults-method}
 \alias{DistMatrix,ScudoResults-method}
+\alias{UpSignatures}
+\alias{UpSignatures,ScudoResults-method}
+\alias{UpSignatures,ScudoResults-method}
+\alias{DownSignatures}
+\alias{DownSignatures,ScudoResults-method}
+\alias{DownSignatures,ScudoResults-method}
+\alias{Groups}
+\alias{Groups,ScudoResults-method}
+\alias{Groups,ScudoResults-method}
+\alias{ConsensusUpSignatures}
+\alias{ConsensusUpSignatures,ScudoResults-method}
+\alias{ConsensusUpSignatures,ScudoResults-method}
+\alias{Groups,ScudoResults-method}
+\alias{ConsensusDownSignatures}
+\alias{ConsensusDownSignatures,ScudoResults-method}
+\alias{ConsensusDownSignatures,ScudoResults-method}
+\alias{SelectedFeatures}
+\alias{SelectedFeatures,ScudoResults-method}
+\alias{SelectedFeatures,ScudoResults-method}
+\alias{Params}
+\alias{Params,ScudoResults-method}
+\alias{Params,ScudoResults-method}
 \title{Class "ScudoResults"}
 \description{
 This is a class that represents the output of the functions
