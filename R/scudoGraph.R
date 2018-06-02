@@ -1,7 +1,7 @@
 #' @include class.R scudo.R accessors.R
 NULL
 
-# Implement as a method?
+# Implement as a method? Yes!
 #' @export
 scudoGraph <- function(scudoResult, N, colors = NULL) {
     # perform some checks
@@ -34,16 +34,17 @@ scudoGraph <- function(scudoResult, N, colors = NULL) {
     result
 }
 
-# as method?
+# as method? Yes!
 #' @export
-scudo2Cytoscape <- function(scudoIgraph) {
-    # perform checks?
-    # add more customization?
-    # add layout
+scudo2Cytoscape <- function(scudoIgraph, title = NULL, collection =
+    "SCUDO", base.url = .defaultBaseUrl) {
 
-    RCy3::createNetworkFromIgraph(scudoIgraph, title =
-        deparse(substitute(scudoIgraph)), collection = "SCUDO")
+    # perform checks
 
+    if (is.null(title)) title <- deparse(substitute(scudoIgraph))
+
+    RCy3::createNetworkFromIgraph(scudoIgraph, title = title, collection =
+        collection, base.url = .defaultBaseUrl)
     RCy3::setNodeShapeDefault("Ellipse")
     RCy3::lockNodeDimensions(TRUE)
     RCy3::setNodeBorderWidthDefault(1.5)
@@ -52,5 +53,4 @@ scudo2Cytoscape <- function(scudoIgraph) {
     RCy3::setVisualPropertyDefault(style)
     RCy3::setEdgeLineWidthDefault(1.5)
     RCy3::layoutNetwork("cose")
-
 }
