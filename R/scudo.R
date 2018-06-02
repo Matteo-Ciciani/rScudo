@@ -8,8 +8,11 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # use warning and stop
     # checks on expressionData
 
+
     # missing check on size of expressionData, must be != 0, e.g. matrix(integer(0)) and matrix(integer(0), nrow = 0) fail in an unclear way
     stopifnot(is.matrix(expressionData))
+
+
 
     # && is different from & and more appropriate here
     if (any(is.na(expressionData)) && !any(is.nan(expressionData))) {
@@ -69,7 +72,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
         warning("No selection for nTop or nBottom if = 0")
     }
 
-    if ((nTop & nBottom) < 0) {
+    if ((nTop < 0) | (nBottom < 0)){
         stop("nTop and nBottom must be positive numbers.")
     }
 
