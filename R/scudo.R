@@ -9,35 +9,11 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # checks on expressionData
 
 
-    # missing check on size of expressionData, must be != 0, e.g. matrix(integer(0)) and matrix(integer(0), nrow = 0) fail in an unclear way
-    stopifnot(is.matrix(expressionData))
+    stopifnot(is.data.frame(expressionData), sapply(expressionData, is.numeric))
 
-
-
-    # && is different from & and more appropriate here
-    if (any(is.na(expressionData)) && !any(is.nan(expressionData))) {
+    if (any(is.na(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                   "contains NAs."))
-    }
-
-    if (any(is.nan(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "contains NaNs."))
-    }
-
-    if (!all(is.numeric(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                  "contains non-numeric values."))
-    }
-
-    if (is.null(rownames(expressionData))) {
-        (paste(deparse(substitute(expressionData)),
-                   "has no row names."))
-    }
-
-    if(is.null(colnames(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "has no column names."))
+                   "contains NA values."))
     }
 
     # checks on groups
