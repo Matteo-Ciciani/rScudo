@@ -8,31 +8,11 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # use warning and stop
     # checks on expressionData
 
-    stopifnot(is.matrix(expressionData))
+    stopifnot(is.data.frame(expressionData), sapply(expressionData, is.numeric))
 
-    if (any(is.na(expressionData)) & !any(is.nan(expressionData))) {
+    if (any(is.na(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
                    "contains NA values."))
-    }
-
-    if (any(is.nan(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "contains NaN's values."))
-    }
-
-    if (!all(is.numeric(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                  "contains non numeric values."))
-    }
-
-    if (is.null(rownames(expressionData))) {
-        (paste(deparse(substitute(expressionData)),
-                   "has no row names."))
-    }
-
-    if(is.null(colnames(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "has no col names."))
     }
 
     # checks on groups
@@ -65,7 +45,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
         warning("No selection for nTop or nBottom if = 0")
     }
 
-    if ((nTop & nBottom) < 0) {
+    if ((nTop < 0) | (nBottom < 0)){
         stop("nTop and nBottom must be positive numbers.")
     }
 
