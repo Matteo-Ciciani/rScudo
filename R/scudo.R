@@ -8,21 +8,23 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # use warning and stop
     # checks on expressionData
 
+    # missing check on size of expressionData, must be != 0, e.g. matrix(integer(0)) and matrix(integer(0), nrow = 0) fail in an unclear way
     stopifnot(is.matrix(expressionData))
 
-    if (any(is.na(expressionData)) & !any(is.nan(expressionData))) {
+    # && is different from & and more appropriate here
+    if (any(is.na(expressionData)) && !any(is.nan(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                   "contains NA values."))
+                   "contains NAs."))
     }
 
     if (any(is.nan(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                   "contains NaN's values."))
+                   "contains NaNs."))
     }
 
     if (!all(is.numeric(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                  "contains non numeric values."))
+                  "contains non-numeric values."))
     }
 
     if (is.null(rownames(expressionData))) {
@@ -32,11 +34,12 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
 
     if(is.null(colnames(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                   "has no col names."))
+                   "has no column names."))
     }
 
     # checks on groups
 
+    # missing checks for NAs in groups
     stopifnot(is.factor(groups))
 
     if (length(groups) != dim(expressionData)[2]) {
@@ -54,7 +57,8 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     }
 
     # checks on nTop and nBottom
-
+    # missing check for NAs, also check if they are integers with is.integer
+    # nTop and nBottom should be > 0, == 0 is bad and should give an error
     stopifnot(is.numeric(nTop), is.numeric(nBottom))
 
     if (is.nan(nTop) | is.nan(nBottom)) {
@@ -72,7 +76,10 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0))
 
     # checks on pValue, prepro, featureSel and p.adj
-
+    # missing check for NA in pValue
+    # what if pValue = numeric(0), or prepro or feat.. = logical(0) or NA?
+    # what if p.adj is character(0)?
+    # also pValue = 0 is not ok
     stopifnot(is.numeric(pValue))
 
     if (is.nan(pValue)) {
@@ -83,6 +90,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
         stop("pValue must be 0 < pVal < 1")
     }
 
+    # use stopifnot
     if (!is.logical(prepro)) {
         stop("prepro is not logical.")
     }
