@@ -8,7 +8,6 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # use warning and stop
     # checks on expressionData
 
-
     stopifnot(is.data.frame(expressionData), sapply(expressionData, is.numeric))
 
     if (any(is.na(expressionData))) {
@@ -18,8 +17,12 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
 
     # checks on groups
 
-    # missing checks for NAs in groups
     stopifnot(is.factor(groups))
+
+    if (any(is.na(groups))) {
+        stop(paste(deparse(substitute(groups)),
+                   "contains NA values."))
+    }
 
     if (length(groups) != dim(expressionData)[2]) {
         stop(paste(deparse(substitute(groups)),
@@ -27,7 +30,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
                    deparse(substitute(expressionData)), "columns."))
     }
 
-    groups <- groups[ , drop = TRUE] #thinking about other checks on groups
+    groups <- groups[ , drop = TRUE]
     nGroups <- length(levels(groups))
 
     if (nGroups == 1) {
@@ -36,47 +39,58 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     }
 
     # checks on nTop and nBottom
-    # missing check for NAs, also check if they are integers with is.integer
-    # nTop and nBottom should be > 0, == 0 is bad and should give an error
+
     stopifnot(is.numeric(nTop), is.numeric(nBottom))
+
+    if (is.na(nTop) | is.na(nBottom)) {
+        stop("NA values for nTop and nBottom not allowed.")
+    }
 
     if (is.nan(nTop) | is.nan(nBottom)) {
         stop("NaN values for nTop and nBottom not allowed.")
     }
 
-    if ((nTop & nBottom) == 0) {
-        warning("No selection for nTop or nBottom if = 0")
+    if ((nTop <= 0) | (nBottom <= 0)) {
+        stop("nTop and nBottom must be positive integer numbers.")
     }
 
-    if ((nTop < 0) | (nBottom < 0)){
-        stop("nTop and nBottom must be positive numbers.")
-    }
-
-    stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0))
+    stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0)) #check if they are integers with is.integer -> is.integer(1) = FALSE -> I've used this way to check if they're integer numbers
 
     # checks on pValue, prepro, featureSel and p.adj
-    # missing check for NA in pValue
-    # what if pValue = numeric(0), or prepro or feat.. = logical(0) or NA?
-    # what if p.adj is character(0)?
-    # also pValue = 0 is not ok
+
     stopifnot(is.numeric(pValue))
+
+    if (is.na(pValue)) {
+        stop("pValue = NA not allowed.")
+    }
 
     if (is.nan(pValue)) {
        stop("pValue = NaN not allowed.")
     }
 
+    if (pValue == 0) {
+        stop("pValue = 0 given.")
+    }
+
+    if (length(pValue) == 0) {
+        stop("pValue given is a set of numeric of length 0.")
+    }
+
     if ((pValue < 0) | (pValue > 1))  {
-        stop("pValue must be 0 < pVal < 1")
+        stop("pValue must be 0 < pVal < 1.")
     }
 
-    # use stopifnot
-    if (!is.logical(prepro)) {
-        stop("prepro is not logical.")
+    stopifnot(is.logical(prepro), is.logical(featureSel))
+
+    if (length(prepro) == 0 | length(featureSel) == 0) {
+        stop("Set of logical of length 0 given for prepro or featureSel.")
     }
 
-    if (!is.logical(featureSel)) {
-        stop("featureSel is not logical.")
+
+    if (length(p.adj) == 0) {
+        stop("Set of characters for p.adj has length 0.")
     }
+
 
     labs <- c("holm", "hochberg", "hommel",
         "bonferroni", "BH", "BY", "fdr", "none")
@@ -114,4 +128,5 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     # Performing Scudo --------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, pValue)
+
 }
