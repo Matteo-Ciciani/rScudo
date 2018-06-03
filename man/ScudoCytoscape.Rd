@@ -2,24 +2,24 @@
 % Please edit documentation in R/ScudoCytoscape.R
 \name{ScudoCytoscape}
 \alias{ScudoCytoscape}
-\title{ScudoCytoscape}
+\title{Create a Cytoscape network from the output of ScudoNetwork}
 \usage{
-ScudoCytoscape(scudoIgraph, title = NULL, collection = "SCUDO",
+ScudoCytoscape(igraph, title = NULL, collection = "SCUDO",
   base.url = NULL)
 }
 \arguments{
-\item{scudoIgraph}{object of class igraph, as the result of
+\item{igraph}{object of class igraph, like the result of
 \code{\link{ScudoNetwork}}.}
 
 \item{title}{The title of the network. If NULL it defaults to
-\code{deparse(substitute(scudoIgraph))}.}
+\code{deparse(substitute(igraph))}.}
 
 \item{collection}{The name of the collection.}
 
-\item{See}{\code{\link[RCy3]{createNetworkFromIgraph}}}
+\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}}
 }
 \value{
-network SUID
+The network SUID (an integer).
 }
 \description{
 Visualize results of scudo analysis in Cytoscape

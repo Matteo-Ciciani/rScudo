@@ -80,7 +80,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, integer(0), 0.1))
 
-    expect_error(scudo(exData, gr1, 1, matrix(1), 0.1))
+    expect_error(scudo(exData, gr1, 1, matrix(1), 0.1)) #
 
     expect_error(scudo(exData, gr1, 1, c(1, 2, 3), 0.1))
 
@@ -110,7 +110,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     # Test prepro --------------------------------------------------------------
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = logic(0)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = logical(0)))
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = "ABC"))
 
@@ -122,7 +122,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     # Test featureSel ----------------------------------------------------------
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, featureSel = logic(0)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, featureSel = logical(0)))
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, featureSel =  "ABC"))
 
@@ -140,9 +140,10 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 10, 1))
 
-    expect_error(scudo(exData, gr1, 1, 10, c("none", "BH")))
+    expect_error(scudo(exData, gr1, 1, 10, 1, p.adj = c("none", "BH")))
 })
 
 # expect_warning goes in conflict with .Normalization that raises errors:
 # check commented tests
+
 
