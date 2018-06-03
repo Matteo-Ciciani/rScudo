@@ -19,22 +19,25 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     groups <- groups[ , drop = TRUE]
     nGroups <- length(levels(groups))
 
+    if (nGroups == 1) {
+        warning(paste("Just one group in", deparse(substitute(groups)),
+                      ": skipping feature selection"))
+        featureSel <- FALSE
+    }
+
     if (featureSel) {
         expressionData <- .FeatureSelection(expressionData,
                                             pValue, groups, nGroups,
                                             featureSel, p.adj)
+        if ((nTop + nBottom) > dim(expressionData)[1]) {
+            stop("top and bottom signatures overlap, only",
+                 dim(expressionData)[1], "features selected.")
+        }
     }
 
-    # Checks if nTop, nBottom not high ----------------------------------------
-
-    if ((nTop + nBottom) > dim(expressionData)[1]) {
-        stop("nTop and nBottom signatures overlap, expressionData too small.")
-    }
-
-    # Performing Scudo --------------------------------------------------------
+    # Performing Scudo ---------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, pValue)
-
 }
 
 # scudoPredict ----------------------------------------------------------------

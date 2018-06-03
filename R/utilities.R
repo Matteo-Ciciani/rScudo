@@ -1,136 +1,125 @@
 #' @include class.R accessors.R
 NULL
 
-# SCUDO FUNCTIONS -------------------------------------------------------------
+# SCUDO FUNCTIONS --------------------------------------------------------------
 
 # .InputCheck ------------------------------------------------------------------
 
 .InputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
                         prepro, featureSel, p.adj) {
 
-    # checks on expressionData ------------------------------------------------
+    # checks on expressionData -------------------------------------------------
 
     stopifnot(is.data.frame(expressionData))
 
-    if (any(!sapply(expressionData, is.numeric))) {
-        stop("expressionData contains some not numeric data.")
+    if (!all(sapply(expressionData, is.numeric))) {
+        stop("expressionData contains some non-numeric data.")
     }
 
     if (any(is.na(expressionData))) {
         stop(paste(deparse(substitute(expressionData)),
-                   "contains NA values."))
+                   "contains NAs."))
     }
 
-    # checks on groups --------------------------------------------------------
+    # checks on groups ---------------------------------------------------------
 
     stopifnot(is.factor(groups))
 
     if (any(is.na(groups))) {
         stop(paste(deparse(substitute(groups)),
-                   "contains NA values."))
+                   "contains NAs."))
     }
 
     if (length(groups) != dim(expressionData)[2]) {
-        stop(paste(deparse(substitute(groups)),
-                   "has different length from ",
-                   deparse(substitute(expressionData)), "columns."))
+        stop(paste("Length of", deparse(substitute(groups)),
+                   "os different from number of columns of ",
+                   deparse(substitute(expressionData))))
     }
 
     if (length(groups) == 0) {
-        stop("Groups have length 0.")
+        stop("groups has length 0.")
     }
-    # checks on nTop and nBottom ----------------------------------------------
 
-    stopifnot(is.numeric(nTop), is.numeric(nBottom),
-              (length(nTop) == 1), (length(nBottom) == 1),
-              (class(nTop) == "numeric"), (class(nBottom) == "numeric"))
+    # checks on nTop and nBottom -----------------------------------------------
 
-    if (is.na(nTop) | is.na(nBottom)) {
-        stop("NA values for nTop and nBottom not allowed.")
-    }
+    stopifnot(is.numeric(nTop),
+              is.numeric(nBottom),
+              length(nTop) == 1,
+              length(nBottom) == 1,
+              is.vector(nTop),
+              is.vector(nBottom),
+              is.finite(nTop),
+              is.finite(nBottom),
+              nTop > 0,
+              nBottom > 0)
 
     if (is.nan(nTop) | is.nan(nBottom)) {
-        stop("NaN values for nTop and nBottom not allowed.")
+        stop("nTop and nBottom cannot be NaN.")
     }
 
-    if ((nTop <= 0) | (nBottom <= 0)) {
-        stop("nTop and nBottom must be positive integer numbers.")
+    if (is.na(nTop) | is.na(nBottom)) {
+        stop("nTop and nBottom cannot be NA.")
     }
 
-    stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0))
+    if ((nTop %% 1 != 0) | (nBottom %% 1 != 0)) {
+        stop("nTop and nBottom must be integers.")
+    }
 
-    # checks on pValue, prepro, featureSel and p.adj --------------------------
+    if ((nTop + nBottom) > dim(expressionData)[1]) {
+        stop(paste("top and bottom signatures overlap, expressionData has",
+                   "only", dim(expressionData)[1], "rows."))
+    }
+
+    # checks on pValue, prepro, featureSel and p.adj ---------------------------
 
     stopifnot(is.numeric(pValue),
-              (length(pValue) == 1),
-              (class(pValue) == "numeric"))
-
-    if (is.na(pValue)) {
-        stop("pValue = NA not allowed.")
-    }
+              length(pValue) == 1,
+              is.vector(pValue),
+              pValue > 0,
+              pValue <= 1)
 
     if (is.nan(pValue)) {
-        stop("pValue = NaN not allowed.")
+        stop("pValue cannot be NaN")
     }
 
-    if (pValue == 0) {
-        stop("pValue = 0 given.")
+    if (is.na(pValue)) {
+        stop("pValue cannot be NA.")
     }
 
-    if (length(pValue) == 0) {
-        stop("pValue given is a set of numeric of length 0.")
-    }
+    stopifnot(is.logical(prepro),
+              is.logical(featureSel),
+              is.vector(prepro),
+              is.vector(featureSel),
+              length(prepro) == 1,
+              length(featureSel) == 1,
+              is.character(p.adj),
+              is.vector(p.adj),
+              length(p.adj) == 1)
 
-    if ((pValue < 0) | (pValue > 1))  {
-        stop("pValue must be 0 < pVal < 1.")
-    }
-
-    stopifnot(is.logical(prepro), is.logical(featureSel),
-              class(prepro) == "logical", class(featureSel) == "logical",
-              length(prepro) == 1, length(featureSel) == 1)
-
-    if (length(prepro) == 0 | length(featureSel) == 0) {
-        stop("Set of logical of length 0 given for prepro or featureSel.")
-    }
-
-
-    if (length(p.adj) == 0) {
-        stop("Set of characters for p.adj has length 0.")
-    }
-
-    stopifnot(length(p.adj) == 1)
-
-    labs <- c("holm", "hochberg", "hommel",
-              "bonferroni", "BH", "BY", "fdr", "none")
-    if (!(p.adj %in% labs)) {
-        stop("p.adj given correction method not available.\n",
-             "Check stats::p.adjust documentation for possible options")
+    if (!(p.adj %in% stats::p.adjust.methods)) {
+        stop("p.adj should be one of “holm”, “hochberg”, “hommel”, “bonferroni”,
+            “BH”, “BY”, “fdr”, “none”. Check stats::p.adjust documentation.")
     }
 }
+
+
 # .FeatureSelection ------------------------------------------------------------
 
 .FeatureSelection <- function(expressionData, pValue, groups,
                               nGroups, featureSel, p.adj) {
-
-    if (nGroups == 1) {
-        warning(paste("Just one group in", deparse(substitute(groups)),
-                      ": skipping feature selection"))
+    if (nGroups == 2) {
+        pVals <- apply(expressionData, 1, function(x) {
+            stats::wilcox.test(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]], correct = FALSE,
+                exact = FALSE)$p.value })
+    } else {
+        pVals <- apply(expressionData, 1, function(x) {
+            stats::kruskal.test(x, groups)$p.value
+        })
     }
+    pVals <- stats::p.adjust(pVals, method = p.adj)
+    expressionData <- expressionData[pVals <= pValue, ]
 
-    if (featureSel && nGroups > 1) {
-        if (nGroups == 2) {
-            pVals <- apply(expressionData, 1, function(x) {
-                stats::wilcox.test(x[groups == levels(groups)[1]],
-                    x[groups == levels(groups)[2]], correct = FALSE,
-                    exact = FALSE)$p.value })
-        } else {
-            pVals <- apply(expressionData, 1, function(x) {
-                stats::kruskal.test(x, groups)$p.value
-            })
-        }
-        pVals <- stats::p.adjust(pVals, method = p.adj)
-        expressionData <- expressionData[pVals <= pValue, ]
-    }
     expressionData
 }
 
@@ -144,7 +133,7 @@ NULL
     normExData
 }
 
-# .performscudo ---------------------------------------------------------------
+# .performscudo ----------------------------------------------------------------
 
 .computeES <- function(top, bottom, profile) {
     # top: numeric, indeces of top genes
@@ -152,7 +141,7 @@ NULL
     # profile: numeric, indeces returned by order(espressionData)
 
     # top signature ------------------------------------------------------------
-    # faster implementation, to test, should be 5x faster
+    # alternative implementation, to test, should be faster
     # membership <- rep(FALSE, length(profile))
     # membership[top] <- TRUE
     # membership <- membership[profile]
@@ -246,7 +235,6 @@ NULL
             stringsAsFactors = FALSE)[(nTop + 1):nrow(sigMatrix), ]
         rownames(ConsDwnSig) <- 1:nBottom
     }
-
 
     ScudoResults(DistMatrix = distances,
         UpSignatures = UpSig,
