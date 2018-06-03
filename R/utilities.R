@@ -66,8 +66,10 @@ NULL
     # compute distance matrix
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
     nonZero <- !.isZero(distances)
-    distances[nonZero] <- distances[nonZero] -
-        floor(100 * min(distances[nonZero])) / 100
+    if (any(nonZero)) {
+        distances[nonZero] <- distances[nonZero] -
+            floor(100 * min(distances[nonZero])) / 100
+    }
 
     # compute consensus signatures
     rankedExprData <- apply(expressionData, 2, rank)
@@ -81,16 +83,32 @@ NULL
                                 nTop, nBottom)
 
     # create ScudoResults object to return
+    UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[1:nTop, ]
+    DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
+        (nTop + 1):nrow(sigMatrix), ]
+    rownames(DwnSig) <- 1:nBottom
+    if (length(levels(groups)) == 1) {
+        consVec <- as.vector(consensusSigMatrix)
+        ConsUpSig <- data.frame(consVec[1:nTop], stringsAsFactors = FALSE)
+        colnames(ConsUpSig) <- levels(groups)
+        ConsDwnSig <- data.frame(consVec[(nTop + 1):nrow(sigMatrix)],
+                                 stringsAsFactors = FALSE)
+        colnames(ConsDwnSig) <- levels(groups)
+    } else {
+        ConsUpSig <- as.data.frame(consensusSigMatrix,
+            stringsAsFactors = FALSE)[1:nTop, ]
+        ConsDwnSig <- as.data.frame(consensusSigMatrix,
+            stringsAsFactors = FALSE)[(nTop + 1):nrow(sigMatrix), ]
+        rownames(ConsDwnSig) <- 1:nBottom
+    }
+
+
     ScudoResults(DistMatrix = distances,
-        UpSignatures = as.data.frame(sigMatrix[1:nTop, ],
-            stringsAsFactors = FALSE),
-        DownSignatures = as.data.frame(sigMatrix[(nTop + 1):nrow(sigMatrix), ],
-            stringsAsFactors = FALSE),
+        UpSignatures = UpSig,
+        DownSignatures = DwnSig,
         Groups = groups,
-        ConsensusUpSignatures = as.data.frame(consensusSigMatrix[1:nTop, ],
-            stringsAsFactors = FALSE),
-        ConsensusDownSignatures = as.data.frame(consensusSigMatrix[(nTop + 1):
-            nrow(sigMatrix), ], stringsAsFactors = FALSE),
+        ConsensusUpSignatures = ConsUpSig,
+        ConsensusDownSignatures = ConsDwnSig,
         SelectedFeatures = rownames(expressionData),
         Params = list(nTop = nTop, nBottom = nBottom, pValue = ..1)
     )
@@ -103,3 +121,4 @@ NULL
     normExData <- ExpressionData / virtControl
     normExData
 }
+
