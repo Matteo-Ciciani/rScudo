@@ -25,9 +25,12 @@ setMethod("ScudoNetwork", signature = "ScudoResults", definition =
         # input checks
         stopifnot(
             is.numeric(N),
+            is.vector(N),
+            length(N) == 1,
             N > 0,
             N <= 1.0,
-            is.character(colors)
+            is.character(colors),
+            is.vector(colors)
         )
 
         if (length(colors) != 0) {
