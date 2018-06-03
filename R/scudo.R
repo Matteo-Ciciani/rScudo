@@ -1,128 +1,34 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
+# scudo ------------------------------------------------------------------------
+
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue,
                   prepro = TRUE, featureSel = TRUE, p.adj = "none") {
-    # Input checks -------------------------------------------------------------
-    # use warning and stop
-    # checks on expressionData
 
-    stopifnot(is.data.frame(expressionData), sapply(expressionData, is.numeric))
+    .InputCheck(expressionData, groups, nTop, nBottom, pValue,
+                prepro, featureSel, p.adj)
 
-    if (any(is.na(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "contains NA values."))
-    }
-
-    # checks on groups
-
-    stopifnot(is.factor(groups))
-
-    if (any(is.na(groups))) {
-        stop(paste(deparse(substitute(groups)),
-                   "contains NA values."))
-    }
-
-    if (length(groups) != dim(expressionData)[2]) {
-        stop(paste(deparse(substitute(groups)),
-                   "has different length from ",
-                   deparse(substitute(expressionData)), "columns."))
-    }
-
-    groups <- groups[ , drop = TRUE]
-    nGroups <- length(levels(groups))
-
-    if (nGroups == 1) {
-        warning(paste("Just one group in", deparse(substitute(groups)),
-                      ": skipping feature selection"))
-    }
-
-    # checks on nTop and nBottom
-
-    stopifnot(is.numeric(nTop), is.numeric(nBottom))
-
-    if (is.na(nTop) | is.na(nBottom)) {
-        stop("NA values for nTop and nBottom not allowed.")
-    }
-
-    if (is.nan(nTop) | is.nan(nBottom)) {
-        stop("NaN values for nTop and nBottom not allowed.")
-    }
-
-    if ((nTop <= 0) | (nBottom <= 0)) {
-        stop("nTop and nBottom must be positive integer numbers.")
-    }
-
-    stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0)) #check if they are integers with is.integer -> is.integer(1) = FALSE -> I've used this way to check if they're integer numbers
-
-    # checks on pValue, prepro, featureSel and p.adj
-
-    stopifnot(is.numeric(pValue))
-
-    if (is.na(pValue)) {
-        stop("pValue = NA not allowed.")
-    }
-
-    if (is.nan(pValue)) {
-       stop("pValue = NaN not allowed.")
-    }
-
-    if (pValue == 0) {
-        stop("pValue = 0 given.")
-    }
-
-    if (length(pValue) == 0) {
-        stop("pValue given is a set of numeric of length 0.")
-    }
-
-    if ((pValue < 0) | (pValue > 1))  {
-        stop("pValue must be 0 < pVal < 1.")
-    }
-
-    stopifnot(is.logical(prepro), is.logical(featureSel))
-
-    if (length(prepro) == 0 | length(featureSel) == 0) {
-        stop("Set of logical of length 0 given for prepro or featureSel.")
-    }
-
-
-    if (length(p.adj) == 0) {
-        stop("Set of characters for p.adj has length 0.")
-    }
-
-
-    labs <- c("holm", "hochberg", "hommel",
-        "bonferroni", "BH", "BY", "fdr", "none")
-    if (!(p.adj %in% labs)) {
-        stop("p.adj given correction method not available.\n",
-             "Check stats::p.adjust documentation for possible options")
-    }
     # Normalization ------------------------------------------------------------
 
     if (prepro) expressionData <- .Normalization(expressionData, groups)
 
     # Feature Selection --------------------------------------------------------
 
-    if (featureSel && nGroups > 1) {
-        if (nGroups == 2) {
-            pVals <- apply(expressionData, 1, function(x) {
-                stats::wilcox.test(x[groups == levels(groups)[1]],
-                    x[groups == levels(groups)[2]], correct = FALSE,
-                    exact = FALSE)$p.value })
-        } else {
-            pVals <- apply(expressionData, 1, function(x) {
-                stats::kruskal.test(x, groups)$p.value
-            })
-        }
-        pVals <- stats::p.adjust(pVals, method = p.adj)
-        expressionData <- expressionData[pVals <= pValue, ]
+    groups <- groups[ , drop = TRUE]
+    nGroups <- length(levels(groups))
+
+    if (featureSel) {
+        expressionData <- .FeatureSelection(expressionData,
+                                            pValue, groups, nGroups,
+                                            featureSel, p.adj)
     }
 
-    # Checks if new ExprData rows < (nTop + nBottom)
+    # Checks if nTop, nBottom not high ----------------------------------------
 
     if ((nTop + nBottom) > dim(expressionData)[1]) {
-        stop("nTop and nBottom signatures overlap.")
+        stop("nTop and nBottom signatures overlap, expressionData too small.")
     }
 
     # Performing Scudo --------------------------------------------------------
@@ -130,3 +36,85 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
     .performScudo(expressionData, groups, nTop, nBottom, pValue)
 
 }
+
+# scudoPredict ----------------------------------------------------------------
+
+#' @export
+scudoPredict <- function(trainExpData, testExpData, test, train,
+                         nTop, nBottom, pValue,
+                         prepro = TRUE, featureSel = TRUE, p.adj = "none") {
+    # InputCheck --------------------------------------------------------------
+
+    .InputCheck(trainExpData, train, nTop, nBottom, pValue,
+                prepro, featureSel, p.adj)
+
+
+    ## check on testExpData
+
+    stopifnot(is.data.frame(testExpData))
+
+    if (any(!sapply(testExpData, is.numeric))) {
+            stop("testExpData contains some not numeric data.")
+    }
+
+    if (any(is.na(testExpData))) {
+
+    stop(paste(deparse(substitute(testExpData)),
+                   "contains NA values."))
+    }
+
+    ## check on test
+
+    stopifnot(is.factor(test))
+
+    if (any(is.na(test))) {
+        stop(paste(deparse(substitute(test)),
+                   "contains NA values."))
+    }
+
+    if (length(test) != dim(testExpData)[2]) {
+        stop(paste(deparse(substitute(test)),
+                   "has different length from ",
+                   deparse(substitute(testExpData)), "columns."))
+    }
+
+    if (length(test) == 0) {
+        stop("Groups have length 0.")
+    }
+
+    # Normalization -----------------------------------------------------------
+
+    if (prepro) {
+        trainExpData <- .Normalization(trainExpData, train)
+    }
+
+    # Test Feature Selection --------------------------------------------------
+
+    train <- train[, drop = TRUE]
+    nTrain <- length(levels(train))
+    test <- test[, drop = TRUE]
+    nTest <- length(levels(test))
+
+    if (nTest != nTrain) {
+        stop("Train and Test have different number of groups.")
+    }
+
+    if (featureSel) {
+        trainExpData <- .FeatureSelection(trainExpData, pValue, train, nTrain,
+                                          featureSel, p.adj)
+        testExpData <- testExpData[rownames(trainExpData), ]
+    }
+
+    if ((nTop + nBottom) > dim(testExpData)[1]) {
+        stop("nTop and nBottom signatures overlap: testExpData too small.")
+    }
+
+    # Performing Scudo --------------------------------------------------------
+
+    .performScudo(testExpData, test, nTop, nBottom, pValue)
+}
+
+## Should there be the chance to use the same dataframe for train and test???
+## The program online uses as group input vector of indexes: in our case they
+## are the labels, hence we already consider that the user has divided
+## into training and testing.

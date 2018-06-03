@@ -1,6 +1,151 @@
 #' @include class.R accessors.R
 NULL
 
+# SCUDO FUNCTIONS -------------------------------------------------------------
+
+# .InputCheck ------------------------------------------------------------------
+
+.InputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
+                        prepro, featureSel, p.adj) {
+
+    # checks on expressionData ------------------------------------------------
+
+    stopifnot(is.data.frame(expressionData))
+
+    if (any(!sapply(expressionData, is.numeric))) {
+        stop("expressionData contains some not numeric data.")
+    }
+
+    if (any(is.na(expressionData))) {
+        stop(paste(deparse(substitute(expressionData)),
+                   "contains NA values."))
+    }
+
+    # checks on groups --------------------------------------------------------
+
+    stopifnot(is.factor(groups))
+
+    if (any(is.na(groups))) {
+        stop(paste(deparse(substitute(groups)),
+                   "contains NA values."))
+    }
+
+    if (length(groups) != dim(expressionData)[2]) {
+        stop(paste(deparse(substitute(groups)),
+                   "has different length from ",
+                   deparse(substitute(expressionData)), "columns."))
+    }
+
+    if (length(groups) == 0) {
+        stop("Groups have length 0.")
+    }
+    # checks on nTop and nBottom ----------------------------------------------
+
+    stopifnot(is.numeric(nTop), is.numeric(nBottom),
+              (length(nTop) == 1), (length(nBottom) == 1),
+              (class(nTop) == "numeric"), (class(nBottom) == "numeric"))
+
+    if (is.na(nTop) | is.na(nBottom)) {
+        stop("NA values for nTop and nBottom not allowed.")
+    }
+
+    if (is.nan(nTop) | is.nan(nBottom)) {
+        stop("NaN values for nTop and nBottom not allowed.")
+    }
+
+    if ((nTop <= 0) | (nBottom <= 0)) {
+        stop("nTop and nBottom must be positive integer numbers.")
+    }
+
+    stopifnot((nTop %% 1 == 0) , (nBottom %% 1 == 0))
+
+    # checks on pValue, prepro, featureSel and p.adj --------------------------
+
+    stopifnot(is.numeric(pValue),
+              (length(pValue) == 1),
+              (class(pValue) == "numeric"))
+
+    if (is.na(pValue)) {
+        stop("pValue = NA not allowed.")
+    }
+
+    if (is.nan(pValue)) {
+        stop("pValue = NaN not allowed.")
+    }
+
+    if (pValue == 0) {
+        stop("pValue = 0 given.")
+    }
+
+    if (length(pValue) == 0) {
+        stop("pValue given is a set of numeric of length 0.")
+    }
+
+    if ((pValue < 0) | (pValue > 1))  {
+        stop("pValue must be 0 < pVal < 1.")
+    }
+
+    stopifnot(is.logical(prepro), is.logical(featureSel),
+              class(prepro) == "logical", class(featureSel) == "logical",
+              length(prepro) == 1, length(featureSel) == 1)
+
+    if (length(prepro) == 0 | length(featureSel) == 0) {
+        stop("Set of logical of length 0 given for prepro or featureSel.")
+    }
+
+
+    if (length(p.adj) == 0) {
+        stop("Set of characters for p.adj has length 0.")
+    }
+
+    stopifnot(length(p.adj) == 1)
+
+    labs <- c("holm", "hochberg", "hommel",
+              "bonferroni", "BH", "BY", "fdr", "none")
+    if (!(p.adj %in% labs)) {
+        stop("p.adj given correction method not available.\n",
+             "Check stats::p.adjust documentation for possible options")
+    }
+}
+# .FeatureSelection ------------------------------------------------------------
+
+.FeatureSelection <- function(expressionData, pValue, groups,
+                              nGroups, featureSel, p.adj) {
+
+    if (nGroups == 1) {
+        warning(paste("Just one group in", deparse(substitute(groups)),
+                      ": skipping feature selection"))
+    }
+
+    if (featureSel && nGroups > 1) {
+        if (nGroups == 2) {
+            pVals <- apply(expressionData, 1, function(x) {
+                stats::wilcox.test(x[groups == levels(groups)[1]],
+                    x[groups == levels(groups)[2]], correct = FALSE,
+                    exact = FALSE)$p.value })
+        } else {
+            pVals <- apply(expressionData, 1, function(x) {
+                stats::kruskal.test(x, groups)$p.value
+            })
+        }
+        pVals <- stats::p.adjust(pVals, method = p.adj)
+        expressionData <- expressionData[pVals <= pValue, ]
+    }
+    expressionData
+}
+
+# .Normalization ---------------------------------------------------------------
+
+.Normalization <- function(ExpressionData, groups) {
+    virtControl <- rowMeans(vapply(levels(groups), function(x) {
+        rowMeans(ExpressionData[groups == x]) },
+        rep(0.0, dim(ExpressionData)[1])))
+    normExData <- ExpressionData / virtControl
+    normExData
+}
+
+# .performscudo ---------------------------------------------------------------
+
 .computeES <- function(top, bottom, profile) {
     # top: numeric, indeces of top genes
     # bottom: numeric, indeces of bottom genes
@@ -114,11 +259,15 @@ NULL
     )
 }
 
-.Normalization <- function(ExpressionData, groups) {
-    virtControl <- rowMeans(vapply(levels(groups), function(x) {
-        rowMeans(ExpressionData[groups == x]) },
-        rep(0.0, dim(ExpressionData)[1])))
-    normExData <- ExpressionData / virtControl
-    normExData
-}
+
+
+
+
+
+
+
+
+
+
+
 
