@@ -1,8 +1,6 @@
 #' @include class.R accessors.R
 NULL
 
-# SCUDO FUNCTIONS --------------------------------------------------------------
-
 # .InputCheck ------------------------------------------------------------------
 
 .InputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
@@ -32,7 +30,7 @@ NULL
 
     if (length(groups) != dim(expressionData)[2]) {
         stop(paste("Length of", deparse(substitute(groups)),
-                   "os different from number of columns of ",
+                   "is different from number of columns of ",
                    deparse(substitute(expressionData))))
     }
 
@@ -97,11 +95,10 @@ NULL
               length(p.adj) == 1)
 
     if (!(p.adj %in% stats::p.adjust.methods)) {
-        stop("p.adj should be one of “holm”, “hochberg”, “hommel”, “bonferroni”,
-            “BH”, “BY”, “fdr”, “none”. Check stats::p.adjust documentation.")
+        stop('p.adj should be one of "holm", "hochberg", "hommel", "bonferroni",
+            "BH", "BY", "fdr", "none". Check stats::p.adjust documentation.')
     }
 }
-
 
 # .FeatureSelection ------------------------------------------------------------
 
@@ -246,16 +243,5 @@ NULL
         Params = list(nTop = nTop, nBottom = nBottom, pValue = ..1)
     )
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
