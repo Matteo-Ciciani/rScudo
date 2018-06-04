@@ -56,6 +56,8 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, "a", 0.1))
 
+    expect_error(scudo(exData, gr1, 7, 7, 0.1))
+
     expect_error(scudo(exData, gr1, NaN, 3, 0.1))
 
     expect_error(scudo(exData, gr1, 1, NaN, 0.1))
@@ -72,7 +74,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 0.3, 0.1))
 
-    expect_error(scudo(exData, gr1, Inf, 0.3, 0.1))
+    expect_error(scudo(exData, gr1, Inf, 3, 0.1))
 
     expect_error(scudo(exData, gr1, 1, Inf, 0.1))
 
@@ -181,4 +183,5 @@ test_that("Scudo Predict selects right features.", {
     expect_warning(scudoPredict(res, testExData, grps1, 1, 3))
 
 })
+
 
