@@ -235,6 +235,8 @@ NULL
             stringsAsFactors = FALSE)[(nTop + 1):nrow(sigMatrix), ]
         rownames(ConsDwnSig) <- 1:nBottom
     }
+    pars <- list(nTop = nTop, nBottom = nBottom)
+    if (...length() != 0) pars$pValue <- ..1
 
     ScudoResults(DistMatrix = distances,
         UpSignatures = UpSig,
@@ -243,7 +245,7 @@ NULL
         ConsensusUpSignatures = ConsUpSig,
         ConsensusDownSignatures = ConsDwnSig,
         SelectedFeatures = rownames(expressionData),
-        Params = list(nTop = nTop, nBottom = nBottom, pValue = ..1)
+        Params = pars
     )
 }
 
