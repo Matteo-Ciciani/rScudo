@@ -95,8 +95,9 @@ NULL
               length(p.adj) == 1)
 
     if (!(p.adj %in% stats::p.adjust.methods)) {
-        stop('p.adj should be one of "holm", "hochberg", "hommel", "bonferroni",
-            "BH", "BY", "fdr", "none". Check stats::p.adjust documentation.')
+        stop(paste('p.adj should be one of "holm", "hochberg", "hommel",',
+                   '"bonferroni", "BH", "BY", "fdr", "none".',
+                   'Check stats::p.adjust documentation.'))
     }
 }
 
@@ -198,8 +199,10 @@ NULL
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
     nonZero <- !.isZero(distances)
     if (any(nonZero)) {
-        distances[nonZero] <- distances[nonZero] -
-            floor(100 * min(distances[nonZero])) / 100
+        minVal <- min(distances[nonZero])
+        if (!isTRUE(all.equal(minVal, 2))) {
+            distances[nonZero] <- distances[nonZero] - floor(100 * minVal) / 100
+        }
     }
 
     # compute consensus signatures
