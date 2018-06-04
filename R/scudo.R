@@ -3,6 +3,38 @@ NULL
 
 # scudo ------------------------------------------------------------------------
 
+#' Performs Scudo functions on Expression Data
+#'
+#' Performs optional normalization and feature selection, then creates a
+#' Scudo Results object.
+#'
+#' @param expressionData Data frame object that contains expressionData with
+#' different samples as columns.
+#'
+#' @param groups Factor containing groups labels for samples in
+#' expressionData.
+#'
+#' @param nTop Number of UpSignatures to be selected.
+#'
+#' @param nBottom Number of DownSignatures to be selected.
+#'
+#' @param pValue pValue for optional feature selection. If no feature selection
+#' is performed, pValue is not used.
+#'
+#' @param prepro Preprocessing on expressionData performed through a
+#' Normalization step. Default = \code{TRUE}: if \code{FALSE}
+#' no normalization is performed.
+#'
+#' @param featureSel Feature selection performed through Wilcoxon-Mann-Withney
+#' test, or with Kruskal-Wallis test. Default = \code{TRUE}: if \code{FALSE}
+#' no feature selection is performed.
+#'
+#' @param p.adj p.adj optionally performed on feature selection step. Default
+#' \code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for the
+#' possible adjustments.
+#'
+#' @return S4 class object \linkS4class{ScudoResults}.
+#'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue,
                   prepro = TRUE, featureSel = TRUE, p.adj = "none") {
