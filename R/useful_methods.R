@@ -25,9 +25,7 @@ setMethod("show", "ScudoResults", function(object) {
         cat("First 5 rows and cols\n")
         print(UpSignatures(object)[1:5,1:5])
     } else {
-        d2_min <- min(d2)
-        cat("First ", d2_min, "rows and cols\n")
-        print(UpSignatures(object)[1:d2_min,1:d2_min])
+        print(UpSignatures(object))
     }
     cat("\n")
 
@@ -38,9 +36,7 @@ setMethod("show", "ScudoResults", function(object) {
         print(DownSignatures(object)[1:5,1:5])
         cat("\t...\n", DownSignatures(object)[-1,])
     } else {
-        d3_min <- min(d3)
-        cat("First ", d3_min, "rows and cols\n")
-        print(DownSignatures(object)[1:d3_min,1:d3_min])
+        print(DownSignatures(object))
     }
     cat("\n")
 

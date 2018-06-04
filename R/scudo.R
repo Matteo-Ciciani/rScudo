@@ -3,6 +3,38 @@ NULL
 
 # scudo ------------------------------------------------------------------------
 
+#' Performs Scudo functions on Expression Data
+#'
+#' Performs optional normalization and feature selection, then creates a
+#' Scudo Results object.
+#'
+#' @param expressionData Data frame object that contains expressionData with
+#' different samples as columns.
+#'
+#' @param groups Factor containing groups labels for samples in
+#' expressionData.
+#'
+#' @param nTop Number of UpSignatures to be selected.
+#'
+#' @param nBottom Number of DownSignatures to be selected.
+#'
+#' @param pValue pValue for optional feature selection. If no feature selection
+#' is performed, pValue is not used.
+#'
+#' @param prepro Preprocessing on expressionData performed through a
+#' Normalization step. Default = \code{TRUE}: if \code{FALSE}
+#' no normalization is performed.
+#'
+#' @param featureSel Feature selection performed through Wilcoxon-Mann-Withney
+#' test, or with Kruskal-Wallis test. Default = \code{TRUE}: if \code{FALSE}
+#' no feature selection is performed.
+#'
+#' @param p.adj p.adj optionally performed on feature selection step. Default
+#' \code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for the
+#' possible adjustments.
+#'
+#' @return S4 class object \linkS4class{ScudoResults}.
+#'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue,
                   prepro = TRUE, featureSel = TRUE, p.adj = "none") {
@@ -43,70 +75,43 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
 # scudoPredict ----------------------------------------------------------------
 
 #' @export
-scudoPredict <- function(trainExpData, testExpData, test, train,
-                         nTop, nBottom, pValue,
-                         prepro = TRUE, featureSel = TRUE, p.adj = "none") {
+scudoPredict <- function(trainScudoRes, testExpData, testGroups,
+                         nTop, nBottom, prepro = TRUE, featureSel = TRUE,
+                         p.adj = "none") {
+
     # InputCheck --------------------------------------------------------------
+    pValue <- 1
 
-    .InputCheck(trainExpData, train, nTop, nBottom, pValue,
+    .InputCheck(testExpData, testGroups, nTop, nBottom, pValue,
                 prepro, featureSel, p.adj)
-
-
-    ## check on testExpData
-
-    stopifnot(is.data.frame(testExpData))
-
-    if (any(!sapply(testExpData, is.numeric))) {
-            stop("testExpData contains some not numeric data.")
-    }
-
-    if (any(is.na(testExpData))) {
-
-    stop(paste(deparse(substitute(testExpData)),
-                   "contains NA values."))
-    }
-
-    ## check on test
-
-    stopifnot(is.factor(test))
-
-    if (any(is.na(test))) {
-        stop(paste(deparse(substitute(test)),
-                   "contains NA values."))
-    }
-
-    if (length(test) != dim(testExpData)[2]) {
-        stop(paste(deparse(substitute(test)),
-                   "has different length from ",
-                   deparse(substitute(testExpData)), "columns."))
-    }
-
-    if (length(test) == 0) {
-        stop("Groups have length 0.")
-    }
 
     # Normalization -----------------------------------------------------------
 
     if (prepro) {
-        trainExpData <- .Normalization(trainExpData, train)
+        testExpData <- .Normalization(testExpData, testGroups)
     }
 
     # Test Feature Selection --------------------------------------------------
 
-    train <- train[, drop = TRUE]
-    nTrain <- length(levels(train))
-    test <- test[, drop = TRUE]
-    nTest <- length(levels(test))
+    testGroups <- testGroups[, drop = TRUE]
+    nTest <- length(levels(testGroups))
+    nTrain <- length(levels(Groups(trainScudoRes)))
 
     if (nTest != nTrain) {
         stop("Train and Test have different number of groups.")
     }
 
-    if (featureSel) {
-        trainExpData <- .FeatureSelection(trainExpData, pValue, train, nTrain,
-                                          featureSel, p.adj)
-        testExpData <- testExpData[rownames(trainExpData), ]
+    temp <- SelectedFeatures(trainScudoRes) %in% rownames(testExpData)
+    missing <- SelectedFeatures(trainScudoRes)[!temp]
+
+    if (length(missing) != 0) {
+        warning(paste("There are ", length(missing),
+        " missing values in testExpData that are present in trainScudoRes:\n",
+                list(missing)))
     }
+
+    testExpData <- testExpData[SelectedFeatures(trainScudoRes), ]
+
 
     if ((nTop + nBottom) > dim(testExpData)[1]) {
         stop("nTop and nBottom signatures overlap: testExpData too small.")
@@ -114,10 +119,10 @@ scudoPredict <- function(trainExpData, testExpData, test, train,
 
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(testExpData, test, nTop, nBottom, pValue)
+    .performScudo(testExpData, testGroups, nTop, nBottom, pValue)
 }
 
 ## Should there be the chance to use the same dataframe for train and test???
 ## The program online uses as group input vector of indexes: in our case they
 ## are the labels, hence we already consider that the user has divided
-## into training and testing.
+## into training and testing
