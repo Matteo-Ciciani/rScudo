@@ -55,7 +55,6 @@ setMethod("show", "ScudoResults", function(object) {
 
 # Summary ----------------------------------------------------------------------
 
-#ADD n NUMBER OF SAMPLES
 #' @export
 setMethod("summary", signature = "ScudoResults", definition =
               function(object) {

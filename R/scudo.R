@@ -3,26 +3,27 @@ NULL
 
 # scudo ------------------------------------------------------------------------
 
-#' Performs Scudo functions on Expression Data
+#' Performs SCUDO on Expression Data
 #'
 #' Performs optional normalization and feature selection, then creates a Scudo
 #' Results object.
 #'
-#' @param expressionData Data frame object that contains expressionData with
+#' Details...
+#'
+#' @param expressionData data.frame object that contains expressionData with
 #'   different samples as columns.
 #'
-#' @param groups Factor containing groups labels for samples in expressionData.
+#' @param groups factor containing groups labels for samples in expressionData.
 #'
-#' @param nTop Number of UpSignatures to be selected.
+#' @param nTop number of down-regulated features to include in the signatures.
 #'
-#' @param nBottom Number of DownSignatures to be selected.
+#' @param nBottom number of down-regulated features to include in the signatures.
 #'
-#' @param pValue pValue for optional feature selection. If no feature selection
-#'   is performed, pValue is not used.
+#' @param pValue pValue cutoff for optional feature selection. If no feature
+#'   selection is performed, pValue is ignored.
 #'
-#' @param prepro Preprocessing on expressionData performed through a
-#'   Normalization step. Default = \code{TRUE}: if \code{FALSE} no normalization
-#'   is performed.
+#' @param prepro logical, whether or not to normalize the expression data. See
+#'   Details for a description of the normalization used.
 #'
 #' @param featureSel Logical, whether or not to perform feature selection.
 #'   Feature selection performed through a Wilcoxon-Mann-Withney test, or with a
@@ -35,7 +36,7 @@ NULL
 #' @return S4 class object \linkS4class{ScudoResults}.
 #'
 #' @export
-scudo <- function(expressionData, groups, nTop, nBottom, pValue,
+scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
                   prepro = TRUE, featureSel = TRUE, p.adj = "none") {
 
     .InputCheck(expressionData, groups, nTop, nBottom, pValue,
@@ -68,7 +69,8 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue,
 
     # Performing Scudo ---------------------------------------------------------
 
-    .performScudo(expressionData, groups, nTop, nBottom, pValue)
+    .performScudo(expressionData, groups, nTop, nBottom, pValue, prepro,
+                  featureSel, p.adj)
 }
 
 # scudoPredict ----------------------------------------------------------------
@@ -115,6 +117,6 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
     }
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(testExpData, testGroups, nTop, nBottom)
+    .performScudo(testExpData, testGroups, nTop, nBottom, prepro = TRUE)
 }
 

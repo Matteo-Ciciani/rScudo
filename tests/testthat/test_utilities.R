@@ -48,7 +48,7 @@ test_that(".performScudo works", {
     nBottom <- 3
     p <- 0.05
 
-    res <- .performScudo(exprData, grps, nTop, nBottom, p)
+    res <- .performScudo(exprData, grps, nTop, nBottom, p, FALSE, FALSE, "none")
     expect_s4_class(res, "ScudoResults")
 
     d_ad <- 1 - ((-6/8 + 2/3)/2 + (-6/8 + 2/3)/2)/2
@@ -81,7 +81,8 @@ test_that(".performScudo works", {
     expect_identical(Groups(res), grps)
     expect_identical(SelectedFeatures(res), letters[11:20])
     expect_identical(Params(res), list(nTop = nTop, nBottom = nBottom,
-                                       pValue = p))
+                                       pValue = p, prepro = FALSE,
+                                       featureSel = FALSE, p.adj = "none"))
 })
 
 test_that(".Normalization works correctly", {

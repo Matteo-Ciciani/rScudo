@@ -2,41 +2,42 @@
 % Please edit documentation in R/scudo.R
 \name{scudo}
 \alias{scudo}
-\title{Performs Scudo functions on Expression Data}
+\title{Performs SCUDO on Expression Data}
 \usage{
-scudo(expressionData, groups, nTop, nBottom, pValue, prepro = TRUE,
+scudo(expressionData, groups, nTop, nBottom, pValue = 0.1, prepro = TRUE,
   featureSel = TRUE, p.adj = "none")
 }
 \arguments{
-\item{expressionData}{Data frame object that contains expressionData with
+\item{expressionData}{data.frame object that contains expressionData with
 different samples as columns.}
 
-\item{groups}{Factor containing groups labels for samples in
-expressionData.}
+\item{groups}{factor containing groups labels for samples in expressionData.}
 
-\item{nTop}{Number of UpSignatures to be selected.}
+\item{nTop}{number of down-regulated features to include in the signatures.}
 
-\item{nBottom}{Number of DownSignatures to be selected.}
+\item{nBottom}{number of down-regulated features to include in the signatures.}
 
-\item{pValue}{pValue for optional feature selection. If no feature selection
-is performed, pValue is not used.}
+\item{pValue}{pValue cutoff for optional feature selection. If no feature
+selection is performed, pValue is ignored.}
 
-\item{prepro}{Preprocessing on expressionData performed through a
-Normalization step. Default = \code{TRUE}: if \code{FALSE}
-no normalization is performed.}
+\item{prepro}{logical, whether or not to normalize the expression data. See
+Details for a description of the normalization used.}
 
-\item{featureSel}{Feature selection performed through Wilcoxon-Mann-Withney
-test, or with Kruskal-Wallis test. Default = \code{TRUE}: if \code{FALSE}
-no feature selection is performed.}
+\item{featureSel}{Logical, whether or not to perform feature selection.
+Feature selection performed through a Wilcoxon-Mann-Withney test, or with a
+Kruskal-Wallis test, depending on the number of groups.}
 
 \item{p.adj}{p.adj optionally performed on feature selection step. Default
-\code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for the
-possible adjustments.}
+\code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
+the possible adjustments.}
 }
 \value{
 S4 class object \linkS4class{ScudoResults}.
 }
 \description{
-Performs optional normalization and feature selection, then creates a
-Scudo Results object.
+Performs optional normalization and feature selection, then creates a Scudo
+Results object.
+}
+\details{
+Details...
 }

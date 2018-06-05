@@ -236,7 +236,14 @@ NULL
         rownames(ConsDwnSig) <- 1:nBottom
     }
     pars <- list(nTop = nTop, nBottom = nBottom)
-    if (...length() != 0) pars$pValue <- ..1
+    if (...length() == 1) {
+        pars$prepro <- ..1
+    } else {
+        pars$pValue <- ..1
+        pars$prepro <- ..2
+        pars$featureSel <- ..3
+        pars$p.adj <- ..4
+    }
 
     ScudoResults(DistMatrix = distances,
         UpSignatures = UpSig,
