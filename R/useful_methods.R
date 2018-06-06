@@ -6,47 +6,46 @@ NULL
 
 #' @export
 setMethod("show", "ScudoResults", function(object) {
-    cat("Object of class ScudoResults\n\n")
+    cat("Scudo Results Object",  "\n\n")
+    cat("    Type                   : ", class(object), "\n")
+    cat("    Number of samples      : ", paste(dim(DistMatrix(object))[1]),
+        "\n")
+    cat("    UpSignatures           : ", paste(Params(object)$nTop),
+        "\n")
+    cat("    DownSignatures         : ", paste(Params(object)$nBottom),
+        "\n")
 
-    d1 <- dim(DistMatrix(object))
-    cat("Distance Matrix \ttot dim:", d1[1], "rows and ", d1[2], "cols\n")
-    if (all(d1 > 5)) {
-        cat("First 5 rows and cols\n")
-        print(DistMatrix(object)[1:5,1:5])
-    } else {
-        cat("First ", dim(DistMatrix(object))[1], "rows and cols\n")
-        print(DistMatrix(object))
-    }
-    cat("\n")
+    nGroups <- length(colnames(ConsensusDownSignatures(object)))
+    cat("    Number of groups       : ", nGroups, "\n\n")
 
-    d2 <- dim(UpSignatures(object))
-    cat("Up Signatures \t\ttot dim:", d2[1], "rows and ", d2[2], "cols\n")
-    if (all(d2 > 5)) {
-        cat("First 5 rows and cols\n")
-        print(UpSignatures(object)[1:5,1:5])
-    } else {
-        print(UpSignatures(object))
-    }
-    cat("\n")
+    if (length(Params(object)) == 3) {
+        cat("    ScudoPredict           : ", "Performed\n")
+        cat("    Normalization            ", "\n")
+        cat("    Performed              : ", paste(Params(object)$prepro),
+            "\n\n")
 
-    d3 <- dim(DownSignatures(object))
-    cat("Down Signatures \ttot dim:", d3[1], "rows and ", d3[2], "cols\n")
-    if (all(d3 > 5)) {
-        cat("First 5 rows and cols\n")
-        print(DownSignatures(object)[1:5,1:5])
-        cat("\t...\n", DownSignatures(object)[-1,])
-    } else {
-        print(DownSignatures(object))
-    }
-    cat("\n")
+    }else{
 
-    d4 <- length(SelectedFeatures(object))
-    cat("Selected Features \ttot dim:", d4, "\n")
-    if (all(d4 > 10)) {
-        cat("First 10: ")
-        print(SelectedFeatures(object)[1:10])
-    } else {
-       print(SelectedFeatures(object))
+        cat("    Normalization            ", "\n")
+        cat("    Performed              : ", paste(Params(object)$prepro),
+            "\n\n")
+        cat("    Feature selection        ", "\n")
+        cat("    Performed              : ", Params(object)$featureSel)
+
+        if (Params(object)$featureSel) {
+            if (nGroups == 2) {
+                cat("    Test               : ", "Wilcoxon Rank Sum statistic",
+                    "\n")
+            }else{
+                cat("    Test               : ", "Kruskal-Wallis Rank Sum Test",
+                    "\n")
+            }
+            cat("    pValue             : ", paste(Params(object)$pValue), "\n")
+            cat("    p.adj method       : ", paste(Params(object)$p.adj), "\n")
+            cat("    selected features  ; ",
+                paste(length(SelectedFeatures(object))))
+        }
+
     }
 
     invisible(NULL)
