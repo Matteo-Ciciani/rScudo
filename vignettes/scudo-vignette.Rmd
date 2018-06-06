@@ -1,12 +1,21 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "SCUDO: Signature-based Clustering for Diagnostic Purposes"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+author:
+- name: Matteo Ciciani
+  affiliation: &aff CIBIO, Univ. of Trento, Trento, Italy
+- name: Thomas Cantore
+  affiliation: *aff
+- name: Enrica Colasurdo
+  affiliation: *aff
+output:
+    BiocStyle::html_document:
+        toc_float: true
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{SCUDO: Signature-based Clustering for Diagnostic Purposes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+abstract: This package implements in R the SCUDO pipeline proposed in Lauria (2013) and Lauria, Moyseos, Priami (2015).
 ---
 
 ```{r setup, include = FALSE}
@@ -16,50 +25,83 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+# An introduction about the method
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+...
 
-## Vignette Info
+# Example
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+Example using the `r Biocpkg("ALL")` package, containing data of T- and B-cell Acute Lymphocytic Leukemia.
 
-## Styles
+## Load required packages and explore data
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r, message=FALSE}
+library(scudo)
+library(ALL)
+data(ALL)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+We cab extract the expression data and the samples annotation.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r}
+expData <- exprs(ALL)
+dim(expData)
+phenoData <- pData(ALL)
 ```
 
-Also a quote using `>`:
+`expData` contains mRNA expression measurements for 128 samples and 12625 features. The factor `phenoData$BT` classifies the samples as B- or T-cell lymphocytic leukemia:
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r}
+summary(phenoData$BT)
+```
+
+We can see that there are different classes of B- and T-cell leukemia. For now we can simplify this, keeping only the distinction between B- and T-cells.
+
+```{r}
+bt <- as.factor(stringr::str_extract(phenoData$BT, "^."))
+summary(bt)
+```
+
+## Perform analysis
+
+For now the input has to be a data.frame, soon we will add matrices and ExpressionSets.
+
+```{r}
+expData <- as.data.frame(expData)
+ScudoRes <- scudo(expData, groups = bt, nTop = 100, nBottom = 100, pValue = 0.1)
+#ScudoRes uncomment when show is implemented
+```
+
+From this object we can extract the signatures for each sample and the consensus signatures for each group.
+
+```{r}
+UpSig <- UpSignatures(ScudoRes)
+UpSig[1:5,1:5]
+ConsUpSig <- ConsensusUpSignatures(ScudoRes)
+ConsUpSig[1:5, ]
+```
+
+The object `ScudoRes` can be used to generate a network of samples, as an `r CRANpkg("igraph")`object, using the function `ScudoNetwork`.
+
+```{r}
+net <- ScudoNetwork(ScudoRes, N = 0.2)
+```
+
+The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
+
+```{r}
+plot(net)
+```
+
+This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
+
+```{r, eval=FALSE}
+ScudoCytoscape(net)
+```
+
+# References
+
+Mario Lauria. Rank-based transcriptional signatures. Systems Biomedicine. 2013; 1(4):228-239.
+
+Mario Lauria, Petros Moyseos and Corrado Priami. SCUDO: a tool for signature-based clustering of expression profiles. Nucleic Acids Research. 2015; 43(W1):W188-92.
+
