@@ -69,7 +69,7 @@ For now the input has to be a data.frame, soon we will add matrices and Expressi
 ```{r}
 expData <- as.data.frame(expData)
 ScudoRes <- scudo(expData, groups = bt, nTop = 100, nBottom = 100, pValue = 0.1)
-#ScudoRes uncomment when show is implemented
+ScudoRes
 ```
 
 From this object we can extract the signatures for each sample and the consensus signatures for each group.
