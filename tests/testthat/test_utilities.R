@@ -32,11 +32,6 @@ test_that(".computeSignature works", {
     expect_equal(apply(indeces, 2, .computeSignature, 2, 2), m)
 })
 
-test_that(".isZero works", {
-    m <- matrix(rep(c(1, 0), 50), ncol = 10)
-    expect_identical(.isZero(m), rep(c(FALSE, TRUE), 50))
-})
-
 test_that(".performScudo works", {
     exprData <- data.frame(a = 11:20,
                            b = 16:25,

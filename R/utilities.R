@@ -172,8 +172,6 @@ NULL
     ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
 }
 
-.isZero <- Vectorize(function(x) isTRUE(all.equal(x, 0)))
-
 .performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
     # transform expressionData in index matrix
     indexMatrix <- apply(expressionData, 2, order, decreasing = TRUE)
@@ -197,7 +195,7 @@ NULL
 
     # compute distance matrix
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
-    nonZero <- !.isZero(distances)
+    nonZero <- distances > sqrt(.Machine$double.eps)
     if (any(nonZero)) {
         minVal <- min(distances[nonZero])
         if (!isTRUE(all.equal(minVal, 2))) {

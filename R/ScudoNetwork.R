@@ -48,8 +48,8 @@ setMethod("ScudoNetwork", signature = "ScudoResults", definition =
         # get distance matrix and generate adjacency matrix according to N
         adjMatrix <- matrix(0, nrow = dim(DistMatrix(object))[1],
             ncol = dim(DistMatrix(object))[1])
-        NQuantile <- stats::quantile(DistMatrix(object)[!.isZero(
-            DistMatrix(object))], probs = N)
+        NQuantile <- stats::quantile(DistMatrix(object)[
+            DistMatrix(object) > sqrt(.Machine$double.eps)], probs = N)
         adjMatrix[DistMatrix(object) <= NQuantile] <- 1
         colnames(adjMatrix) <- colnames(DistMatrix(object))
 
