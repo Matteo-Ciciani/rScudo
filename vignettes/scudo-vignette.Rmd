@@ -68,42 +68,88 @@ bt <- as.factor(stringr::str_extract(phenoData$BT, "^."))
 summary(bt)
 ```
 
-## Perform analysis
-
-Rigth now the input has to be a data.frame, soon we will add matrices and ExpressionSets.
+We can divide this dataset in a training set and a testing set. We also convert them to data.farmes. Rigth now the input to our function has to be a data.frame, but we will soon add matrices and ExpressionSets.
 
 ```{r}
-expData <- as.data.frame(expData)
-ScudoRes <- scudo(expData, groups = bt, nTop = 100, nBottom = 100, pValue = 0.1)
-ScudoRes
+inTrain <- c(1:47, 96:112)
+train <- as.data.frame(expData[, inTrain])
+test <- as.data.frame(expData[, -inTrain])
+```
+
+
+
+## Analyze training set
+
+```{r}
+ScudoTrain <- scudo(train, groups = bt[inTrain], nTop = 100, nBottom = 100, pValue = 0.1)
+ScudoTrain
 ```
 
 From this object we can extract the signatures for each sample and the consensus signatures for each group.
 
 ```{r}
-UpSig <- UpSignatures(ScudoRes)
+UpSig <- UpSignatures(ScudoTrain)
 UpSig[1:5,1:5]
-ConsUpSig <- ConsensusUpSignatures(ScudoRes)
+ConsUpSig <- ConsensusUpSignatures(ScudoTrain)
 ConsUpSig[1:5, ]
 ```
 
 The object `ScudoRes` can be used to generate a network of samples, as an `r CRANpkg("igraph")`object, using the function `ScudoNetwork`.
 
 ```{r}
-net <- ScudoNetwork(ScudoRes, N = 0.2)
+netTrain <- ScudoNetwork(ScudoTrain, N = 0.3)
 ```
 
 The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
 
 ```{r}
-plot(net)
+plot(netTrain)
 ```
 
 This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
 
 ```{r, eval=FALSE}
-ScudoCytoscape(net)
+ScudoCytoscape(netTrain)
 ```
+
+## Community clustering
+
+We can use a community clustering algorithm to identify clusters of samples. In the following example we use the function `cluster_fast_greedy` to perform a greedy clustering of our network. In Cytoscape we can perform a similar analysis using the GLay clustering function from the clusterMaker app.
+
+```{r,warning=FALSE}
+clusterTrain <- igraph::cluster_fast_greedy(netTrain)
+plot(clusterTrain, netTrain)
+```
+
+## Analyse testing set
+
+We can use a `ScudoResults` object and the function `scudoPredict` to analyze the testing set. The feature selection is not performed in the testing set. Instead, only the features selected in the training are used in the analysis of the testing set.
+
+```{r}
+ScudoTest <- scudoPredict(ScudoTrain, test, bt[-inTrain], nTop = 100, nBottom = 100)
+ScudoTest
+```
+
+We can plot the resulting network and we can attempt to identify communities.
+
+```{r}
+netTest <- ScudoNetwork(ScudoTest, N = 0.3)
+plot(netTest)
+```
+
+The groups are already well partitioned. We can nonetheless perform the community clustering.
+
+```{r,warning=FALSE}
+clusterTest <- igraph::cluster_fast_greedy(netTest)
+plot(clusterTest, netTest)
+```
+
+The same analysis could be performed in Cytoscape.
+
+```{r,eval=FALSE}
+ScudoCytoscape(netTest)
+```
+
 
 # References
 

@@ -42,7 +42,7 @@ ScudoCytoscape <- function(igraph, title = NULL, collection = "SCUDO",
     RCy3::setNodeColorMapping("color", mapping.type = "p")
     style <- list(visualProperty = "NODE_TRANSPARENCY", value = 200)
     RCy3::setVisualPropertyDefault(style)
-    RCy3::setEdgeLineWidthDefault(1.5)
+    RCy3::setEdgeLineWidthDefault(1)
     RCy3::layoutNetwork("cose")
     id
 }

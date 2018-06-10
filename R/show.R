@@ -8,12 +8,10 @@ NULL
 #' @aliases show,ScudoResults-method
 #' @usage NULL
 setMethod("show", "ScudoResults", function(object) {
-    cat("Object of class ScudoResults",  "\n\n")
+    cat("Object of class ScudoResults\n")
+    cat("Result of", ifelse(length(Params(object)) == 3,
+        "scudoPredict", "scudo"), "\n\n")
     cat("Number of samples      : ", paste(dim(DistMatrix(object))[1]),
-        "\n")
-    cat("UpSignatures length    : ", paste(Params(object)$nTop),
-        "\n")
-    cat("DownSignatures length  : ", paste(Params(object)$nBottom),
         "\n")
 
     nGroups <- length(colnames(ConsensusDownSignatures(object)))
@@ -22,16 +20,14 @@ setMethod("show", "ScudoResults", function(object) {
     invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
         "samples\n")))
 
-    if (length(Params(object)) == 3) {
+    cat("UpSignatures length    : ", paste(Params(object)$nTop),
+        "\n")
+    cat("DownSignatures length  : ", paste(Params(object)$nBottom),
+        "\n")
+    cat("Normalization          : ", paste0(ifelse(Params(object)$prepro,
+        "", "not "), "performed"), "\n")
 
-        cat("ScudoPredict           : ", "Performed\n")
-        cat("Normalization          : ", paste0(ifelse(Params(object)$prepro,
-            "", "not "), "performed"), "\n")
-
-    }else{
-
-        cat("Normalization          : ", paste0(ifelse(Params(object)$prepro,
-            "", "not "), "performed"), "\n")
+     if (length(Params(object)) != 3) {
         cat("Feature selection      : ", paste0(
             ifelse(Params(object)$featureSel, "", "not "), "performed"), "\n")
 
