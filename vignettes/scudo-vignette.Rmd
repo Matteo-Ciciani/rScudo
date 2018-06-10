@@ -25,15 +25,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# An introduction about the method
+# An introduction to the method
 
-The aim of SCUDO is to work as a classifier for microarray-based phenotype prediction. The method is based on the idea of a sample-specific signature. The expected result is the emergence of a partitioning of the set of samples in separate groups on the basis of signature similarity. \
-A first normalization step and feature selection are optionally performed. Feature selection is obtained through a Wilcoxon Rank Sum Statistics or Kruskal-Wallis Rank Sum Test depending on number of sample groups considered. \
-The subsequent operations include single sample gene ranking and signature extraction (based on UpSignatures, DownSignatures values). An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance is calculated finding an enrichment score (ES) of the signature of one sample against the whole list of sorted IDs.\
-Consensus signtures, both for up- and down-signatures are then computed, in order to extract the overall most relevant signatures, for each of the considered groups.\   
-Finally, a threshold as the Nth lowest percentile of distances is used in order to produce a map as a graph, where each node represents signatures and each node is connected by an edge corresponding to their respective distance. The map can be displayed through the use of Cytoscape. 
+SCUDO is a method for the analysis of gene expression profiles for diagnostic and classification purposes. The method is based on the idea of a sample-specific gene signatures. The expected result is the emergence of a partitioning of the set of samples in separate clusters (propely, communities) on the basis of signature similarity.
 
-# Example
+First, normalization and feature selection are optionally performed. Feature selection is carried out through a Wilcoxon rank sum test or through a Kruskal-Wallis rank sum test depending on the number of groups considered.
+
+The subsequent operations include single sample gene ranking and the extraction of signatures form up-regulated and down-regulated genes. The sizes of the signatures are customizable. An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance between two samples is computed as the mean of the enrichment scores (ES) of the signature of each sample in the expression profile of the other sample. Consensus signtures are then computed, both for up- and down-regulated genes and for each group. This provides a list of interesting genes of each group.
+
+Finally, a user-defined threshold N is used to generate a network of samples. The distance matrix is treated as an adjacency matrix, but only the distances that fall below the N^th^ percentile of distances are used to draw arcs in the network. The network can be displayed in R or using Cytoscape. 
+
+# Worked Example
 
 Example using the `r Biocpkg("ALL")` package, containing data of T- and B-cell Acute Lymphocytic Leukemia.
 

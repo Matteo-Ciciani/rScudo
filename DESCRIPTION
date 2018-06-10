@@ -1,7 +1,7 @@
 Package: scudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
-Version: 0.0.4.9002
+Version: 0.0.4.9003
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com", role = c("aut", "cre")),
     person("Thomas", "Cantore", email = "cantorethomas@gmail.com", role = "aut"),
     person("Enrica", "Colasurdo", email = "enrica.colasurdo@gmail.com", role = "aut"))
@@ -20,7 +20,7 @@ Collate:
     'scudo.R'
     'ScudoCytoscape.R'
     'ScudoNetwork.R'
-    'useful_methods.R'
+    'show.R'
 RoxygenNote: 6.0.1
 Depends: R (>= 3.5.0)
 Imports: methods,
@@ -32,5 +32,6 @@ Imports: methods,
 Suggests: testthat,
     BiocStyle,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ALL
 VignetteBuilder: knitr
