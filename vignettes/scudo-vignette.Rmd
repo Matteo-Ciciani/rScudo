@@ -27,10 +27,11 @@ knitr::opts_chunk$set(
 
 # An introduction about the method
 
-The aim of SCUDO is to perform as a classifier for microarray-based phenotype prediction. The method is based on the idea of a sample-specific signature. The expected result is the emergence of a partitioning of the set of samples in separate groups on the basis of signature similarity. \\
-A first normalization step and feature selection are optionally performed. Feature selection is obtained through a Wilcoxon Rank Sum Statistics or Kruskal-Wallis Rank Sum Test depending on number of sample groups considered. \\
-The subsequent operations include single sample gene ranking and signature extraction (based on UpSignatures, DownSignatures values). An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance is calculated finding an enrichment score (ES) of the signature of one sample against the whole list of sorted IDs.\\
-Finally, a threshold as the Nth lowest percentile of distances is used in order to produce a map as a graph, where each node represents signatures and each node is connected by an edge corresponding to their respective distance. The map is produced through the use of Cytoscape. 
+The aim of SCUDO is to work as a classifier for microarray-based phenotype prediction. The method is based on the idea of a sample-specific signature. The expected result is the emergence of a partitioning of the set of samples in separate groups on the basis of signature similarity. \
+A first normalization step and feature selection are optionally performed. Feature selection is obtained through a Wilcoxon Rank Sum Statistics or Kruskal-Wallis Rank Sum Test depending on number of sample groups considered. \
+The subsequent operations include single sample gene ranking and signature extraction (based on UpSignatures, DownSignatures values). An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance is calculated finding an enrichment score (ES) of the signature of one sample against the whole list of sorted IDs.\
+Consensus signtures, both for up- and down-signatures are then computed, in order to extract the overall most relevant signatures, for each of the considered groups.\   
+Finally, a threshold as the Nth lowest percentile of distances is used in order to produce a map as a graph, where each node represents signatures and each node is connected by an edge corresponding to their respective distance. The map can be displayed through the use of Cytoscape. 
 
 # Example
 
@@ -44,7 +45,7 @@ library(ALL)
 data(ALL)
 ```
 
-We cab extract the expression data and the samples annotation.
+We can extract the expression data and the samples annotation.
 
 ```{r}
 expData <- exprs(ALL)
@@ -67,7 +68,7 @@ summary(bt)
 
 ## Perform analysis
 
-For now the input has to be a data.frame, soon we will add matrices and ExpressionSets.
+Rigth now the input has to be a data.frame, soon we will add matrices and ExpressionSets.
 
 ```{r}
 expData <- as.data.frame(expData)
