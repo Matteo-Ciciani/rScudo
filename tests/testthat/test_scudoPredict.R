@@ -17,22 +17,22 @@ test_that("Scudo Predict selects right features.", {
     res <- .performScudo(exprData, grps, nTop, nBottom, p)
 
     #Examples of scudo predict
-    testExData <- data.frame(e = 11:20,
+    testExpData <- data.frame(e = 11:20,
                              f = 16:25,
                              g = rev(1:10),
                              h = c(1:2, rev(3:10)))
-    rownames(testExData) <- letters[11:20]
+    rownames(testExpData) <- letters[11:20]
     grps1 <- as.factor(c("G1", "G2", "G2", "G1"))
     grps2 <- as.factor(c("G1", "G2", "G3", "G1"))
 
     # Testing ScudoRes obj produced
-    expect_s4_class(scudoPredict(res, testExData, grps1, 1, 3), "ScudoResults")
+    expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "ScudoResults")
 
     # tests on warnings and errors
 
-    expect_warning(scudoPredict(res, testExData, grps2, 1, 3))
+    expect_warning(scudoPredict(res, testExpData, grps2, 1, 3))
 
-    rownames(testExData) <- letters[1:10]
-    expect_error(suppressWarnings(scudoPredict(res, testExData, grps1, 1, 3)))
+    rownames(testExpData) <- letters[1:10]
+    expect_error(suppressWarnings(scudoPredict(res, testExpData, grps1, 1, 3)))
 
 })

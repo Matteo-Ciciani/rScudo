@@ -134,24 +134,31 @@ NULL
 # .performscudo ----------------------------------------------------------------
 
 .computeES <- function(top, bottom, profile) {
-    # top: numeric, indeces of top genes
-    # bottom: numeric, indeces of bottom genes
-    # profile: numeric, indeces returned by order(espressionData)
+    # top: numeric, indexes of top genes
+    # bottom: numeric, indexes of bottom genes
+    # profile: numeric, indexes returned by order(espressionData)
+
+    # faster approach: instead of using cumsum, do the computation only on the
+    # indexes in top (or bottom) and on the indexes before them. Complexity
+    # should go from linear in the number of feaures to linear in the signature
+    # size. There should be enough information in the initial data (top +
+    # profile) to figure out on which indexes we need to make computations.
 
     # top signature ------------------------------------------------------------
-    # alternative implementation, to test, should be faster
-    # membership <- rep(FALSE, length(profile))
-    # membership[top] <- TRUE
-    # membership <- membership[profile]
+    membership <- rep(FALSE, length(profile))
+    membership[top] <- TRUE
+    membership <- membership[profile]
 
-    membership <- profile %in% top
     pHits <- cumsum(membership) / length(top)
     pMisses <- cumsum(!membership) / (length(profile) - length(top))
     indexMax <- which.max(abs(pHits - pMisses))
     topES <- pHits[indexMax] - pMisses[indexMax]
 
     # bottom signature ---------------------------------------------------------
-    membership <- profile %in% bottom
+    membership <- rep(FALSE, length(profile))
+    membership[bottom] <- TRUE
+    membership <- membership[profile]
+
     pHits <- cumsum(membership) / length(bottom)
     pMisses <- cumsum(!membership) / (length(profile) - length(bottom))
     indexMax <- which.max(abs(pHits - pMisses))
@@ -159,9 +166,7 @@ NULL
 
     # compute overall ES -------------------------------------------------------
     # returns 1 if top and bottom are respectively at the top and bottom of the
-    # profile
-    # returns -1 if top and bottom are respectively at the bottom and top of the
-    # profile
+    # profile, -1 if viceversa
 
     ES <- (topES - bottomES) / 2
     ES
@@ -204,12 +209,11 @@ NULL
     }
 
     # compute consensus signatures
-    rankedExprData <- apply(expressionData, 2, rank)
-    groupedRankSums <- stats::aggregate(t(rankedExprData), by = list(groups),
-                                        sum)
-    rownames(groupedRankSums) <- groupedRankSums[, 1]
-    ordGroupedRankSums <- apply(groupedRankSums[, -1], 1, order,
-                                decreasing = TRUE)
+    rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
+    groupedRankSums <- vapply(levels(groups), function(x) {
+        rowSums(rankedExprData[groups == x])},
+        rep(0.0, dim(rankedExprData)[1]))
+    ordGroupedRankSums <- apply(groupedRankSums, 2, order, decreasing = TRUE)
     rownames(ordGroupedRankSums) <- rownames(expressionData)
     consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
                                 nTop, nBottom)

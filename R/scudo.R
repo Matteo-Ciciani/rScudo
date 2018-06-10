@@ -87,13 +87,14 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
 
     # Normalization -----------------------------------------------------------
 
+    testGroups <- testGroups[, drop = TRUE]
+
     if (prepro) {
         testExpData <- .Normalization(testExpData, testGroups)
     }
 
     # Test Feature Selection --------------------------------------------------
 
-    testGroups <- testGroups[, drop = TRUE]
     nTest <- length(levels(testGroups))
     nTrain <- length(levels(Groups(trainScudoRes)))
 
