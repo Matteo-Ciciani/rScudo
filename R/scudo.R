@@ -62,8 +62,8 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
                                             pValue, groups, nGroups,
                                             featureSel, p.adj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
-            stop("top and bottom signatures overlap, only",
-                 dim(expressionData)[1], "features selected.")
+            stop("top and bottom signatures overlap, only ",
+                 dim(expressionData)[1], " features selected.")
         }
     }
 
