@@ -13,7 +13,7 @@ different samples as columns.}
 
 \item{groups}{factor containing groups labels for samples in expressionData.}
 
-\item{nTop}{number of down-regulated features to include in the signatures.}
+\item{nTop}{number of up-regulated features to include in the signatures.}
 
 \item{nBottom}{number of down-regulated features to include in the signatures.}
 
@@ -39,5 +39,11 @@ Performs optional normalization and feature selection, then creates a Scudo
 Results object.
 }
 \details{
-Details...
+\code{scudo} performs a normalization based on mean features expression
+levels in different groups, in order to increase the sensitivity for the
+subsequent analysis.
+
+The feature selection process is helpful for subsequent analysis. It is also
+possible to compute optionally a pValue adjustment for stricter feature
+selection.
 }

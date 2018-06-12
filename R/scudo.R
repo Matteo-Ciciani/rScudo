@@ -8,14 +8,20 @@ NULL
 #' Performs optional normalization and feature selection, then creates a Scudo
 #' Results object.
 #'
-#' Details...
+#' \code{scudo} performs a normalization based on mean features expression
+#' levels in different groups, in order to increase the sensitivity for the
+#' subsequent analysis.
+#'
+#' The feature selection process is helpful for subsequent analysis. It is also
+#' possible to compute optionally a pValue adjustment for stricter feature
+#' selection.
 #'
 #' @param expressionData data.frame object that contains expressionData with
 #'   different samples as columns.
 #'
 #' @param groups factor containing groups labels for samples in expressionData.
 #'
-#' @param nTop number of down-regulated features to include in the signatures.
+#' @param nTop number of up-regulated features to include in the signatures.
 #'
 #' @param nBottom number of down-regulated features to include in the signatures.
 #'
@@ -75,7 +81,33 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 
 # scudoPredict ----------------------------------------------------------------
 
+#' Performs ScudoPredict on test Expression Data
+#'
+#' Performes SCUDO on test Expression Data using feature selected from a
+#' previous computed train Scudo Results object.
+#'
+#' \code{scudoPredict} works as a common predict function by testing on a
+#' different expressionData object previous feature selection results obtained
+#' in a train Scudo Result object. This could be helpful in order to check the
+#' effectiveness of previously chosen parameters.
+#'
+#' @param trainScudoRes  Scudo Results object used as training object.
+#'
+#' @param testExpData data.frame object containing expressionData used as test.
+#'
+#' @param testGroups factor containing groups labels for samples in testExpData.
+#'
+#' @param nTop number of up-regulated features to include in the signatures.
+#'
+#' @param nBottom number of down-regulated features to include in the signatures.
+#'
+#' @param prepro logical, whether or not to normalize the test expression data.
+#'   See Details for a description of the normalization used.
+#'
+#' @return S4 class object \linkS4class{ScudoResults}.
+#'
 #' @export
+
 scudoPredict <- function(trainScudoRes, testExpData, testGroups,
                          nTop, nBottom, prepro = TRUE) {
 
