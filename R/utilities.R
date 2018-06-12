@@ -103,13 +103,37 @@ NULL
 
 # .FeatureSelection ------------------------------------------------------------
 
+.fastWilcoxon <- .newPruned <- function (x, y) {
+    r <- rank(c(x, y))
+    n.x <- as.double(length(x))
+    n.y <- as.double(length(y))
+    STATISTIC <- c(W = sum(r[seq_along(x)]) - n.x * (n.x + 1) / 2)
+    DUPS <- duplicated(r)
+    if (any(DUPS)) {
+        UNIQ <- r[!DUPS]
+        NTIES <- as.list(rep(1, length(UNIQ)))
+        names(NTIES) <- UNIQ
+        for(val in unique(r[DUPS])) {
+            NTIES[[as.character(val)]] <- 1 + sum(r[DUPS] == val)
+        }
+        NTIES <- unlist(NTIES)
+    } else {
+        NTIES <- 0
+    }
+    z <- STATISTIC - n.x * n.y/2
+    SIGMA <- sqrt((n.x * n.y/12) * ((n.x + n.y + 1) - sum(NTIES^3 - NTIES)/(
+        (n.x + n.y) * (n.x + n.y - 1))))
+    z <- z/SIGMA
+    PVAL <- 2 * min(pnorm(z), pnorm(z, lower.tail = FALSE))
+    PVAL
+}
+
 .FeatureSelection <- function(expressionData, pValue, groups,
                               nGroups, featureSel, p.adj) {
     if (nGroups == 2) {
         pVals <- apply(expressionData, 1, function(x) {
-            stats::wilcox.test(x[groups == levels(groups)[1]],
-                x[groups == levels(groups)[2]], correct = FALSE,
-                exact = FALSE)$p.value })
+            .fastWilcoxon(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]]) })
     } else {
         pVals <- apply(expressionData, 1, function(x) {
             stats::kruskal.test(x, groups)$p.value
