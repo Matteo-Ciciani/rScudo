@@ -107,7 +107,6 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 #' @return S4 class object \linkS4class{ScudoResults}.
 #'
 #' @export
-
 scudoPredict <- function(trainScudoRes, testExpData, testGroups,
                          nTop, nBottom, prepro = TRUE) {
 
