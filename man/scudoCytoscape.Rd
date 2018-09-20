@@ -9,7 +9,7 @@ scudoCytoscape(igraph, title = NULL, collection = "SCUDO",
 }
 \arguments{
 \item{igraph}{object of class igraph, like the result of
-\code{\link{ScudoNetwork}}.}
+\code{\link{scudoNetwork}}.}
 
 \item{title}{The title of the network. If NULL it defaults to
 \code{deparse(substitute(igraph))}.}

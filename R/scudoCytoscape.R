@@ -6,7 +6,7 @@ NULL
 #' Visualize results of scudo analysis in Cytoscape
 #'
 #' @param igraph object of class igraph, like the result of
-#'   \code{\link{ScudoNetwork}}.
+#'   \code{\link{scudoNetwork}}.
 #' @param title The title of the network. If NULL it defaults to
 #'   \code{deparse(substitute(igraph))}.
 #' @param collection The name of the collection.

@@ -124,7 +124,7 @@ NULL
     SIGMA <- sqrt((n.x * n.y/12) * ((n.x + n.y + 1) - sum(NTIES^3 - NTIES)/(
         (n.x + n.y) * (n.x + n.y - 1))))
     z <- z/SIGMA
-    PVAL <- 2 * min(pnorm(z), pnorm(z, lower.tail = FALSE))
+    PVAL <- 2 * min(stats::pnorm(z), stats::pnorm(z, lower.tail = FALSE))
     PVAL
 }
 
