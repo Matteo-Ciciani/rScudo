@@ -26,7 +26,7 @@ test_that("Scudo Predict selects right features.", {
     grps2 <- as.factor(c("G1", "G2", "G3", "G1"))
 
     # Testing ScudoRes obj produced
-    expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "ScudoResults")
+    expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "scudoResults")
 
     # tests on warnings and errors
 

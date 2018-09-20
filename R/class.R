@@ -1,7 +1,7 @@
 #' @import methods
 NULL
 
-#' Class "ScudoResults"
+#' Class "scudoResults"
 #'
 #' This is a class that represents the output of the functions -- link to scudo
 #' functions --.
@@ -10,213 +10,213 @@ NULL
 #' functions. It contains a distance matrix, i.e. a symmetric matrix with
 #' non-negative numeric values.
 #'
-#' @slot DistMatrix Object of class "matrix". A symmetric matrix with
+#' @slot distMatrix Object of class "matrix". A symmetric matrix with
 #'   non-negative numeric elements.
-#' @slot UpSignatures Object of class "data.frame". A data.frame with the same
-#'   colnames as DistMatrix, representing the up-regualted features in each
+#' @slot upSignatures Object of class "data.frame". A data.frame with the same
+#'   colnames as distMatrix, representing the up-regualted features in each
 #'   sample.
-#' @slot DownSignatures Object of class "data.frame". A data.frame with the same
-#'   colnames as DistMatrix, representing the down-regualted features in each
+#' @slot downSignatures Object of class "data.frame". A data.frame with the same
+#'   colnames as distMatrix, representing the down-regualted features in each
 #'   sample.
-#' @slot Groups Object of class "factor". It represents the groups used for the
+#' @slot groups Object of class "factor". It represents the groups used for the
 #'   normalization and the feature selection. It corresponds to the
 #'   \code{groups} argument in --link-- and --link--, but unused levels are
 #'   dropped.
-#' @slot ConsensusUpSignatures Object of class "data.frame". It contains the
+#' @slot consensusUpSignatures Object of class "data.frame". It contains the
 #'   consensus signatures of up-regulated features for each group.
-#' @slot ConsensusDownSignatures Object of class "data.frame".It contains the
+#' @slot consensusDownSignatures Object of class "data.frame".It contains the
 #'   consensus signatures of dowm-regulated features for each group.
-#' @slot SelectedFeatures Object of class "character". A vector of selected
+#' @slot selectedFeatures Object of class "character". A vector of selected
 #'   features. If the feature selection was not performed, it contains every
 #'   feature present in the input of the scudo functions.
-#' @slot Params Object of class "list". A list of the parameters used to run
+#' @slot params Object of class "list". A list of the parameters used to run
 #'   --link-- or --link--.
 #'
-#' @section Methods: \describe{ \item{\code{DistMatrix}}{\code{signature(object
-#'   = "ScudoResults")}: a method for obtaining the distance matrix.}
-#'   \item{\code{UpSignatures}}{\code{signature(object = "ScudoResults")}: a
+#' @section Methods: \describe{ \item{\code{distMatrix}}{\code{signature(object
+#'   = "scudoResults")}: a method for obtaining the distance matrix.}
+#'   \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
 #'   method for obtaining the signature of up-regualted features in each
-#'   sample.} \item{\code{DownSignatures}}{\code{signature(object =
-#'   "ScudoResults")}: a method for obtaining the signature of down-regulated
-#'   features in each sample.} \item{\code{Groups}}{\code{signature(object =
-#'   "ScudoResults")}: a method for obtaining the groups used for normalization
+#'   sample.} \item{\code{downSignatures}}{\code{signature(object =
+#'   "scudoResults")}: a method for obtaining the signature of down-regulated
+#'   features in each sample.} \item{\code{groups}}{\code{signature(object =
+#'   "scudoResults")}: a method for obtaining the groups used for normalization
 #'   and feature selection.}
-#'   \item{\code{ConsensusUpSignatures}}{\code{signature(object =
-#'   "ScudoResults")}: a method for obtaining the consensus signatures of
+#'   \item{\code{consensusUpSignatures}}{\code{signature(object =
+#'   "scudoResults")}: a method for obtaining the consensus signatures of
 #'   up-regualted features in each group.}
-#'   \item{\code{ConsensusDownSignatures}}{\code{signature(object =
-#'   "ScudoResults")}: a method for obtaining the consensus signatures of
+#'   \item{\code{consensusDownSignatures}}{\code{signature(object =
+#'   "scudoResults")}: a method for obtaining the consensus signatures of
 #'   down-regulated features in each group.}
-#'   \item{\code{SelectedFeatures}}{\code{signature(object = "ScudoResults")}: a
+#'   \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}: a
 #'   method for obtaining the names of the features seleted. If no feature
 #'   selection was performed, the names of every feature are returned.}
-#'   \item{\code{Params}}{\code{signature(object = "ScudoResults")}: a method
+#'   \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
 #'   for obtaining the parameters that were used to generate the result.} }
 #'
-#' @name ScudoResults-class
-#' @rdname ScudoResults-class
+#' @name scudoResults-class
+#' @rdname scudoResults-class
 #'
-#' @export ScudoResults
-#' @exportClass ScudoResults
-ScudoResults <- setClass("ScudoResults",
+#' @export scudoResults
+#' @exportClass scudoResults
+scudoResults <- setClass("scudoResults",
                         slots = list(
-                            DistMatrix = "matrix",
-                            UpSignatures = "data.frame",
-                            DownSignatures = "data.frame",
-                            Groups = "factor",
-                            ConsensusUpSignatures = "data.frame",
-                            ConsensusDownSignatures = "data.frame",
-                            SelectedFeatures = "character",
-                            Params = "list"))
+                            distMatrix = "matrix",
+                            upSignatures = "data.frame",
+                            downSignatures = "data.frame",
+                            groups = "factor",
+                            consensusUpSignatures = "data.frame",
+                            consensusDownSignatures = "data.frame",
+                            selectedFeatures = "character",
+                            params = "list"))
 
-setValidity("ScudoResults", function(object) {
+setValidity("scudoResults", function(object) {
     valid <- TRUE
     msg <- NULL
 
-    # validity of DistMatrix ---------------------------------------------------
-    if (dim(object@DistMatrix)[1] != dim(object@DistMatrix)[2]) {
+    # validity of distMatrix ---------------------------------------------------
+    if (dim(object@distMatrix)[1] != dim(object@distMatrix)[2]) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix is not a square matrix")
+        msg <- c(msg, "distMatrix is not a square matrix")
     }
-    if (any(is.na(object@DistMatrix)) & !any(is.nan(object@DistMatrix))) {
+    if (any(is.na(object@distMatrix)) & !any(is.nan(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix contains NAs")
+        msg <- c(msg, "distMatrix contains NAs")
     }
-    if (any(is.nan(object@DistMatrix))) {
+    if (any(is.nan(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix contains NaNs")
+        msg <- c(msg, "distMatrix contains NaNs")
     }
-    if (!all(is.numeric(object@DistMatrix))) {
+    if (!all(is.numeric(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix contains non-numeric values")
+        msg <- c(msg, "distMatrix contains non-numeric values")
     }
-    if (any(object@DistMatrix[!is.na(object@DistMatrix)] < 0)) {
+    if (any(object@distMatrix[!is.na(object@distMatrix)] < 0)) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix contains negative numbers")
+        msg <- c(msg, "distMatrix contains negative numbers")
     }
-    if (!isSymmetric(object@DistMatrix)) {
+    if (!isSymmetric(object@distMatrix)) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix is not symmetric")
+        msg <- c(msg, "distMatrix is not symmetric")
     }
-    if (all(is.numeric(object@DistMatrix)) &&
-        !all(sapply(diag(object@DistMatrix),
+    if (all(is.numeric(object@distMatrix)) &&
+        !all(sapply(diag(object@distMatrix),
                     function(x) isTRUE(all.equal(x, 0))))) {
         valid <- FALSE
-        msg <- c(msg, "DistMatrix contains non-zero elements in the diagonal")
+        msg <- c(msg, "distMatrix contains non-zero elements in the diagonal")
     }
-    if (is.null(colnames(object@DistMatrix)) |
-        is.null(rownames(object@DistMatrix))) {
+    if (is.null(colnames(object@distMatrix)) |
+        is.null(rownames(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "colnames or rownames are not present in DistMatrix")
+        msg <- c(msg, "colnames or rownames are not present in distMatrix")
     }
-    if (!identical(colnames(object@DistMatrix), rownames(object@DistMatrix))) {
+    if (!identical(colnames(object@distMatrix), rownames(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, "colnames and rownames are different in DistMatrix")
+        msg <- c(msg, "colnames and rownames are different in distMatrix")
     }
 
-    # validity of UpSignatures -------------------------------------------------
-    if (any(is.na(object@UpSignatures))) {
+    # validity of upSignatures -------------------------------------------------
+    if (any(is.na(object@upSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "UpSignatures contains NAs")
+        msg <- c(msg, "upSignatures contains NAs")
     }
-    if (!all(dim(object@UpSignatures)[2] == dim(object@DistMatrix))) {
+    if (!all(dim(object@upSignatures)[2] == dim(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, paste0("number of columns in UpSignatures is different",
-                             " from the dimension of DistMatrix"))
+        msg <- c(msg, paste0("number of columns in upSignatures is different",
+                             " from the dimension of distMatrix"))
     }
-    if (!identical(colnames(object@DistMatrix),
-                   colnames(object@UpSignatures))) {
+    if (!identical(colnames(object@distMatrix),
+                   colnames(object@upSignatures))) {
         valid <- FALSE
-        msg <- c(msg, paste0("colnames in UpSignatures are different from",
-                             " colnames in DistMatrix"))
+        msg <- c(msg, paste0("colnames in upSignatures are different from",
+                             " colnames in distMatrix"))
     }
-    if (!all(sapply(object@UpSignatures, is.character))) {
+    if (!all(sapply(object@upSignatures, is.character))) {
         valid <- FALSE
-        msg <- c(msg, "UpSignatures contains non-character values")
-    }
-
-    # validity of DownSignatures -----------------------------------------------
-    if (any(is.na(object@DownSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, "DownSignatures contains NAs")
-    }
-    if (!all(dim(object@DownSignatures)[2] == dim(object@DistMatrix))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("number of columns in DownSignatures is different",
-                             " from the dimension of DistMatrix"))
-    }
-    if (!identical(colnames(object@DistMatrix),
-                   colnames(object@DownSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames in DownSignatures are different from",
-                             " colnames in DistMatrix"))
-    }
-    if (!all(sapply(object@DownSignatures, is.character))) {
-        valid <- FALSE
-        msg <- c(msg, "DownSignatures contains non-character values")
+        msg <- c(msg, "upSignatures contains non-character values")
     }
 
-    # validity of Groups -------------------------------------------------------
-    if (any(is.na(object@Groups))) {
+    # validity of downSignatures -----------------------------------------------
+    if (any(is.na(object@downSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "Groups contains NAs")
+        msg <- c(msg, "downSignatures contains NAs")
     }
-    if (length(object@Groups) != dim(object@DistMatrix)[1]) {
+    if (!all(dim(object@downSignatures)[2] == dim(object@distMatrix))) {
         valid <- FALSE
-        msg <- c(msg, paste0("length of Groups different from number of rows ",
-                             "in DistMatrix"))
+        msg <- c(msg, paste0("number of columns in downSignatures is different",
+                             " from the dimension of distMatrix"))
     }
-
-    # validity of ConsensusUpSignatures ----------------------------------------
-    if (any(is.na(object@ConsensusUpSignatures))) {
+    if (!identical(colnames(object@distMatrix),
+                   colnames(object@downSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "ConsensusUpSignatures contains NAs")
+        msg <- c(msg, paste0("colnames in downSignatures are different from",
+                             " colnames in distMatrix"))
     }
-    if (dim(object@ConsensusUpSignatures)[1] != dim(object@UpSignatures)[1]) {
+    if (!all(sapply(object@downSignatures, is.character))) {
         valid <- FALSE
-        msg <- c(msg, paste0("number of rows in ConsensusUpSignatures ",
-                             "different from number of rows in UpSignatures"))
-    }
-    if (!all(sapply(object@ConsensusUpSignatures, is.character))) {
-        valid <- FALSE
-        msg <- c(msg, "ConsensusUpSignatures contains non-character values")
-    }
-    if (!all(is.element(colnames(object@ConsensusUpSignatures),
-                        as.character(levels(object@Groups))))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames of ConsensusUpSignatures contains ",
-                             "elements that are not in Groups"))
+        msg <- c(msg, "downSignatures contains non-character values")
     }
 
-    # validity of ConsensusDownSignatures --------------------------------------
-    if (any(is.na(object@ConsensusDownSignatures))) {
+    # validity of groups -------------------------------------------------------
+    if (any(is.na(object@groups))) {
         valid <- FALSE
-        msg <- c(msg, "ConsensusDownSignatures contains NAs")
+        msg <- c(msg, "groups contains NAs")
     }
-    if (dim(object@ConsensusDownSignatures)[1] !=
-        dim(object@DownSignatures)[1]) {
+    if (length(object@groups) != dim(object@distMatrix)[1]) {
         valid <- FALSE
-        msg <- c(msg, paste0("number of rows in ConsensusDownSignatures ",
-                             "different from number of rows in DownSignatures"))
-    }
-    if (!all(sapply(object@ConsensusDownSignatures, is.character))) {
-        valid <- FALSE
-        msg <- c(msg, "ConsensusDownSignatures contains non-character values")
-    }
-    if (!all(is.element(colnames(object@ConsensusDownSignatures),
-                        as.character(levels(object@Groups))))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames of ConsensusDownSignatures contains ",
-                             "elements that are not in Groups"))
+        msg <- c(msg, paste0("length of groups different from number of rows ",
+                             "in distMatrix"))
     }
 
-    # validity of SelectedFeatures ---------------------------------------------
-    if (any(is.na(object@SelectedFeatures))) {
+    # validity of consensusUpSignatures ----------------------------------------
+    if (any(is.na(object@consensusUpSignatures))) {
         valid <- FALSE
-        msg <- c(msg, "SelectedFeatures contains NAs")
+        msg <- c(msg, "consensusUpSignatures contains NAs")
+    }
+    if (dim(object@consensusUpSignatures)[1] != dim(object@upSignatures)[1]) {
+        valid <- FALSE
+        msg <- c(msg, paste0("number of rows in consensusUpSignatures ",
+                             "different from number of rows in upSignatures"))
+    }
+    if (!all(sapply(object@consensusUpSignatures, is.character))) {
+        valid <- FALSE
+        msg <- c(msg, "consensusUpSignatures contains non-character values")
+    }
+    if (!all(is.element(colnames(object@consensusUpSignatures),
+                        as.character(levels(object@groups))))) {
+        valid <- FALSE
+        msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
+                             "elements that are not in groups"))
     }
 
-    # validity of Params -------------------------------------------------------
+    # validity of consensusDownSignatures --------------------------------------
+    if (any(is.na(object@consensusDownSignatures))) {
+        valid <- FALSE
+        msg <- c(msg, "consensusDownSignatures contains NAs")
+    }
+    if (dim(object@consensusDownSignatures)[1] !=
+        dim(object@downSignatures)[1]) {
+        valid <- FALSE
+        msg <- c(msg, paste0("number of rows in consensusDownSignatures ",
+                             "different from number of rows in downSignatures"))
+    }
+    if (!all(sapply(object@consensusDownSignatures, is.character))) {
+        valid <- FALSE
+        msg <- c(msg, "consensusDownSignatures contains non-character values")
+    }
+    if (!all(is.element(colnames(object@consensusDownSignatures),
+                        as.character(levels(object@groups))))) {
+        valid <- FALSE
+        msg <- c(msg, paste0("colnames of consensusDownSignatures contains ",
+                             "elements that are not in groups"))
+    }
+
+    # validity of selectedFeatures ---------------------------------------------
+    if (any(is.na(object@selectedFeatures))) {
+        valid <- FALSE
+        msg <- c(msg, "selectedFeatures contains NAs")
+    }
+
+    # validity of params -------------------------------------------------------
 
     if (valid) TRUE else msg
 })

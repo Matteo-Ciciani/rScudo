@@ -1,14 +1,14 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# Scudo ------------------------------------------------------------------------
+# scudo ------------------------------------------------------------------------
 
 #' Performs SCUDO on Expression Data
 #'
 #' Performs optional normalization and feature selection, then creates a Scudo
 #' Results object.
 #'
-#' \code{Scudo} performs a normalization based on mean features expression
+#' \code{scudo} performs a normalization based on mean features expression
 #' levels in different groups, in order to increase the sensitivity for the
 #' subsequent analysis.
 #'
@@ -39,10 +39,10 @@ NULL
 #'   \code{pAdj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
 #'   the possible adjustments.
 #'
-#' @return S4 class object \linkS4class{ScudoResults}.
+#' @return S4 class object \linkS4class{scudoResults}.
 #'
 #' @export
-Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
+scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
                   prepro = TRUE, featureSel = TRUE, pAdj = "none") {
 
     .inputCheck(expressionData, groups, nTop, nBottom, pValue,
@@ -55,9 +55,9 @@ Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
     # Feature Selection --------------------------------------------------------
 
     groups <- groups[ , drop = TRUE]
-    nGroups <- length(levels(groups))
+    ngroups <- length(levels(groups))
 
-    if (nGroups == 1) {
+    if (ngroups == 1) {
         warning(paste("Just one group in", deparse(substitute(groups)),
                       ": skipping feature selection"))
         featureSel <- FALSE
@@ -65,7 +65,7 @@ Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 
     if (featureSel) {
         expressionData <- .featureSelection(expressionData,
-                                            pValue, groups, nGroups,
+                                            pValue, groups, ngroups,
                                             featureSel, pAdj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
             stop("top and bottom signatures overlap, only ",
@@ -79,23 +79,23 @@ Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
                   featureSel, pAdj)
 }
 
-# ScudoPredict ----------------------------------------------------------------
+# scudoPredict ----------------------------------------------------------------
 
-#' Performs ScudoPredict on test Expression Data
+#' Performs scudoPredict on test Expression Data
 #'
 #' Performes SCUDO on test Expression Data using feature selected from a
 #' previous computed train Scudo Results object.
 #'
-#' \code{ScudoPredict} works as a common predict function by testing on a
+#' \code{scudoPredict} works as a common predict function by testing on a
 #' different expressionData object previous feature selection results obtained
 #' in a train Scudo Result object. This could be helpful in order to check the
 #' effectiveness of previously chosen parameters.
 #'
-#' @param trainScudoRes  Scudo Results object used as training object.
+#' @param trainScudoRes  scudoResults object used as training object.
 #'
 #' @param testExpData data.frame object containing expressionData used as test.
 #'
-#' @param testGroups factor containing groups labels for samples in testExpData.
+#' @param testgroups factor containing groups labels for samples in testExpData.
 #'
 #' @param nTop number of up-regulated features to include in the signatures.
 #'
@@ -104,44 +104,44 @@ Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 #' @param prepro logical, whether or not to normalize the test expression data.
 #'   See Details for a description of the normalization used.
 #'
-#' @return S4 class object \linkS4class{ScudoResults}.
+#' @return S4 class object \linkS4class{scudoResults}.
 #'
 #' @export
-ScudoPredict <- function(trainScudoRes, testExpData, testGroups,
+scudoPredict <- function(trainScudoRes, testExpData, testgroups,
                          nTop, nBottom, prepro = TRUE) {
 
     # InputCheck --------------------------------------------------------------
 
     # use placeholder for pValue, featureSel, pAdj
-    .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
+    .inputCheck(testExpData, testgroups, nTop, nBottom, pValue = 0.5,
                 prepro, featureSel = FALSE, pAdj = "none")
 
     # normalization -----------------------------------------------------------
 
-    testGroups <- testGroups[, drop = TRUE]
+    testgroups <- testgroups[, drop = TRUE]
 
     if (prepro) {
-        testExpData <- .normalization(testExpData, testGroups)
+        testExpData <- .normalization(testExpData, testgroups)
     }
 
     # Test Feature Selection --------------------------------------------------
 
-    nTest <- length(levels(testGroups))
-    nTrain <- length(levels(Groups(trainScudoRes)))
+    nTest <- length(levels(testgroups))
+    nTrain <- length(levels(groups(trainScudoRes)))
 
     if (nTest != nTrain) {
         warning("Train and Test have different number of groups.")
     }
 
-    present <- SelectedFeatures(trainScudoRes) %in% rownames(testExpData)
-    missing <- SelectedFeatures(trainScudoRes)[!present]
+    present <- selectedFeatures(trainScudoRes) %in% rownames(testExpData)
+    missing <- selectedFeatures(trainScudoRes)[!present]
 
     if (length(missing) != 0) {
         warning(paste(length(missing), "features present in trainScudoRes are",
         "absent in testExpData:\n"))
     }
 
-    testExpData <- testExpData[SelectedFeatures(trainScudoRes)[present], ]
+    testExpData <- testExpData[selectedFeatures(trainScudoRes)[present], ]
 
     if ((nTop + nBottom) > dim(testExpData)[1]) {
         stop("top and bottom signatures overlap, only",
@@ -149,6 +149,6 @@ ScudoPredict <- function(trainScudoRes, testExpData, testGroups,
     }
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(testExpData, testGroups, nTop, nBottom, prepro = TRUE)
+    .performScudo(testExpData, testgroups, nTop, nBottom, prepro = TRUE)
 }
 

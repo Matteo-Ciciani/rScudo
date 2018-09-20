@@ -6,8 +6,6 @@ author:
   affiliation: &aff CIBIO, Univ. of Trento, Trento, Italy
 - name: Thomas Cantore
   affiliation: *aff
-- name: Enrica Colasurdo
-  affiliation: *aff
 output:
     BiocStyle::html_document:
         toc_float: true
@@ -88,16 +86,16 @@ ScudoTrain
 From this object we can extract the signatures for each sample and the consensus signatures for each group.
 
 ```{r}
-UpSig <- UpSignatures(ScudoTrain)
+UpSig <- upSignatures(ScudoTrain)
 UpSig[1:5,1:5]
-ConsUpSig <- ConsensusUpSignatures(ScudoTrain)
+ConsUpSig <- consensusUpSignatures(ScudoTrain)
 ConsUpSig[1:5, ]
 ```
 
 The object `ScudoRes` can be used to generate a network of samples, as an `r CRANpkg("igraph")`object, using the function `ScudoNetwork`.
 
 ```{r}
-netTrain <- ScudoNetwork(ScudoTrain, N = 0.3)
+netTrain <- scudoNetwork(ScudoTrain, N = 0.3)
 ```
 
 The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
@@ -109,7 +107,7 @@ plot(netTrain)
 This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
 
 ```{r, eval=FALSE}
-ScudoCytoscape(netTrain)
+scudoCytoscape(netTrain)
 ```
 
 ## Community clustering
@@ -133,7 +131,7 @@ ScudoTest
 We can plot the resulting network and we can attempt to identify communities.
 
 ```{r}
-netTest <- ScudoNetwork(ScudoTest, N = 0.3)
+netTest <- scudoNetwork(ScudoTest, N = 0.3)
 plot(netTest)
 ```
 
@@ -147,7 +145,7 @@ plot(clusterTest, netTest)
 The same analysis could be performed in Cytoscape.
 
 ```{r,eval=FALSE}
-ScudoCytoscape(netTest)
+scudoCytoscape(netTest)
 ```
 
 

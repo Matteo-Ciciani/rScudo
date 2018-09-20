@@ -2,17 +2,17 @@
 % Please edit documentation in R/scudo.R
 \name{scudoPredict}
 \alias{scudoPredict}
-\title{Performs ScudoPredict on test Expression Data}
+\title{Performs scudoPredict on test Expression Data}
 \usage{
-scudoPredict(trainScudoRes, testExpData, testGroups, nTop, nBottom,
+scudoPredict(trainScudoRes, testExpData, testgroups, nTop, nBottom,
   prepro = TRUE)
 }
 \arguments{
-\item{trainScudoRes}{Scudo Results object used as training object.}
+\item{trainScudoRes}{scudoResults object used as training object.}
 
 \item{testExpData}{data.frame object containing expressionData used as test.}
 
-\item{testGroups}{factor containing groups labels for samples in testExpData.}
+\item{testgroups}{factor containing groups labels for samples in testExpData.}
 
 \item{nTop}{number of up-regulated features to include in the signatures.}
 
@@ -22,7 +22,7 @@ scudoPredict(trainScudoRes, testExpData, testGroups, nTop, nBottom,
 See Details for a description of the normalization used.}
 }
 \value{
-S4 class object \linkS4class{ScudoResults}.
+S4 class object \linkS4class{scudoResults}.
 }
 \description{
 Performes SCUDO on test Expression Data using feature selected from a

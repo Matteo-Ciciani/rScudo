@@ -4,8 +4,8 @@
 \alias{scudo}
 \title{Performs SCUDO on Expression Data}
 \usage{
-scudo(expressionData, groups, nTop, nBottom, pValue = 0.1, prepro = TRUE,
-  featureSel = TRUE, p.adj = "none")
+scudo(expressionData, groups, nTop, nBottom, pValue = 0.1,
+  prepro = TRUE, featureSel = TRUE, pAdj = "none")
 }
 \arguments{
 \item{expressionData}{data.frame object that contains expressionData with
@@ -27,12 +27,12 @@ Details for a description of the normalization used.}
 Feature selection performed through a Wilcoxon-Mann-Withney test, or with a
 Kruskal-Wallis test, depending on the number of groups.}
 
-\item{p.adj}{p.adj optionally performed on feature selection step. Default
-\code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
+\item{pAdj}{pAdj optionally performed on feature selection step. Default
+\code{pAdj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
 the possible adjustments.}
 }
 \value{
-S4 class object \linkS4class{ScudoResults}.
+S4 class object \linkS4class{scudoResults}.
 }
 \description{
 Performs optional normalization and feature selection, then creates a Scudo

@@ -129,8 +129,8 @@ NULL
 }
 
 .featureSelection <- function(expressionData, pValue, groups,
-                              nGroups, featureSel, pAdj) {
-    if (nGroups == 2) {
+                              ngroups, featureSel, pAdj) {
+    if (ngroups == 2) {
         pVals <- apply(expressionData, 1, function(x) {
             .fastWilcoxon(x[groups == levels(groups)[1]],
                 x[groups == levels(groups)[2]]) })
@@ -242,7 +242,7 @@ NULL
     consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
                                 nTop, nBottom)
 
-    # create ScudoResults object to return
+    # create scudoResults object to return
     UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[1:nTop, ]
     DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
         (nTop + 1):nrow(sigMatrix), ]
@@ -271,14 +271,14 @@ NULL
         pars$pAdj <- ..4
     }
 
-    ScudoResults(DistMatrix = distances,
-        UpSignatures = UpSig,
-        DownSignatures = DwnSig,
-        Groups = groups,
-        ConsensusUpSignatures = ConsUpSig,
-        ConsensusDownSignatures = ConsDwnSig,
-        SelectedFeatures = rownames(expressionData),
-        Params = pars
+    scudoResults(distMatrix = distances,
+        upSignatures = UpSig,
+        downSignatures = DwnSig,
+        groups = groups,
+        consensusUpSignatures = ConsUpSig,
+        consensusDownSignatures = ConsDwnSig,
+        selectedFeatures = rownames(expressionData),
+        params = pars
     )
 }
 

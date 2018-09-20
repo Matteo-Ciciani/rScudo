@@ -7,7 +7,7 @@ NULL
 #'
 #' Details about the function
 #'
-#' @param object A ScudoResults object
+#' @param object A scudoResults object
 #' @param N A numeric value.
 #' @param colors A character vector
 #'
@@ -17,9 +17,9 @@ setGeneric("scudoNetwork", function(object, N, colors = character())
     standardGeneric("scudoNetwork"))
 
 #' @rdname scudoNetwork-methods
-#' @aliases scudoNetwork,ScudoResults-method
+#' @aliases scudoNetwork,scudoResults-method
 #' @usage NULL
-setMethod("scudoNetwork", signature = "ScudoResults", definition =
+setMethod("scudoNetwork", signature = "scudoResults", definition =
     function(object, N, colors) {
 
         # input checks
@@ -35,7 +35,7 @@ setMethod("scudoNetwork", signature = "ScudoResults", definition =
 
         if (length(colors) != 0) {
             if (any(is.na(colors))) stop("colors contains NAs")
-            if (length(colors) != dim(DistMatrix(object))[1]) {
+            if (length(colors) != dim(distMatrix(object))[1]) {
                 stop(paste("length of colors differs from number of samples",
                            "in object"))
             }
@@ -46,27 +46,27 @@ setMethod("scudoNetwork", signature = "ScudoResults", definition =
         }
 
         # get distance matrix and generate adjacency matrix according to N
-        adjMatrix <- matrix(0, nrow = dim(DistMatrix(object))[1],
-            ncol = dim(DistMatrix(object))[1])
-        NQuantile <- stats::quantile(DistMatrix(object)[
-            DistMatrix(object) > sqrt(.Machine$double.eps)], probs = N)
-        adjMatrix[DistMatrix(object) <= NQuantile] <- 1
-        colnames(adjMatrix) <- colnames(DistMatrix(object))
+        adjMatrix <- matrix(0, nrow = dim(distMatrix(object))[1],
+            ncol = dim(distMatrix(object))[1])
+        NQuantile <- stats::quantile(distMatrix(object)[
+            distMatrix(object) > sqrt(.Machine$double.eps)], probs = N)
+        adjMatrix[distMatrix(object) <= NQuantile] <- 1
+        colnames(adjMatrix) <- colnames(distMatrix(object))
 
         # generate graph using graph_from_adjacency_matrix
         result <- igraph::graph_from_adjacency_matrix(adjMatrix,
             mode = "undirected", diag = FALSE)
 
         # add weights
-        igraph::E(result)$weight <- DistMatrix(object)[as.logical(adjMatrix) &
-            lower.tri(DistMatrix(object))]
+        igraph::E(result)$weight <- distMatrix(object)[as.logical(adjMatrix) &
+            lower.tri(distMatrix(object))]
 
         # add group and color annotation
-        igraph::V(result)$group <- Groups(object)
+        igraph::V(result)$group <- groups(object)
         if (length(colors) == 0) {
-            pal <- grDevices::rainbow(length(levels(Groups(object))))
+            pal <- grDevices::rainbow(length(levels(groups(object))))
             pal <- stringr::str_extract(pal, "^#[0-9a-fA-F]{6}")
-            igraph::V(result)$color <- pal[as.integer(Groups(object))]
+            igraph::V(result)$color <- pal[as.integer(groups(object))]
         } else {
             igraph::V(result)$color <- stringr::str_extract(colors,
             "^#[0-9a-fA-F]{6}")

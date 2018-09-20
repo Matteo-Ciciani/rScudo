@@ -27,7 +27,7 @@ Collate:
     'scudoCytoscape.R'
     'scudoNetwork.R'
     'show.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Depends: R (>= 3.5.0)
 Imports: methods,
     stats,

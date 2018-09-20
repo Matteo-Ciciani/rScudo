@@ -10,7 +10,7 @@ test_that("Accessors work correctly", {
     SigDown <- data.frame(a = letters[1:10], b = letters[11:20],
                           c = letters[1:10], d = letters[11:20],
                           stringsAsFactors = FALSE)
-    Groups <- as.factor(c("G1", "G1", "G2", "G2"))
+    groups <- as.factor(c("G1", "G1", "G2", "G2"))
     ConsUp <- data.frame(G1 = letters[11:15], G2 = letters[21:25],
                          stringsAsFactors = FALSE)
     ConsDown <- data.frame(G1 = letters[16:25], G2 = letters[1:10],
@@ -18,22 +18,22 @@ test_that("Accessors work correctly", {
     Feats <- letters[1:20]
     Pars <- list() # to update
 
-    ScudoRes <- ScudoResults(DistMatrix = m,
-                             UpSignatures = SigUp,
-                             DownSignatures = SigDown,
-                             Groups = Groups,
-                             ConsensusUpSignatures = ConsUp,
-                             ConsensusDownSignatures = ConsDown,
-                             SelectedFeatures = Feats,
-                             Params = Pars)
+    ScudoRes <- scudoResults(distMatrix = m,
+                             upSignatures = SigUp,
+                             downSignatures = SigDown,
+                             groups = groups,
+                             consensusUpSignatures = ConsUp,
+                             consensusDownSignatures = ConsDown,
+                             selectedFeatures = Feats,
+                             params = Pars)
 
-    expect_identical(DistMatrix(ScudoRes), m)
-    expect_identical(UpSignatures(ScudoRes), SigUp)
-    expect_identical(DownSignatures(ScudoRes), SigDown)
-    expect_identical(Groups(ScudoRes), Groups)
-    expect_identical(ConsensusUpSignatures(ScudoRes), ConsUp)
-    expect_identical(ConsensusDownSignatures(ScudoRes), ConsDown)
-    expect_identical(SelectedFeatures(ScudoRes), Feats)
-    #expect_identical(Params(ScudoRes), Pars)
+    expect_identical(distMatrix(ScudoRes), m)
+    expect_identical(upSignatures(ScudoRes), SigUp)
+    expect_identical(downSignatures(ScudoRes), SigDown)
+    expect_identical(groups(ScudoRes), groups)
+    expect_identical(consensusUpSignatures(ScudoRes), ConsUp)
+    expect_identical(consensusDownSignatures(ScudoRes), ConsDown)
+    expect_identical(selectedFeatures(ScudoRes), Feats)
+    #expect_identical(params(ScudoRes), Pars)
 
 })

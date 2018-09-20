@@ -4,47 +4,47 @@ NULL
 
 # Show -------------------------------------------------------------------------
 
-#' @rdname ScudoResults-class
-#' @aliases show,ScudoResults-method
+#' @rdname scudoResults-class
+#' @aliases show,scudoResults-method
 #' @usage NULL
-setMethod("show", "ScudoResults", function(object) {
-    cat("Object of class ScudoResults\n")
-    cat("Result of", ifelse(length(Params(object)) == 3,
+setMethod("show", "scudoResults", function(object) {
+    cat("Object of class scudoResults\n")
+    cat("Result of", ifelse(length(params(object)) == 3,
         "scudoPredict", "scudo"), "\n\n")
-    cat("Number of samples      : ", paste(dim(DistMatrix(object))[1]),
+    cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),
         "\n")
 
-    nGroups <- length(colnames(ConsensusDownSignatures(object)))
-    cat("Number of groups       : ", nGroups, "\n")
-    gt <- table(Groups(object)[, drop = TRUE])
+    ngroups <- length(colnames(consensusDownSignatures(object)))
+    cat("Number of groups       : ", ngroups, "\n")
+    gt <- table(groups(object)[, drop = TRUE])
     invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
         "samples\n")))
 
-    cat("UpSignatures length    : ", paste(Params(object)$nTop),
+    cat("upSignatures length    : ", paste(params(object)$nTop),
         "\n")
-    cat("DownSignatures length  : ", paste(Params(object)$nBottom),
+    cat("downSignatures length  : ", paste(params(object)$nBottom),
         "\n")
-    cat("Normalization          : ", paste0(ifelse(Params(object)$prepro,
+    cat("Normalization          : ", paste0(ifelse(params(object)$prepro,
         "", "not "), "performed"), "\n")
 
-     if (length(Params(object)) != 3) {
+     if (length(params(object)) != 3) {
         cat("Feature selection      : ", paste0(
-            ifelse(Params(object)$featureSel, "", "not "), "performed"), "\n")
+            ifelse(params(object)$featureSel, "", "not "), "performed"), "\n")
 
-        if (Params(object)$featureSel) {
-            if (nGroups == 2) {
+        if (params(object)$featureSel) {
+            if (ngroups == 2) {
                 cat("    Test               : ",
                     "Wilcoxon rank sum test", "\n")
             }else{
                 cat("    Test               : ",
                     "Kruskal-Wallis rank sum test", "\n")
             }
-            cat("    p-value cutoff     : ", paste(Params(object)$pValue),
+            cat("    p-value cutoff     : ", paste(params(object)$pValue),
                 "\n")
-            cat("    p.adjust method    : ", paste(Params(object)$p.adj),
+            cat("    p.adjust method    : ", paste(params(object)$p.adj),
                 "\n")
             cat("    Selected features  : ",
-                paste(length(SelectedFeatures(object))))
+                paste(length(selectedFeatures(object))))
         }
 
     }
