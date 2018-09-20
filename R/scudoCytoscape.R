@@ -15,7 +15,7 @@ NULL
 #' @return The network SUID (an integer).
 #'
 #' @export
-ScudoCytoscape <- function(igraph, title = NULL, collection = "SCUDO",
+scudoCytoscape <- function(igraph, title = NULL, collection = "SCUDO",
                            base.url = NULL) {
     # perform checks
     if (is.null(title)) title <- deparse(substitute(igraph))

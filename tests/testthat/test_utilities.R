@@ -77,10 +77,10 @@ test_that(".performScudo works", {
     expect_identical(SelectedFeatures(res), letters[11:20])
     expect_identical(Params(res), list(nTop = nTop, nBottom = nBottom,
                                        pValue = p, prepro = FALSE,
-                                       featureSel = FALSE, p.adj = "none"))
+                                       featureSel = FALSE, pAdj = "none"))
 })
 
-test_that(".Normalization works correctly", {
+test_that(".normalization works correctly", {
     df <- data.frame(a = rep(1, 5),
                      b = rep(3, 5),
                      c = rep(5, 5),
@@ -92,5 +92,5 @@ test_that(".Normalization works correctly", {
     virtContr <- (3 + 6:10) / 2
     correctRes <- df / virtContr
 
-    expect_equal(.Normalization(df, groups), correctRes)
+    expect_equal(.normalization(df, groups), correctRes)
 })

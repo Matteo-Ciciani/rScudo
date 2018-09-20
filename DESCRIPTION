@@ -24,8 +24,8 @@ Collate:
     'accessors.R'
     'utilities.R'
     'scudo.R'
-    'ScudoCytoscape.R'
-    'ScudoNetwork.R'
+    'scudoCytoscape.R'
+    'scudoNetwork.R'
     'show.R'
 RoxygenNote: 6.0.1
 Depends: R (>= 3.5.0)

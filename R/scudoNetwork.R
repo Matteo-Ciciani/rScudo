@@ -1,7 +1,7 @@
 #' @include class.R scudo.R accessors.R
 NULL
 
-#' ScudoNetwork
+#' scudoNetwork
 #'
 #' A function to convert a ScudoResult in an igraph object
 #'
@@ -11,15 +11,15 @@ NULL
 #' @param N A numeric value.
 #' @param colors A character vector
 #'
-#' @rdname ScudoNetwork-methods
+#' @rdname scudoNetwork-methods
 #' @export
-setGeneric("ScudoNetwork", function(object, N, colors = character())
-    standardGeneric("ScudoNetwork"))
+setGeneric("scudoNetwork", function(object, N, colors = character())
+    standardGeneric("scudoNetwork"))
 
-#' @rdname ScudoNetwork-methods
-#' @aliases ScudoNetwork,ScudoResults-method
+#' @rdname scudoNetwork-methods
+#' @aliases scudoNetwork,ScudoResults-method
 #' @usage NULL
-setMethod("ScudoNetwork", signature = "ScudoResults", definition =
+setMethod("scudoNetwork", signature = "ScudoResults", definition =
     function(object, N, colors) {
 
         # input checks

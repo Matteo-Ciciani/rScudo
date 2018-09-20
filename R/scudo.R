@@ -1,14 +1,14 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudo ------------------------------------------------------------------------
+# Scudo ------------------------------------------------------------------------
 
 #' Performs SCUDO on Expression Data
 #'
 #' Performs optional normalization and feature selection, then creates a Scudo
 #' Results object.
 #'
-#' \code{scudo} performs a normalization based on mean features expression
+#' \code{Scudo} performs a normalization based on mean features expression
 #' levels in different groups, in order to increase the sensitivity for the
 #' subsequent analysis.
 #'
@@ -35,22 +35,22 @@ NULL
 #'   Feature selection performed through a Wilcoxon-Mann-Withney test, or with a
 #'   Kruskal-Wallis test, depending on the number of groups.
 #'
-#' @param p.adj p.adj optionally performed on feature selection step. Default
-#'   \code{p.adj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
+#' @param pAdj pAdj optionally performed on feature selection step. Default
+#'   \code{pAdj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
 #'   the possible adjustments.
 #'
 #' @return S4 class object \linkS4class{ScudoResults}.
 #'
 #' @export
-scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
-                  prepro = TRUE, featureSel = TRUE, p.adj = "none") {
+Scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
+                  prepro = TRUE, featureSel = TRUE, pAdj = "none") {
 
-    .InputCheck(expressionData, groups, nTop, nBottom, pValue,
-                prepro, featureSel, p.adj)
+    .inputCheck(expressionData, groups, nTop, nBottom, pValue,
+                prepro, featureSel, pAdj)
 
-    # Normalization ------------------------------------------------------------
+    # normalization ------------------------------------------------------------
 
-    if (prepro) expressionData <- .Normalization(expressionData, groups)
+    if (prepro) expressionData <- .normalization(expressionData, groups)
 
     # Feature Selection --------------------------------------------------------
 
@@ -64,9 +64,9 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
     }
 
     if (featureSel) {
-        expressionData <- .FeatureSelection(expressionData,
+        expressionData <- .featureSelection(expressionData,
                                             pValue, groups, nGroups,
-                                            featureSel, p.adj)
+                                            featureSel, pAdj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
             stop("top and bottom signatures overlap, only ",
                  dim(expressionData)[1], " features selected.")
@@ -76,17 +76,17 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
     # Performing Scudo ---------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, pValue, prepro,
-                  featureSel, p.adj)
+                  featureSel, pAdj)
 }
 
-# scudoPredict ----------------------------------------------------------------
+# ScudoPredict ----------------------------------------------------------------
 
 #' Performs ScudoPredict on test Expression Data
 #'
 #' Performes SCUDO on test Expression Data using feature selected from a
 #' previous computed train Scudo Results object.
 #'
-#' \code{scudoPredict} works as a common predict function by testing on a
+#' \code{ScudoPredict} works as a common predict function by testing on a
 #' different expressionData object previous feature selection results obtained
 #' in a train Scudo Result object. This could be helpful in order to check the
 #' effectiveness of previously chosen parameters.
@@ -107,21 +107,21 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 #' @return S4 class object \linkS4class{ScudoResults}.
 #'
 #' @export
-scudoPredict <- function(trainScudoRes, testExpData, testGroups,
+ScudoPredict <- function(trainScudoRes, testExpData, testGroups,
                          nTop, nBottom, prepro = TRUE) {
 
     # InputCheck --------------------------------------------------------------
 
-    # use placeholder for pValue, featureSel, p.adj
-    .InputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
-                prepro, featureSel = FALSE, p.adj = "none")
+    # use placeholder for pValue, featureSel, pAdj
+    .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
+                prepro, featureSel = FALSE, pAdj = "none")
 
-    # Normalization -----------------------------------------------------------
+    # normalization -----------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
 
     if (prepro) {
-        testExpData <- .Normalization(testExpData, testGroups)
+        testExpData <- .normalization(testExpData, testGroups)
     }
 
     # Test Feature Selection --------------------------------------------------

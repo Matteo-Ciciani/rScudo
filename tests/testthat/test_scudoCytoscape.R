@@ -1,7 +1,7 @@
-context("Test ScudoCytoscape")
+context("Test scudoCytoscape")
 library(scudo)
 
-test_that("ScudoCytoscape raises errors when it should", {
+test_that("scudoCytoscape raises errors when it should", {
     exData <- data.frame(a = rep(1,10),
                          b = rep(1,10),
                          c = rep(30,10),
@@ -10,9 +10,9 @@ test_that("ScudoCytoscape raises errors when it should", {
 
     groups <- factor(c("h","h","d","d"))
     res <- scudo(exData, groups, 1, 3, 0.1)
-    expect_s4_class(res, "ScudoResults")
+    expect_s4_class(res, "scudoResults")
 
-    scudoNet <- ScudoNetwork(res, 0.2)
+    scudoNet <- scudoNetwork(res, 0.2)
     expect_s3_class(scudoNet, "igraph")
 
     # test errors in title -----------------------------------------------------

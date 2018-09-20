@@ -1,10 +1,10 @@
 #' @include class.R accessors.R
 NULL
 
-# .InputCheck ------------------------------------------------------------------
+# .inputCheck ------------------------------------------------------------------
 
-.InputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
-                        prepro, featureSel, p.adj) {
+.inputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
+                        prepro, featureSel, pAdj) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -68,7 +68,7 @@ NULL
                    "only", dim(expressionData)[1], "rows."))
     }
 
-    # checks on pValue, prepro, featureSel and p.adj ---------------------------
+    # checks on pValue, prepro, featureSel and pAdj ----------------------------
 
     stopifnot(is.numeric(pValue),
               length(pValue) == 1,
@@ -90,12 +90,12 @@ NULL
               is.vector(featureSel),
               length(prepro) == 1,
               length(featureSel) == 1,
-              is.character(p.adj),
-              is.vector(p.adj),
-              length(p.adj) == 1)
+              is.character(pAdj),
+              is.vector(pAdj),
+              length(pAdj) == 1)
 
-    if (!(p.adj %in% stats::p.adjust.methods)) {
-        stop(paste('p.adj should be one of "holm", "hochberg", "hommel",',
+    if (!(pAdj %in% stats::p.adjust.methods)) {
+        stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',
                    '"bonferroni", "BH", "BY", "fdr", "none".',
                    'Check stats::p.adjust documentation.'))
     }
@@ -103,7 +103,7 @@ NULL
 
 # .FeatureSelection ------------------------------------------------------------
 
-.fastWilcoxon <- .newPruned <- function (x, y) {
+.fastWilcoxon <- function (x, y) {
     r <- rank(c(x, y))
     n.x <- as.double(length(x))
     n.y <- as.double(length(y))
@@ -128,8 +128,8 @@ NULL
     PVAL
 }
 
-.FeatureSelection <- function(expressionData, pValue, groups,
-                              nGroups, featureSel, p.adj) {
+.featureSelection <- function(expressionData, pValue, groups,
+                              nGroups, featureSel, pAdj) {
     if (nGroups == 2) {
         pVals <- apply(expressionData, 1, function(x) {
             .fastWilcoxon(x[groups == levels(groups)[1]],
@@ -139,15 +139,15 @@ NULL
             stats::kruskal.test(x, groups)$p.value
         })
     }
-    pVals <- stats::p.adjust(pVals, method = p.adj)
+    pVals <- stats::p.adjust(pVals, method = pAdj)
     expressionData <- expressionData[pVals <= pValue, ]
 
     expressionData
 }
 
-# .Normalization ---------------------------------------------------------------
+# .normalization ---------------------------------------------------------------
 
-.Normalization <- function(ExpressionData, groups) {
+.normalization <- function(ExpressionData, groups) {
     virtControl <- rowMeans(vapply(levels(groups), function(x) {
         rowMeans(ExpressionData[groups == x]) },
         rep(0.0, dim(ExpressionData)[1])))
@@ -268,7 +268,7 @@ NULL
         pars$pValue <- ..1
         pars$prepro <- ..2
         pars$featureSel <- ..3
-        pars$p.adj <- ..4
+        pars$pAdj <- ..4
     }
 
     ScudoResults(DistMatrix = distances,
