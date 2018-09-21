@@ -23,13 +23,14 @@ test_that(".computeES works", {
 test_that(".computeSignature works", {
     df <- data.frame(a = 1:10, b = rev(1:10))
     rownames(df) <- letters[11:20]
-    indeces <- apply(df, 2, order, decreasing = TRUE)
-    rownames(indeces) <- rownames(df)
+    ranks <- apply(df, 2, rank)
+    rownames(ranks) <- rownames(df)
     sig <- c("t", "s", "l", "k")
     m <- matrix(c(sig, rev(sig)), ncol = 2)
     colnames(m) <- c("a", "b")
+    rownames(m) <- c("10", "9", "2", "1")
 
-    expect_equal(apply(indeces, 2, .computeSignature, 2, 2), m)
+    expect_equal(apply(ranks, 2, .computeSignature, 2, 2), m)
 })
 
 test_that(".performScudo works", {

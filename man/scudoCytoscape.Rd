@@ -2,25 +2,26 @@
 % Please edit documentation in R/scudoCytoscape.R
 \name{scudoCytoscape}
 \alias{scudoCytoscape}
-\title{Create a Cytoscape network from the output of ScudoNetwork}
+\title{Create a Cytoscape network from the output of scudoNetwork}
 \usage{
-scudoCytoscape(igraph, title = NULL, collection = "SCUDO",
+scudoCytoscape(graph, title = NULL, collection = "SCUDO",
   base.url = NULL)
 }
 \arguments{
-\item{igraph}{object of class igraph, like the result of
-\code{\link{scudoNetwork}}.}
+\item{graph}{object of class \code{\link[igraph:igraph-package]{igraph}},
+like the result of \code{\link{scudoNetwork}}.}
 
 \item{title}{The title of the network. If NULL it defaults to
-\code{deparse(substitute(igraph))}.}
+\code{deparse(substitute(graph))}.}
 
-\item{collection}{The name of the collection.}
+\item{collection}{The name of the Cytoscape collection.}
 
-\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}}
+\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}.}
 }
 \value{
 The network SUID (an integer).
 }
 \description{
-Visualize results of scudo analysis in Cytoscape
+A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of a
+SCUDO analysis in Cytoscape.
 }

@@ -101,7 +101,7 @@ NULL
     }
 }
 
-# .FeatureSelection ------------------------------------------------------------
+# fast tests -------------------------------------------------------------------
 
 .fastWilcoxon <- function (x, y) {
     r <- rank(c(x, y))
@@ -128,17 +128,32 @@ NULL
     PVAL
 }
 
+# .featureSelection ------------------------------------------------------------
+
 .featureSelection <- function(expressionData, pValue, groups,
-                              ngroups, featureSel, pAdj) {
-    if (ngroups == 2) {
-        pVals <- apply(expressionData, 1, function(x) {
-            .fastWilcoxon(x[groups == levels(groups)[1]],
-                x[groups == levels(groups)[2]]) })
+                              ngroups, parametric, pAdj) {
+
+    if (parametric) {
+        # should we use limma instead?
+        if (ngroups == 2) {
+            pVals <- apply(expressionData, 1, function(x) {
+                stats::t.test(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]])$p.value})
+        } else {
+            pVals <- apply(expressionData, 1, function(x) {
+                anova(lm(x ~ groups))["Pr(>F)"][1,1]})
+        }
     } else {
-        pVals <- apply(expressionData, 1, function(x) {
-            stats::kruskal.test(x, groups)$p.value
-        })
+        if (ngroups == 2) {
+            pVals <- apply(expressionData, 1, function(x) {
+                .fastWilcoxon(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]])})
+        } else {
+            pVals <- apply(expressionData, 1, function(x) {
+                stats::kruskal.test(x, groups)$p.value})
+        }
     }
+
     pVals <- stats::p.adjust(pVals, method = pAdj)
     expressionData <- expressionData[pVals <= pValue, ]
 
@@ -148,14 +163,18 @@ NULL
 # .normalization ---------------------------------------------------------------
 
 .normalization <- function(ExpressionData, groups) {
-    virtControl <- rowMeans(vapply(levels(groups), function(x) {
-        rowMeans(ExpressionData[groups == x]) },
-        rep(0.0, dim(ExpressionData)[1])))
+    if (is.null(groups)) {
+        virtControl <- rowMeans(ExpressionData)
+    } else {
+        virtControl <- rowMeans(vapply(levels(groups), function(x) {
+            rowMeans(ExpressionData[groups == x]) },
+            rep(0.0, dim(ExpressionData)[1])))
+    }
     normExData <- ExpressionData / virtControl
     normExData
 }
 
-# .performscudo ----------------------------------------------------------------
+# compute distance matrix ------------------------------------------------------
 
 .computeES <- function(top, bottom, profile) {
     # top: numeric, indexes of top genes
@@ -168,7 +187,7 @@ NULL
     # size. There should be enough information in the initial data (top +
     # profile) to figure out on which indexes we need to make computations.
 
-    # top signature ------------------------------------------------------------
+    # top signature
     membership <- rep(FALSE, length(profile))
     membership[top] <- TRUE
     membership <- membership[profile]
@@ -178,7 +197,7 @@ NULL
     indexMax <- which.max(abs(pHits - pMisses))
     topES <- pHits[indexMax] - pMisses[indexMax]
 
-    # bottom signature ---------------------------------------------------------
+    # bottom signature
     membership <- rep(FALSE, length(profile))
     membership[bottom] <- TRUE
     membership <- membership[profile]
@@ -188,7 +207,7 @@ NULL
     indexMax <- which.max(abs(pHits - pMisses))
     bottomES <- pHits[indexMax] - pMisses[indexMax]
 
-    # compute overall ES -------------------------------------------------------
+    # compute overall ES
     # returns 1 if top and bottom are respectively at the top and bottom of the
     # profile, -1 if viceversa
 
@@ -196,27 +215,20 @@ NULL
     ES
 }
 
-.computeSignature <- function(indeces, nTop, nBottom) {
-    ordNames <- names(indeces)[indeces]
-    ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
-}
+.defaultDist <- function(expressionData, nTop, nBottom) {
 
-.performScudo <- function(expressionData, groups, nTop, nBottom, ...) {
-    # transform expressionData in index matrix
+    # compute matrix of indexes
     indexMatrix <- apply(expressionData, 2, order, decreasing = TRUE)
-    rownames(indexMatrix) <- rownames(expressionData)
-
-    # compute signatures
-    sigMatrix <- apply(indexMatrix, 2, .computeSignature, nTop, nBottom)
 
     # compute square non-symmetric matrix, with element[i, j] equal
     # to the ES of signature of sample i in the profile of sample j
     ESmatrix <- outer(colnames(expressionData), colnames(expressionData),
-        Vectorize(function(x, y) .computeES(
-            indexMatrix[1:nTop, x],
-            indexMatrix[(dim(indexMatrix)[1] - nBottom +1):
-                (dim(indexMatrix)[1]), x],
-            indexMatrix[, y]
+        Vectorize(function(x, y)
+            .computeES(
+                indexMatrix[1:nTop, x],
+                indexMatrix[(dim(indexMatrix)[1] - nBottom +1):
+                    (dim(indexMatrix)[1]), x],
+                indexMatrix[, y]
             )
         )
     )
@@ -232,8 +244,33 @@ NULL
         }
     }
 
-    # compute consensus signatures
+    distances
+}
+
+# compute signatures -----------------------------------------------------------
+
+.computeSignature <- function(ranks, nTop, nBottom) {
+    rankedNames <- names(ranks)
+    names(rankedNames) <- ranks
+    rankedNames[rev(c(as.character(1:nTop), as.character(
+        (length(rankedNames) - nBottom + 1):length(rankedNames))))]
+}
+
+# perform analysis -------------------------------------------------------------
+
+.performScudo <- function(expressionData, groups, nTop, nBottom,
+                          distFun = NULL, ...) {
+
+    # transform expressionData in ranks
     rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
+
+    # compute signatures
+    sigMatrix <- apply(rankedExprData, 2, .computeSignature, nTop, nBottom)
+
+    # compute distance matrix
+    distances <- .defaultDist(expressionData, nTop, nBottom)
+
+    # compute consensus signatures
     groupedRankSums <- vapply(levels(groups), function(x) {
         rowSums(rankedExprData[groups == x])},
         rep(0.0, dim(rankedExprData)[1]))

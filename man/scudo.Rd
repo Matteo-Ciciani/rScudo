@@ -2,7 +2,7 @@
 % Please edit documentation in R/scudo.R
 \name{scudo}
 \alias{scudo}
-\title{Performs SCUDO on Expression Data}
+\title{Performs SCUDO analysis}
 \usage{
 scudo(expressionData, groups, nTop, nBottom, pValue = 0.1,
   prepro = TRUE, featureSel = TRUE, pAdj = "none")
@@ -11,14 +11,16 @@ scudo(expressionData, groups, nTop, nBottom, pValue = 0.1,
 \item{expressionData}{data.frame object that contains expressionData with
 different samples as columns.}
 
-\item{groups}{factor containing groups labels for samples in expressionData.}
+\item{groups}{factor containing group labels for each sample in
+\code{expressionData}.}
 
 \item{nTop}{number of up-regulated features to include in the signatures.}
 
-\item{nBottom}{number of down-regulated features to include in the signatures.}
+\item{nBottom}{number of down-regulated features to include in the
+signatures.}
 
-\item{pValue}{pValue cutoff for optional feature selection. If no feature
-selection is performed, pValue is ignored.}
+\item{pValue}{p-value cutoff for the optional feature selection step. If
+feature selection is skipped, pValue is ignored.}
 
 \item{prepro}{logical, whether or not to normalize the expression data. See
 Details for a description of the normalization used.}
@@ -32,11 +34,10 @@ Kruskal-Wallis test, depending on the number of groups.}
 the possible adjustments.}
 }
 \value{
-S4 class object \linkS4class{scudoResults}.
+Object of class \linkS4class{scudoResults}.
 }
 \description{
-Performs optional normalization and feature selection, then creates a Scudo
-Results object.
+This function performs SCUDO analysis on gene expression data.
 }
 \details{
 \code{scudo} performs a normalization based on mean features expression

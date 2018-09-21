@@ -26,6 +26,8 @@ Collate:
     'scudo.R'
     'scudoCytoscape.R'
     'scudoNetwork.R'
+    'scudoPredict.R'
+    'scudoPredict2.R'
     'show.R'
 RoxygenNote: 6.1.0
 Depends: R (>= 3.5.0)

@@ -1,24 +1,25 @@
 #' @include class.R scudo.R accessors.R
 NULL
 
-#' Create a Cytoscape network from the output of ScudoNetwork
+#' Create a Cytoscape network from the output of scudoNetwork
 #'
-#' Visualize results of scudo analysis in Cytoscape
+#' A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of a
+#' SCUDO analysis in Cytoscape.
 #'
-#' @param igraph object of class igraph, like the result of
-#'   \code{\link{scudoNetwork}}.
+#' @param graph Object of class \code{\link[igraph:igraph-package]{igraph}},
+#' like the result of \code{\link{scudoNetwork}}
 #' @param title The title of the network. If NULL it defaults to
-#'   \code{deparse(substitute(igraph))}.
-#' @param collection The name of the collection.
+#'   \code{deparse(substitute(graph))}
+#' @param collection The name of the Cytoscape collection
 #' @param base.url See \code{\link[RCy3]{createNetworkFromIgraph}}
 #'
 #' @return The network SUID (an integer).
 #'
 #' @export
-scudoCytoscape <- function(igraph, title = NULL, collection = "SCUDO",
+scudoCytoscape <- function(graph, title = NULL, collection = "SCUDO",
                            base.url = NULL) {
     # perform checks
-    if (is.null(title)) title <- deparse(substitute(igraph))
+    if (is.null(title)) title <- deparse(substitute(graph))
 
     stopifnot(
         is.character(title),
@@ -30,10 +31,10 @@ scudoCytoscape <- function(igraph, title = NULL, collection = "SCUDO",
 
     # plot
     if (is.null(base.url)) {
-        id <- RCy3::createNetworkFromIgraph(igraph, title = title,
+        id <- RCy3::createNetworkFromIgraph(graph, title = title,
             collection = collection)
     } else {
-        id <- RCy3::createNetworkFromIgraph(igraph, title = title,
+        id <- RCy3::createNetworkFromIgraph(graph, title = title,
             collection = collection, base.url = base.url)
     }
     RCy3::setNodeShapeDefault("Ellipse")

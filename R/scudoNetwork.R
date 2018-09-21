@@ -1,14 +1,16 @@
 #' @include class.R scudo.R accessors.R
 NULL
 
-#' scudoNetwork
+#' Create graph from a scudoResults object
 #'
-#' A function to convert a ScudoResult in an igraph object
+#' A function to create an \code{\link[igraph:igraph-package]{igraph}} graph
+#' from a \code{\link{scudoResults}} object.
 #'
-#' Details about the function
+#' The distance matrix in the scudoResults
 #'
-#' @param object A scudoResults object
-#' @param N A numeric value.
+#' @param object A \code{\link{scudoResults}} object
+#' @param N A number between 0 and 1. The fraction of all of the
+#' signature-to-signature distances that will be used for drawing the graph.
 #' @param colors A character vector
 #'
 #' @rdname scudoNetwork-methods
