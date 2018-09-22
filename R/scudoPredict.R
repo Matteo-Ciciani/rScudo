@@ -49,10 +49,9 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
     # normalization -----------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
+    normGroups <- if(groupedNorm) groups else NULL
 
-    if (prepro) {
-        testExpData <- .normalization(testExpData, testGroups)
-    }
+    if (prepro) expressionData <- .normalization(expressionData, normGroups)
 
     # Test Feature Selection --------------------------------------------------
 

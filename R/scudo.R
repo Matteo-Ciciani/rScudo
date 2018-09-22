@@ -64,7 +64,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 
     groups <- groups[, drop = TRUE]
     ngroups <- length(levels(groups))
-    normGroups <- ifelse(groupedNorm, groups, NULL)
+    normGroups <- if(groupedNorm) groups else NULL
 
     if (prepro) expressionData <- .normalization(expressionData, normGroups)
 
