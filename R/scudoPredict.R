@@ -26,17 +26,25 @@ NULL
 #' @param prepro logical, whether or not to normalize the test expression data.
 #'   See Details for a description of the normalization used.
 #'
+#' @param groupedNorm logical, whether or not to performed grouped
+#' normalization. See Details for a description of the normalization used
+#'
+#' @param distFun the function used to compute the distance between two
+#' samples. See Details
+#'
 #' @return S4 class object \linkS4class{scudoResults}.
 #'
 #' @export
 scudoPredict <- function(trainScudoRes, testExpData, testGroups,
-                         nTop, nBottom, prepro = TRUE) {
+                         nTop, nBottom, prepro = TRUE, groupedNorm = TRUE,
+                         distFun = NULL) {
 
     # InputCheck --------------------------------------------------------------
 
     # use placeholder for pValue, featureSel, pAdj
     .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
-                prepro, featureSel = FALSE, pAdj = "none")
+                prepro, groupedNorm, featureSel = FALSE, parametric = FALSE,
+                pAdj = "none", distFun = NULL)
 
     # normalization -----------------------------------------------------------
 
@@ -69,8 +77,12 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
         stop("top and bottom signatures overlap, only",
              dim(testExpData)[1], "features selected.")
     }
+
+    # distFun check ? ---------------------------------------------------------
+    # if (distFun(scudo) != distFun) warning("Using two different dist fun for training and testing")
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(testExpData, testGroups, nTop, nBottom, prepro = TRUE)
+    .performScudo(testExpData, testGroups, nTop, nBottom, groupedNorm,
+                  prepro = TRUE, distFun)
 }
 

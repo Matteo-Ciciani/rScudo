@@ -5,33 +5,44 @@
 \title{Performs SCUDO analysis}
 \usage{
 scudo(expressionData, groups, nTop, nBottom, pValue = 0.1,
-  prepro = TRUE, featureSel = TRUE, pAdj = "none")
+  prepro = TRUE, groupedNorm = TRUE, featureSel = TRUE,
+  parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{data.frame object that contains expressionData with
-different samples as columns.}
+different samples as columns}
 
 \item{groups}{factor containing group labels for each sample in
-\code{expressionData}.}
+\code{expressionData}}
 
-\item{nTop}{number of up-regulated features to include in the signatures.}
+\item{nTop}{number of up-regulated features to include in the signatures}
 
 \item{nBottom}{number of down-regulated features to include in the
-signatures.}
+signatures}
 
 \item{pValue}{p-value cutoff for the optional feature selection step. If
-feature selection is skipped, pValue is ignored.}
+feature selection is skipped, pValue is ignored}
 
 \item{prepro}{logical, whether or not to normalize the expression data. See
-Details for a description of the normalization used.}
+Details for a description of the normalization used}
 
-\item{featureSel}{Logical, whether or not to perform feature selection.
-Feature selection performed through a Wilcoxon-Mann-Withney test, or with a
-Kruskal-Wallis test, depending on the number of groups.}
+\item{groupedNorm}{logical, whether or not to performed grouped
+normalization. See Details for a description of the normalization used}
+
+\item{featureSel}{logical, whether or not to perform a feature selection.
+Feature selection is performed using one of four tests: Student's t-test,
+ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
+used depends on the number of groups and the \code{parametric} argument}
+
+\item{parametric}{logical, whether to use a parametric or a non-parametric
+test for the feature selection}
 
 \item{pAdj}{pAdj optionally performed on feature selection step. Default
 \code{pAdj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
-the possible adjustments.}
+the possible adjustment methods}
+
+\item{distFun}{the function used to compute the distance between two
+samples. See Details}
 }
 \value{
 Object of class \linkS4class{scudoResults}.

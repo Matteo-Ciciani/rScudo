@@ -58,7 +58,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
                   parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     .inputCheck(expressionData, groups, nTop, nBottom, pValue,
-                prepro, groupedNorm, featureSel, parametric, pAdj, distanceFun)
+                prepro, groupedNorm, featureSel, parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 

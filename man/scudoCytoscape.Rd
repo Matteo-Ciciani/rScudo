@@ -8,15 +8,15 @@ scudoCytoscape(graph, title = NULL, collection = "SCUDO",
   base.url = NULL)
 }
 \arguments{
-\item{graph}{object of class \code{\link[igraph:igraph-package]{igraph}},
-like the result of \code{\link{scudoNetwork}}.}
+\item{graph}{Object of class \code{\link[igraph:igraph-package]{igraph}},
+like the result of \code{\link{scudoNetwork}}}
 
 \item{title}{The title of the network. If NULL it defaults to
-\code{deparse(substitute(graph))}.}
+\code{deparse(substitute(graph))}}
 
-\item{collection}{The name of the Cytoscape collection.}
+\item{collection}{The name of the Cytoscape collection}
 
-\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}.}
+\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}}
 }
 \value{
 The network SUID (an integer).

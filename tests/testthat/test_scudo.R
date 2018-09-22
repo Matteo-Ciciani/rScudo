@@ -122,6 +122,18 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = list(TRUE)))
 
+    # Test groupedNorm ---------------------------------------------------------
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = logical(0)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = "ABC"))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = c(TRUE, FALSE)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = matrix(TRUE)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = list(TRUE)))
+
     # Test featureSel ----------------------------------------------------------
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, featureSel = logical(0)))
@@ -134,7 +146,19 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, featureSel =  list(TRUE)))
 
-    # test pAdj ---------------------------------------------------------------
+    # Test parametric ----------------------------------------------------------
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, parametric = logical(0)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, parametric =  "ABC"))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, parametric =  c(TRUE, FALSE)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, parametric =  matrix(TRUE)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, parametric =  list(TRUE)))
+
+    # test pAdj ----------------------------------------------------------------
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, pAdj = "ABC"))
 
@@ -143,7 +167,23 @@ test_that("scudo raises errors on wrong inputs", {
     expect_error(scudo(exData, gr1, 1, 10, 1))
 
     expect_error(scudo(exData, gr1, 1, 10, 1, pAdj = c("none", "BH")))
+
+    # test distFun -------------------------------------------------------------
+
+    f <- function(){}
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = NA))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = "ABC"))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = character(0)))
+
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = f))
+
 })
+
 
 # expect_warning goes in conflict with .Normalization that raises errors:
 # check commented tests
+
+

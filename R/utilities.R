@@ -4,7 +4,8 @@ NULL
 # .inputCheck ------------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
-                        prepro, featureSel, pAdj) {
+                        prepro, groupedNorm, featureSel, parametric, pAdj,
+                        distFun) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -68,7 +69,7 @@ NULL
                    "only", dim(expressionData)[1], "rows."))
     }
 
-    # checks on pValue, prepro, featureSel and pAdj ----------------------------
+    # checks on pValue, prepro, featureSel, groupedNorm, parametric, pAdj ------
 
     stopifnot(is.numeric(pValue),
               length(pValue) == 1,
@@ -86,10 +87,16 @@ NULL
 
     stopifnot(is.logical(prepro),
               is.logical(featureSel),
+              is.logical(groupedNorm),
+              is.logical(parametric),
               is.vector(prepro),
               is.vector(featureSel),
+              is.vector(groupedNorm),
+              is.vector(parametric),
               length(prepro) == 1,
               length(featureSel) == 1,
+              length(groupedNorm) == 1,
+              length(parametric) == 1,
               is.character(pAdj),
               is.vector(pAdj),
               length(pAdj) == 1)
@@ -98,6 +105,16 @@ NULL
         stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',
                    '"bonferroni", "BH", "BY", "fdr", "none".',
                    'Check stats::p.adjust documentation.'))
+    }
+
+    # check on distFun ---------------------------------------------------------
+
+    if (!is.null(distFun)){
+        stopifnot(is.function(distFun))
+        if (is.null(formals(distFun))) {
+            stop(paste('"distFun" should take in input at least one argument,',
+                       ' i.e "expressionData".'))
+        }
     }
 }
 

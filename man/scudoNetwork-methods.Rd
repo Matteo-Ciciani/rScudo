@@ -4,20 +4,22 @@
 \name{scudoNetwork}
 \alias{scudoNetwork}
 \alias{scudoNetwork,scudoResults-method}
-\title{scudoNetwork}
+\title{Create graph from a scudoResults object}
 \usage{
 scudoNetwork(object, N, colors = character())
 }
 \arguments{
-\item{object}{A scudoResults object}
+\item{object}{A \code{\link{scudoResults}} object}
 
-\item{N}{A numeric value.}
+\item{N}{A number between 0 and 1. The fraction of all of the
+signature-to-signature distances that will be used for drawing the graph.}
 
 \item{colors}{A character vector}
 }
 \description{
-A function to convert a ScudoResult in an igraph object
+A function to create an \code{\link[igraph:igraph-package]{igraph}} graph
+from a \code{\link{scudoResults}} object.
 }
 \details{
-Details about the function
+The distance matrix in the scudoResults
 }
