@@ -110,17 +110,17 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 3, c(0.5, 0.7)))
 
-    # Test prepro --------------------------------------------------------------
+    # Test norm --------------------------------------------------------------
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = logical(0)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = logical(0)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = "ABC"))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = "ABC"))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = c(TRUE, FALSE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = c(TRUE, FALSE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = matrix(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = matrix(TRUE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, prepro = list(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = list(TRUE)))
 
     # Test groupedNorm ---------------------------------------------------------
 

@@ -29,7 +29,7 @@ NULL
 #' @param pValue p-value cutoff for the optional feature selection step. If
 #' feature selection is skipped, pValue is ignored
 #'
-#' @param prepro logical, whether or not to normalize the expression data. See
+#' @param norm logical, whether or not to normalize the expression data. See
 #' Details for a description of the normalization used
 #'
 #' @param groupedNorm logical, whether or not to performed grouped
@@ -54,11 +54,11 @@ NULL
 #'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
-                  prepro = TRUE, groupedNorm = TRUE, featureSel = TRUE,
+                  norm = TRUE, groupedNorm = TRUE, featureSel = TRUE,
                   parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     .inputCheck(expressionData, groups, nTop, nBottom, pValue,
-                prepro, groupedNorm, featureSel, parametric, pAdj, distFun)
+                norm, groupedNorm, featureSel, parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 
@@ -66,12 +66,12 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
     ngroups <- length(levels(groups))
     normGroups <- if(groupedNorm) groups else NULL
 
-    if (prepro) expressionData <- .normalization(expressionData, normGroups)
+    if (norm) expressionData <- .normalization(expressionData, normGroups)
 
     # Feature Selection --------------------------------------------------------
 
     if (ngroups == 1) {
-        warning(paste("Just one group in", deparse(substitute(groups)),
+        warning(paste0("Just one group in ", deparse(substitute(groups)),
                       ": skipping feature selection"))
         featureSel <- FALSE
     }
@@ -89,6 +89,6 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
     # Performing Scudo ---------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, distFun, pValue,
-                  prepro, groupedNorm, featureSel, parametric, pAdj)
+                  norm, groupedNorm, featureSel, parametric, pAdj)
 }
 

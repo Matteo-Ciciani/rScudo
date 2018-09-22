@@ -4,7 +4,7 @@ NULL
 # .inputCheck ------------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
-                        prepro, groupedNorm, featureSel, parametric, pAdj,
+                        norm, groupedNorm, featureSel, parametric, pAdj,
                         distFun) {
 
     # checks on expressionData -------------------------------------------------
@@ -69,7 +69,7 @@ NULL
                    "only", dim(expressionData)[1], "rows."))
     }
 
-    # checks on pValue, prepro, featureSel, groupedNorm, parametric, pAdj ------
+    # checks on pValue, norm, featureSel, groupedNorm, parametric, pAdj ------
 
     stopifnot(is.numeric(pValue),
               length(pValue) == 1,
@@ -85,15 +85,15 @@ NULL
         stop("pValue cannot be NA.")
     }
 
-    stopifnot(is.logical(prepro),
+    stopifnot(is.logical(norm),
               is.logical(featureSel),
               is.logical(groupedNorm),
               is.logical(parametric),
-              is.vector(prepro),
+              is.vector(norm),
               is.vector(featureSel),
               is.vector(groupedNorm),
               is.vector(parametric),
-              length(prepro) == 1,
+              length(norm) == 1,
               length(featureSel) == 1,
               length(groupedNorm) == 1,
               length(parametric) == 1,
@@ -266,11 +266,9 @@ NULL
 
 # compute signatures -----------------------------------------------------------
 
-.computeSignature <- function(ranks, nTop, nBottom) {
-    rankedNames <- names(ranks)
-    names(rankedNames) <- ranks
-    rankedNames[rev(c(as.character(1:nTop), as.character(
-        (length(rankedNames) - nBottom + 1):length(rankedNames))))]
+.computeSignature <- function(indeces, nTop, nBottom) {
+    ordNames <- names(indeces)[indeces]
+    ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
 }
 
 # perform analysis -------------------------------------------------------------
@@ -278,16 +276,18 @@ NULL
 .performScudo <- function(expressionData, groups, nTop, nBottom,
                           distFun = NULL, ...) {
 
-    # transform expressionData in ranks
-    rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
+    # transform expressionData in indexes
+    indexMatrix <- apply(expressionData, 2, order, decreasing = TRUE)
+    rownames(indexMatrix) <- rownames(expressionData)
 
     # compute signatures
-    sigMatrix <- apply(rankedExprData, 2, .computeSignature, nTop, nBottom)
+    sigMatrix <- apply(indexMatrix, 2, .computeSignature, nTop, nBottom)
 
     # compute distance matrix
     distances <- .defaultDist(expressionData, nTop, nBottom)
 
     # compute consensus signatures
+    rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
     groupedRankSums <- vapply(levels(groups), function(x) {
         rowSums(rankedExprData[groups == x])},
         rep(0.0, dim(rankedExprData)[1]))
@@ -317,12 +317,14 @@ NULL
     }
     pars <- list(nTop = nTop, nBottom = nBottom)
     if (...length() == 1) {
-        pars$prepro <- ..1
+        pars$norm <- ..1 # to be changed
     } else {
         pars$pValue <- ..1
-        pars$prepro <- ..2
-        pars$featureSel <- ..3
-        pars$pAdj <- ..4
+        pars$norm <- ..2
+        pars$groupedNorm <- ..3
+        pars$featureSel <- ..4
+        pars$parametric <- ..5
+        pars$pAdj <- ..6
     }
 
     scudoResults(distMatrix = distances,
@@ -335,5 +337,3 @@ NULL
         params = pars
     )
 }
-
-

@@ -24,7 +24,7 @@ setMethod("show", "scudoResults", function(object) {
         "\n")
     cat("downSignatures length  : ", paste(params(object)$nBottom),
         "\n")
-    cat("Normalization          : ", paste0(ifelse(params(object)$prepro,
+    cat("Normalization          : ", paste0(ifelse(params(object)$norm,
         "", "not "), "performed"), "\n")
 
      if (length(params(object)) != 3) {

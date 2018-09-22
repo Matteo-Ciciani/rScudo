@@ -23,7 +23,7 @@ NULL
 #'
 #' @param nBottom number of down-regulated features to include in the signatures.
 #'
-#' @param prepro logical, whether or not to normalize the test expression data.
+#' @param norm logical, whether or not to normalize the test expression data.
 #'   See Details for a description of the normalization used.
 #'
 #' @param groupedNorm logical, whether or not to performed grouped
@@ -35,15 +35,15 @@ NULL
 #' @return S4 class object \linkS4class{scudoResults}.
 #'
 #' @export
-scudoPredict <- function(trainScudoRes, testExpData, testGroups,
-                         nTop, nBottom, prepro = TRUE, groupedNorm = TRUE,
-                         distFun = NULL) {
+scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
+                         nTop = NULL, nBottom = NULL, norm = TRUE,
+                         groupedNorm = TRUE, distFun = NULL) {
 
     # InputCheck --------------------------------------------------------------
 
     # use placeholder for pValue, featureSel, pAdj
     .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
-                prepro, groupedNorm, featureSel = FALSE, parametric = FALSE,
+                norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
                 pAdj = "none", distFun = NULL)
 
     # normalization -----------------------------------------------------------
@@ -51,7 +51,7 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
     testGroups <- testGroups[, drop = TRUE]
     normGroups <- if(groupedNorm) groups else NULL
 
-    if (prepro) expressionData <- .normalization(expressionData, normGroups)
+    if (norm) expressionData <- .normalization(expressionData, normGroups)
 
     # Test Feature Selection --------------------------------------------------
 
@@ -82,6 +82,6 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups,
     # Performing Scudo --------------------------------------------------------
 
     .performScudo(testExpData, testGroups, nTop, nBottom, groupedNorm,
-                  prepro = TRUE, distFun)
+                  norm = TRUE, distFun)
 }
 

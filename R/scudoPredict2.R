@@ -6,20 +6,20 @@ NULL
 
 #' @export
 scudoPredict2 <- function(trainScudoRes, trainScudoNet, testExpData, nTop,
-                          nBottom, testGroups = NULL, prepro = TRUE,
+                          nBottom, testGroups = NULL, norm = TRUE,
                           neighbours = 1, weighted = TRUE, pruned = FALSE) {
 
     # InputCheck --------------------------------------------------------------
 
     # use placeholder for pValue, featureSel, pAdj
     .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
-                prepro, featureSel = FALSE, pAdj = "none")
+                norm, featureSel = FALSE, pAdj = "none")
 
     # normalization -----------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
 
-    if (prepro) {
+    if (norm) {
         testExpData <- .normalization(testExpData, testGroups)
     }
 
@@ -49,7 +49,7 @@ scudoPredict2 <- function(trainScudoRes, trainScudoNet, testExpData, nTop,
     # Performing Scudo on testing set -----------------------------------------
 
     testScudoResult <- .performScudo(testExpData, testGroups, nTop, nBottom,
-                                     prepro = TRUE)
+                                     norm = TRUE)
 
     # Use trainScudoNet to perform classification
 
