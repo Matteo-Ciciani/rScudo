@@ -4,8 +4,9 @@
 \alias{scudoPredict}
 \title{Performs scudoPredict on test Expression Data}
 \usage{
-scudoPredict(trainScudoRes, testExpData, testGroups, nTop, nBottom,
-  prepro = TRUE, groupedNorm = TRUE, distFun = NULL)
+scudoPredict(trainScudoRes, testExpData, testGroups = NULL,
+  nTop = NULL, nBottom = NULL, norm = TRUE, groupedNorm = TRUE,
+  distFun = NULL)
 }
 \arguments{
 \item{trainScudoRes}{scudoResults object used as training object.}
@@ -18,7 +19,7 @@ scudoPredict(trainScudoRes, testExpData, testGroups, nTop, nBottom,
 
 \item{nBottom}{number of down-regulated features to include in the signatures.}
 
-\item{prepro}{logical, whether or not to normalize the test expression data.
+\item{norm}{logical, whether or not to normalize the test expression data.
 See Details for a description of the normalization used.}
 
 \item{groupedNorm}{logical, whether or not to performed grouped

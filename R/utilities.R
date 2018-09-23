@@ -316,8 +316,11 @@ NULL
         rownames(ConsDwnSig) <- 1:nBottom
     }
     pars <- list(nTop = nTop, nBottom = nBottom)
-    if (...length() == 1) {
-        pars$norm <- ..1 # to be changed
+
+    if (...length() == 2) {
+        pars$norm <- ..1
+        pars$groupedNorm <- ..2
+
     } else {
         pars$pValue <- ..1
         pars$norm <- ..2

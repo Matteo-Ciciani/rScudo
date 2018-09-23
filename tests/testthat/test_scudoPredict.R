@@ -14,7 +14,7 @@ test_that("Scudo Predict selects right features.", {
     nBottom <- 3
     p <- 0.05
 
-    res <- .performScudo(exprData, grps, nTop, nBottom, p)
+    res <- scudo(exprData, grps, nTop, nBottom, p, featureSel = F)
 
     #Examples of scudo predict
     testExpData <- data.frame(e = 11:20,
@@ -24,6 +24,7 @@ test_that("Scudo Predict selects right features.", {
     rownames(testExpData) <- letters[11:20]
     grps1 <- as.factor(c("G1", "G2", "G2", "G1"))
     grps2 <- as.factor(c("G1", "G2", "G3", "G1"))
+    grps3 <- NULL
 
     # Testing ScudoRes obj produced
     expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "scudoResults")
@@ -35,4 +36,6 @@ test_that("Scudo Predict selects right features.", {
     rownames(testExpData) <- letters[1:10]
     expect_error(suppressWarnings(scudoPredict(res, testExpData, grps1, 1, 3)))
 
+    # test for null groups
+    expect_s4_class(scudoPredict(res, testExpData, grps3, 1, 3), "scudoResults")
 })

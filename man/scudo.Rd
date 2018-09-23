@@ -4,9 +4,9 @@
 \alias{scudo}
 \title{Performs SCUDO analysis}
 \usage{
-scudo(expressionData, groups, nTop, nBottom, pValue = 0.1,
-  prepro = TRUE, groupedNorm = TRUE, featureSel = TRUE,
-  parametric = FALSE, pAdj = "none", distFun = NULL)
+scudo(expressionData, groups, nTop, nBottom, pValue = 0.1, norm = TRUE,
+  groupedNorm = TRUE, featureSel = TRUE, parametric = FALSE,
+  pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{data.frame object that contains expressionData with
@@ -23,7 +23,7 @@ signatures}
 \item{pValue}{p-value cutoff for the optional feature selection step. If
 feature selection is skipped, pValue is ignored}
 
-\item{prepro}{logical, whether or not to normalize the expression data. See
+\item{norm}{logical, whether or not to normalize the expression data. See
 Details for a description of the normalization used}
 
 \item{groupedNorm}{logical, whether or not to performed grouped

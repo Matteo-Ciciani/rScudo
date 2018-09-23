@@ -39,6 +39,17 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
                          nTop = NULL, nBottom = NULL, norm = TRUE,
                          groupedNorm = TRUE, distFun = NULL) {
 
+    # nTop, nBottom, groups ---------------------------------------------------
+
+    flag <- T # used for (if (nTest != nTrain))
+    if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop
+    if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
+    if (is.null(testGroups)) {
+        testGroups <- factor(rep("a", length(testExpData[1,])))
+        groupedNorm <- FALSE
+        flag <- F
+    }
+
     # InputCheck --------------------------------------------------------------
 
     # use placeholder for pValue, featureSel, pAdj
@@ -51,15 +62,17 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
     testGroups <- testGroups[, drop = TRUE]
     normGroups <- if(groupedNorm) groups else NULL
 
-    if (norm) expressionData <- .normalization(expressionData, normGroups)
+    if (norm) testExpData <- .normalization(testExpData, normGroups)
 
     # Test Feature Selection --------------------------------------------------
 
     nTest <- length(levels(testGroups))
     nTrain <- length(levels(groups(trainScudoRes)))
 
-    if (nTest != nTrain) {
-        warning("Train and Test have different number of groups.")
+    if (flag) {
+        if (nTest != nTrain) {
+            warning("Train and Test have different number of groups.")
+        }
     }
 
     present <- selectedFeatures(trainScudoRes) %in% rownames(testExpData)
@@ -77,11 +90,9 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
              dim(testExpData)[1], "features selected.")
     }
 
-    # distFun check ? ---------------------------------------------------------
-    # if (distFun(scudo) != distFun) warning("Using two different dist fun for training and testing")
     # Performing Scudo --------------------------------------------------------
 
-    .performScudo(testExpData, testGroups, nTop, nBottom, groupedNorm,
-                  norm = TRUE, distFun)
+    .performScudo(testExpData, testGroups, nTop, nBottom,
+                  distFun, norm, groupedNorm)
 }
 
