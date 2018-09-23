@@ -29,6 +29,9 @@ test_that("Scudo Predict selects right features.", {
     # Testing ScudoRes obj produced
     expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "scudoResults")
 
+    # test for null groups
+    expect_s4_class(scudoPredict(res, testExpData, grps3, 1, 3), "scudoResults")
+
     # tests on warnings and errors
 
     expect_warning(scudoPredict(res, testExpData, grps2, 1, 3))
@@ -36,6 +39,4 @@ test_that("Scudo Predict selects right features.", {
     rownames(testExpData) <- letters[1:10]
     expect_error(suppressWarnings(scudoPredict(res, testExpData, grps1, 1, 3)))
 
-    # test for null groups
-    expect_s4_class(scudoPredict(res, testExpData, grps3, 1, 3), "scudoResults")
 })

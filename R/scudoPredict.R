@@ -41,13 +41,13 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     # nTop, nBottom, groups ---------------------------------------------------
 
-    flag <- T # used for (if (nTest != nTrain))
+    flag <- TRUE # used for (if (nTest != nTrain))
     if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop
     if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
     if (is.null(testGroups)) {
         testGroups <- factor(rep("a", length(testExpData[1,])))
         groupedNorm <- FALSE
-        flag <- F
+        flag <- FALSE
     }
 
     # InputCheck --------------------------------------------------------------
