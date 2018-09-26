@@ -9,17 +9,25 @@
 scudoNetwork(object, N, colors = character())
 }
 \arguments{
-\item{object}{A \code{\link{scudoResults}} object}
+\item{object}{a \code{\linkS4class{scudoResults}} object}
 
-\item{N}{A number between 0 and 1. The fraction of all of the
-signature-to-signature distances that will be used for drawing the graph.}
+\item{N}{a number between 0 and 1. The fraction of all of the
+signature-to-signature distances that will be used to draw the graph}
 
-\item{colors}{A character vector}
+\item{colors}{a character vector of hex color codes, used to color the nodes}
 }
 \description{
-A function to create an \code{\link[igraph:igraph-package]{igraph}} graph
-from a \code{\link{scudoResults}} object.
+A function to create an \code{\link[igraph:igraph-package]{igraph}} graph,
+from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
+samples and edges quantify the similarity between the nodes.
 }
 \details{
 The distance matrix in the scudoResults
+}
+\seealso{
+\code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
+\code{\link[igraph:igraph-package]{igraph}}
+}
+\author{
+Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
 }

@@ -35,7 +35,7 @@ NULL
 #' net <- scudoNetwork(res, N = 0.5, colors = col)
 #'
 #' # run scudoCytoscape (with Cytoscape open)
-#' scudoCytoscape(res)
+#' \dontrun{scudoCytoscape(res)}
 #'
 #' @export
 scudoCytoscape <- function(graph, title = NULL, collection = "SCUDO",

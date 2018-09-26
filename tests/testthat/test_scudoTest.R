@@ -1,7 +1,7 @@
 context("Test scudoTest")
 library(scudo)
 
-test_that("scudoTest selects right features.", {
+test_that("scudoTest selects right features", {
 
     # Scudo Result for training
     exprData <- data.frame(a = 11:20,
@@ -18,15 +18,19 @@ test_that("scudoTest selects right features.", {
 
     #Examples of scudoTest
     testExpData <- data.frame(e = 11:20,
-                             f = 16:25,
-                             g = rev(1:10),
-                             h = c(1:2, rev(3:10)))
+                              f = 16:25,
+                              g = rev(1:10),
+                              h = c(1:2, rev(3:10)))
     rownames(testExpData) <- letters[11:20]
     grps1 <- as.factor(c("G1", "G2", "G2", "G1"))
     grps2 <- as.factor(c("G1", "G2", "G3", "G1"))
+    grps3 <- NULL
 
     # Testing ScudoRes obj produced
     expect_s4_class(scudoTest(res, testExpData, grps1, 1, 3), "scudoResults")
+
+    # test for null groups
+    expect_s4_class(scudoPredict(res, testExpData, grps3, 1, 3), "scudoResults")
 
     # tests on warnings and errors
 

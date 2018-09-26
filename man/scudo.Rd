@@ -80,7 +80,7 @@ ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
 used depends on the number of groups and the \code{parametric} parameter.
 The parameter \code{pAdj} controls the method used to adjust p-values for
 multiple hypothesis testing. For a list of adjustment methods see
-\code{\link[stat]{p.adjust}}. Features with an adjusted p-value less than
+\code{\link[stats]{p.adjust}}. Features with an adjusted p-value less than
 \code{pValue} are selected.
 
 After these two optional steps, the signatures for each sample are computed.

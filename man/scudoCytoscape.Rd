@@ -44,6 +44,9 @@ net <- scudoNetwork(res, N = 0.5, colors = col)
 scudoCytoscape(res)
 
 }
+\seealso{
+\code{\link{scudoNetwork}}, \code{\link[RCy3]{RCy3}}
+}
 \author{
 Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
 }

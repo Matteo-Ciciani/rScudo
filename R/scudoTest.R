@@ -55,6 +55,15 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
                 norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
                 pAdj = "none", distFun = NULL)
 
+    nTest <- length(levels(testGroups))
+    nTrain <- length(levels(groups(trainScudoRes)))
+
+    if (!is.null(testGroups)) {
+        if (!isTRUE(all.equal(nTest, nTrain))) {
+            message("Train and test have different number of groups")
+        }
+    }
+
     # normalization ------------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
@@ -63,13 +72,6 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
     if (norm) testExpData <- .normalization(testExpData, normGroups)
 
     # Test Feature Selection ---------------------------------------------------
-
-    nTest <- length(levels(testGroups))
-    nTrain <- length(levels(groups(trainScudoRes)))
-
-    if (nTest != nTrain) {
-        warning("Train and Test have different number of groups.")
-    }
 
     present <- selectedFeatures(trainScudoRes) %in% rownames(testExpData)
     missing <- selectedFeatures(trainScudoRes)[!present]
@@ -88,5 +90,6 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     .performScudo(testExpData, testGroups, nTop, nBottom, distFun, norm,
                   groupedNorm)
+
 }
 

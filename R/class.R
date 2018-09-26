@@ -161,53 +161,61 @@ setValidity("scudoResults", function(object) {
         valid <- FALSE
         msg <- c(msg, "groups contains NAs")
     }
-    if (length(object@groups) != dim(object@distMatrix)[1]) {
+    if (length(object@groups) != dim(object@distMatrix)[1] &&
+        length(object@groups) != 0) {
+
         valid <- FALSE
         msg <- c(msg, paste0("length of groups different from number of rows ",
                              "in distMatrix"))
     }
 
     # validity of consensusUpSignatures ----------------------------------------
-    if (any(is.na(object@consensusUpSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, "consensusUpSignatures contains NAs")
-    }
-    if (dim(object@consensusUpSignatures)[1] != dim(object@upSignatures)[1]) {
-        valid <- FALSE
-        msg <- c(msg, paste0("number of rows in consensusUpSignatures ",
-                             "different from number of rows in upSignatures"))
-    }
-    if (!all(sapply(object@consensusUpSignatures, is.character))) {
-        valid <- FALSE
-        msg <- c(msg, "consensusUpSignatures contains non-character values")
-    }
-    if (!all(is.element(colnames(object@consensusUpSignatures),
-                        as.character(levels(object@groups))))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
-                             "elements that are not in groups"))
+    if (!isTRUE(all.equal(dim(object@consensusUpSignatures), c(0, 0)))) {
+        if (any(is.na(object@consensusUpSignatures))) {
+            valid <- FALSE
+            msg <- c(msg, "consensusUpSignatures contains NAs")
+        }
+        if (dim(object@consensusUpSignatures)[1] != dim(object@upSignatures)[1])
+        {
+            valid <- FALSE
+            msg <- c(msg, paste0("number of rows in consensusUpSignatures ",
+                "different from number of rows in upSignatures"))
+        }
+        if (!all(sapply(object@consensusUpSignatures, is.character))) {
+            valid <- FALSE
+            msg <- c(msg, "consensusUpSignatures contains non-character values")
+        }
+        if (!all(is.element(colnames(object@consensusUpSignatures),
+                            as.character(levels(object@groups))))) {
+            valid <- FALSE
+            msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
+                "elements that are not in groups"))
+        }
     }
 
     # validity of consensusDownSignatures --------------------------------------
-    if (any(is.na(object@consensusDownSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, "consensusDownSignatures contains NAs")
-    }
-    if (dim(object@consensusDownSignatures)[1] !=
-        dim(object@downSignatures)[1]) {
-        valid <- FALSE
-        msg <- c(msg, paste0("number of rows in consensusDownSignatures ",
-                             "different from number of rows in downSignatures"))
-    }
-    if (!all(sapply(object@consensusDownSignatures, is.character))) {
-        valid <- FALSE
-        msg <- c(msg, "consensusDownSignatures contains non-character values")
-    }
-    if (!all(is.element(colnames(object@consensusDownSignatures),
-                        as.character(levels(object@groups))))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames of consensusDownSignatures contains ",
-                             "elements that are not in groups"))
+    if (!isTRUE(all.equal(dim(object@consensusDownSignatures), c(0, 0)))) {
+        if (any(is.na(object@consensusDownSignatures))) {
+            valid <- FALSE
+            msg <- c(msg, "consensusDownSignatures contains NAs")
+        }
+        if (dim(object@consensusDownSignatures)[1] !=
+            dim(object@downSignatures)[1]) {
+            valid <- FALSE
+            msg <- c(msg, paste0("number of rows in consensusDownSignatures ",
+                "different from number of rows in downSignatures"))
+        }
+        if (!all(sapply(object@consensusDownSignatures, is.character))) {
+            valid <- FALSE
+            msg <- c(msg, paste0("consensusDownSignatures contains ",
+                "non-character values"))
+        }
+        if (!all(is.element(colnames(object@consensusDownSignatures),
+                            as.character(levels(object@groups))))) {
+            valid <- FALSE
+            msg <- c(msg, paste0("colnames of consensusDownSignatures ",
+                "contains elements that are not in groups"))
+        }
     }
 
     # validity of selectedFeatures ---------------------------------------------
