@@ -287,21 +287,27 @@ NULL
     distances <- .defaultDist(expressionData, nTop, nBottom)
 
     # compute consensus signatures
-    rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
-    groupedRankSums <- vapply(levels(groups), function(x) {
-        rowSums(rankedExprData[groups == x])},
-        rep(0.0, dim(rankedExprData)[1]))
-    ordGroupedRankSums <- apply(groupedRankSums, 2, order, decreasing = TRUE)
-    rownames(ordGroupedRankSums) <- rownames(expressionData)
-    consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
-                                nTop, nBottom)
+    if (!is.null(groups)) {
+        rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
+        groupedRankSums <- vapply(levels(groups), function(x) {
+            rowSums(rankedExprData[groups == x])},
+            rep(0.0, dim(rankedExprData)[1]))
+        ordGroupedRankSums <- apply(groupedRankSums, 2, order,
+                                    decreasing = TRUE)
+        rownames(ordGroupedRankSums) <- rownames(expressionData)
+        consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
+                                    nTop, nBottom)
+    }
 
     # create scudoResults object to return
     UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[1:nTop, ]
     DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
         (nTop + 1):nrow(sigMatrix), ]
     rownames(DwnSig) <- 1:nBottom
-    if (length(levels(groups)) == 1) {
+    if (is.null(groups)) {
+        ConsUpSig <- data.frame()
+        ConsDwnSig <- data.frame()
+    } else if (length(levels(groups)) == 1) {
         consVec <- as.vector(consensusSigMatrix)
         ConsUpSig <- data.frame(consVec[1:nTop], stringsAsFactors = FALSE)
         colnames(ConsUpSig) <- levels(groups)
@@ -328,6 +334,8 @@ NULL
         pars$parametric <- ..5
         pars$pAdj <- ..6
     }
+
+    if (is.null(groups)) groups <- factor()
 
     scudoResults(distMatrix = distances,
         upSignatures = UpSig,
