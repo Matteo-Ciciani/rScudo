@@ -124,7 +124,7 @@ The distance matrix is included in the returned object and can be used to
 generate a graph of samples using \code{\link{scudoNetwork}}.
 }
 \seealso{
-\code{\link{scudoPredict}}, \code{\link{scudoNetwork}},
+\code{\link{scudoTest}}, \code{\link{scudoNetwork}},
 \code{\linkS4class{scudoResults}}
 }
 \author{

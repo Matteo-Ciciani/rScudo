@@ -121,10 +121,10 @@ plot(clusterTrain, netTrain)
 
 ## Analyse testing set
 
-We can use a `ScudoResults` object and the function `scudoPredict` to analyze the testing set. The feature selection is not performed in the testing set. Instead, only the features selected in the training are used in the analysis of the testing set.
+We can use a `ScudoResults` object and the function `scudoTest` to analyze the testing set. The feature selection is not performed in the testing set. Instead, only the features selected in the training are used in the analysis of the testing set.
 
 ```{r}
-ScudoTest <- scudoPredict(ScudoTrain, test, bt[-inTrain], nTop = 100, nBottom = 100)
+ScudoTest <- scudoTest(ScudoTrain, test, bt[-inTrain], nTop = 100, nBottom = 100)
 ScudoTest
 ```
 

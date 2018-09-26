@@ -116,7 +116,7 @@ NULL
 #'
 #' @return Object of class \code{\linkS4class{scudoResults}}.
 #'
-#' @seealso \code{\link{scudoPredict}}, \code{\link{scudoNetwork}},
+#' @seealso \code{\link{scudoTest}}, \code{\link{scudoNetwork}},
 #' \code{\linkS4class{scudoResults}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}

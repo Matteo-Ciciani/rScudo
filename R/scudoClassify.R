@@ -1,7 +1,7 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudoPredict2 ----------------------------------------------------------------
+# scudoTest2 ----------------------------------------------------------------
 
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,

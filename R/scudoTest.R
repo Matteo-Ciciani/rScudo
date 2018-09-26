@@ -1,14 +1,14 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudoPredict ----------------------------------------------------------------
+# scudoTest ----------------------------------------------------------------
 
-#' Performs scudoPredict on test Expression Data
+#' Performs scudoTest on test Expression Data
 #'
 #' Performes SCUDO on test Expression Data using feature selected from a
 #' previous computed train Scudo Results object.
 #'
-#' \code{scudoPredict} works as a common predict function by testing on a
+#' \code{scudoTest} works as a common predict function by testing on a
 #' different expressionData object previous feature selection results obtained
 #' in a train Scudo Result object. This could be helpful in order to check the
 #' effectiveness of previously chosen parameters.
@@ -36,25 +36,33 @@ NULL
 #' @return S4 class object \linkS4class{scudoResults}.
 #'
 #' @export
-scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
+scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
                          nTop = NULL, nBottom = NULL, norm = TRUE,
                          groupedNorm = FALSE, distFun = NULL) {
 
-    # InputCheck --------------------------------------------------------------
+    # InputCheck ---------------------------------------------------------------
+
+    if (is(trainScudoRes, "scudoResults")) {
+        if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop
+        if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
+    } else {
+        stop("trainScudoRes must be an object of class scudoResults. Current",
+             " class is ", class(trainScudoRes))
+    }
 
     # use placeholder for pValue, featureSel, pAdj
     .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
                 norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
                 pAdj = "none", distFun = NULL)
 
-    # normalization -----------------------------------------------------------
+    # normalization ------------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
-    normGroups <- if(groupedNorm) groups else NULL
+    normGroups <- if(groupedNorm) testGroups else NULL
 
-    if (norm) expressionData <- .normalization(expressionData, normGroups)
+    if (norm) testExpData <- .normalization(testExpData, normGroups)
 
-    # Test Feature Selection --------------------------------------------------
+    # Test Feature Selection ---------------------------------------------------
 
     nTest <- length(levels(testGroups))
     nTrain <- length(levels(groups(trainScudoRes)))
@@ -78,11 +86,7 @@ scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
              dim(testExpData)[1], "features selected.")
     }
 
-    # distFun check ? ---------------------------------------------------------
-    # if (distFun(scudo) != distFun) warning("Using two different dist fun for training and testing")
-    # Performing Scudo --------------------------------------------------------
-
-    .performScudo(testExpData, testGroups, nTop, nBottom, groupedNorm,
-                  norm = TRUE, distFun)
+    .performScudo(testExpData, testGroups, nTop, nBottom, distFun, norm,
+                  groupedNorm)
 }
 

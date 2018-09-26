@@ -1,7 +1,7 @@
-context("Test scudoPredict")
+context("Test scudoTest")
 library(scudo)
 
-test_that("Scudo Predict selects right features.", {
+test_that("scudoTest selects right features.", {
 
     # Scudo Result for training
     exprData <- data.frame(a = 11:20,
@@ -14,9 +14,9 @@ test_that("Scudo Predict selects right features.", {
     nBottom <- 3
     p <- 0.05
 
-    res <- .performScudo(exprData, grps, nTop, nBottom, p)
+    res <- .performScudo(exprData, grps, nTop, nBottom, NULL, FALSE, FALSE)
 
-    #Examples of scudo predict
+    #Examples of scudoTest
     testExpData <- data.frame(e = 11:20,
                              f = 16:25,
                              g = rev(1:10),
@@ -26,13 +26,13 @@ test_that("Scudo Predict selects right features.", {
     grps2 <- as.factor(c("G1", "G2", "G3", "G1"))
 
     # Testing ScudoRes obj produced
-    expect_s4_class(scudoPredict(res, testExpData, grps1, 1, 3), "scudoResults")
+    expect_s4_class(scudoTest(res, testExpData, grps1, 1, 3), "scudoResults")
 
     # tests on warnings and errors
 
-    expect_warning(scudoPredict(res, testExpData, grps2, 1, 3))
+    expect_warning(scudoTest(res, testExpData, grps2, 1, 3))
 
     rownames(testExpData) <- letters[1:10]
-    expect_error(suppressWarnings(scudoPredict(res, testExpData, grps1, 1, 3)))
+    expect_error(suppressWarnings(scudoTest(res, testExpData, grps1, 1, 3)))
 
 })

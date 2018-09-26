@@ -24,10 +24,10 @@ Collate:
     'accessors.R'
     'utilities.R'
     'scudo.R'
+    'scudoClassify.R'
     'scudoCytoscape.R'
     'scudoNetwork.R'
-    'scudoPredict.R'
-    'scudoPredict2.R'
+    'scudoTest.R'
     'show.R'
 RoxygenNote: 6.1.0
 Depends: R (>= 3.5.0)
