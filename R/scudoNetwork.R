@@ -3,15 +3,21 @@ NULL
 
 #' Create graph from a scudoResults object
 #'
-#' A function to create an \code{\link[igraph:igraph-package]{igraph}} graph
-#' from a \code{\link{scudoResults}} object.
+#' A function to create an \code{\link[igraph:igraph-package]{igraph}} graph,
+#' from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
+#' samples and edges quantify the similarity between the nodes.
 #'
 #' The distance matrix in the scudoResults
 #'
-#' @param object A \code{\link{scudoResults}} object
-#' @param N A number between 0 and 1. The fraction of all of the
-#' signature-to-signature distances that will be used for drawing the graph.
-#' @param colors A character vector
+#' @param object a \code{\linkS4class{scudoResults}} object
+#' @param N a number between 0 and 1. The fraction of all of the
+#' signature-to-signature distances that will be used to draw the graph
+#' @param colors a character vector of hex color codes, used to color the nodes
+#'
+#' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
+#' \code{\link[igraph:igraph-package]{igraph}}
+#'
+#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
 #'
 #' @rdname scudoNetwork-methods
 #' @export
