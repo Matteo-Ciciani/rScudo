@@ -5,18 +5,82 @@ NULL
 
 #' Performs SCUDO analysis
 #'
-#' This function performs SCUDO analysis on gene expression data.
+#' SCUDO (Signature-based ClUstering for DiagnOstic purposes) is a method for
+#' the analysis on gene expression data. This function
+#' computes gene signatures for each sample and consensus signatures for each
+#' group specified. A distance matrix is also computed, that can be use by the
+#' function \code{\link{scudoNetwork}} to generate a graph in which each node is
+#' a sample and an edge between two nodes quantitatively represents the
+#' similarity between their respective signatures.
 #'
-#' \code{scudo} performs a normalization based on mean features expression
-#' levels in different groups, in order to increase the sensitivity for the
-#' subsequent analysis.
+#' Given a set of expression profiles with known classification, SCUDO
+#' computes a list of signatures composed of genes over- and under-expressed
+#' in each sample. It also compute consensus signatures for each group and
+#' uses the signatures to compute a distance matrix that quantifies the
+#' similarity between the signatures of pairs of samples.
 #'
-#' The feature selection process is helpful for subsequent analysis. It is also
-#' possible to compute optionally a pValue adjustment for stricter feature
-#' selection.
+#' Before computing the signatures, two optional perprocessing steps are
+#' performed. The first step is a normalization of expression values. If the
+#' parameter \code{groupedNorm} is \code{TRUE}, the normalization is performed
+#' computing the mean expression value for each feature in each group.
+#' The the mean of the group means is taken for each feature and the expression
+#' values are normalized dividing them for this mean value. If the the parameter
+#' \code{groupedNorm} is \code{FALSE}, the normalized expression values are
+#' computed dividing the expression value of each feature for the mean
+#' expression value of that feature (regardless of groups).
 #'
-#' @param expressionData data.frame object that contains expressionData with
-#'   different samples as columns
+#' The second optional preprocessing step is a feature selection. This step is
+#' performed in order to select relevant features.
+#' Feature selection is performed using one of four tests: Student's t-test,
+#' ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
+#' used depends on the number of groups and the \code{parametric} parameter.
+#' The parameter \code{pAdj} controls the method used to adjust p-values for
+#' multiple hypothesis testing. For a list of adjustment methods see
+#' \code{\link[stat]{p.adjust}}. Features with an adjusted p-value less than
+#' \code{pValue} are selected.
+#'
+#' After these two optional steps, the signatures for each sample are computed.
+#' Selected features are ranked according to the (normalized) expression values.
+#' Than the
+#' first \code{nTop} and the last \code{nBottom} features are selected from the
+#' ranked list of features. Two \code{data.frame}s are containing the signatures
+#' of up-regulated genes and down-regulated genes for each sample are produced
+#' and are contained in the returned object.
+#'
+#' Consensus top and bottom signatures are computed for each group. The
+#' avreage rank for each gene is computed for each group. Features are then
+#' ranked according to the average rank in each group and the first
+#' \code{nTop} and the last \code{nBottom} genes are selected to form the
+#' consensus signatures of each group. Two \code{data.frame}s containing the
+#' consensus signatures for each group are produced and are contained in the
+#' returned object.
+#'
+#' Gene signatures are used to compute an all-to-all distance matrix.
+#' The distance between two samples quantifies the degree of similarty between
+#' the signatures of the two samples. The default method used to compute the
+#' distance between two samples is based on GSEA. Specifically, the distance
+#' between two samples A and B is found by computing the enrichment score (ES)
+#' of the signaure of one sample against the whole expression profile of the
+#' other sample, ES(A, B), and vicevarsa, ES(B, A). Since a signature is
+#' composed of a top and a bottom part, the ES of a signature in a profile is
+#' computed as the average of the ES of the top and the bottom signatures.
+#' The distance between two samples is computed as the average ES:
+#' \deqn{d(A,B)=(ES(A,B)+ES(B,A))/2}
+#' Note that the ES employed by default also known as the Kolmogorov-Smirnov
+#' running sum, and is analogous to the ES used in the unweighted early
+#' version of GSEA.
+#'
+#' Alternatively, a user specified function can be used to compute the distance
+#' matrix, provided using the argument \code{distFun}. This function should be
+#' of the form \code{function(expressionData, nTop, nBottom)}. It should
+#' return a symmetric square matrix, with identical names on the rows and the,
+#' columns, corresponding to the names of the samples in \code{expressionData}.
+#'
+#' The distance matrix is included in the returned object and can be used to
+#' generate a graph of samples using \code{\link{scudoNetwork}}.
+#'
+#' @param expressionData data.frame of gene expression data, with a column for
+#' each sample and a row for each feature
 #'
 #' @param groups factor containing group labels for each sample in
 #' \code{expressionData}
@@ -43,18 +107,23 @@ NULL
 #' @param parametric logical, whether to use a parametric or a non-parametric
 #' test for the feature selection
 #'
-#' @param pAdj pAdj optionally performed on feature selection step. Default
-#' \code{pAdj = "none"}. Look at \code{\link[stats]{p.adjust.methods}} for
-#' the possible adjustment methods
+#' @param pAdj method to use to adjust the p-values in the feature selection
+#' step. See \code{\link[stats]{p.adjust.methods}} for a list of adjustment
+#' methods
 #'
 #' @param distFun the function used to compute the distance between two
-#' samples. See Details
+#' samples. See Details for the specification of this function
 #'
-#' @return Object of class \linkS4class{scudoResults}.
+#' @return Object of class \code{\linkS4class{scudoResults}}.
+#'
+#' @seealso \code{\link{scudoPredict}}, \code{\link{scudoNetwork}},
+#' \code{\linkS4class{scudoResults}}
+#'
+#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
 #'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
-                  norm = TRUE, groupedNorm = TRUE, featureSel = TRUE,
+                  norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
                   parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     .inputCheck(expressionData, groups, nTop, nBottom, pValue,

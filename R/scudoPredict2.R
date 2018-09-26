@@ -1,58 +1,95 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-
 # scudoPredict2 ----------------------------------------------------------------
 
 #' @export
-scudoPredict2 <- function(trainScudoRes, trainScudoNet, testExpData, nTop,
-                          nBottom, testGroups = NULL, norm = TRUE,
+scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
+                          trainGroups, testGroups = NULL, pVaue = 0.1,
+                          norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
+                          parametric = FALSE, pAdj = "none", distFun = NULL,
                           neighbours = 1, weighted = TRUE, pruned = FALSE) {
 
-    # InputCheck --------------------------------------------------------------
+    # InputCheck ---------------------------------------------------------------
+    # perform input checks
 
-    # use placeholder for pValue, featureSel, pAdj
-    .inputCheck(testExpData, testGroups, nTop, nBottom, pValue = 0.5,
-                norm, featureSel = FALSE, pAdj = "none")
+    # normalization ------------------------------------------------------------
 
-    # normalization -----------------------------------------------------------
-
+    trainGroups <- trainGroups[, drop = TRUE]
     testGroups <- testGroups[, drop = TRUE]
+    trainNormGroups <- if (groupedNorm) trainGroups else NULL
+    testNormGroups <- if (groupedNorm) testGroups else NULL
 
     if (norm) {
-        testExpData <- .normalization(testExpData, testGroups)
+        trainExpData <- .normalization(trainExpData, trainNormGroups)
+        testExpData <- .normalization(testExpData, testNormGroups)
     }
 
-    # Test Feature Selection --------------------------------------------------
+    # Feature Selection --------------------------------------------------------
+    # training set
 
-    nTest <- length(levels(testGroups))
-    nTrain <- length(levels(groups(trainScudoRes)))
+    nGroupsTrain <- length(levels(trainGroups))
 
-    if (nTest != nTrain) {
-        warning("Train and Test have different number of groups.")
+    if (nGroupsTrain == 1) {
+        warning(paste0("Just one group in ", deparse(substitute(groups)),
+                       ": skipping feature selection"))
+        featureSel <- FALSE
     }
 
-    present <- selectedFeatures(trainScudoRes) %in% rownames(testExpData)
-    missing <- selectedFeatures(trainScudoRes)[!present]
+    if (featureSel) {
+        trainExpData <- .featureSelection(trainExpData, pValue, trainGroups,
+                                          nGroupsTrain, parametric, pAdj)
+        if ((nTop + nBottom) > dim(trainExpData)[1]) {
+            stop("top and bottom signatures overlap, only ",
+                 dim(trainExpData)[1], " features selected.")
+        }
+    }
+
+    # testing set
+
+    present <- rownames(trainExpData) %in% rownames(testExpData)
+    missing <- rownames(trainExpData)[!present]
 
     if (length(missing) != 0) {
-        warning(paste(length(missing), "features present in trainScudoRes are",
+        stop(paste(length(missing), "features present in trainExpData are",
                       "absent in testExpData:\n"))
     }
 
-    testExpData <- testExpData[selectedFeatures(trainScudoRes)[present], ]
+    testExpData <- testExpData[rownames(trainExpData)[present], ]
 
-    if ((nTop + nBottom) > dim(testExpData)[1]) {
-        stop("top and bottom signatures overlap, only",
-             dim(testExpData)[1], "features selected.")
+    # Performing Scudo on training set -----------------------------------------
+
+    trainScudoRes <- .performScudo(trainExpData, trainGroups, nTop, nBottom,
+                                   distFun, pValue, norm, groupedNorm,
+                                   featureSel, parametric, pAdj)
+
+    # compute whole distance matrix, then select submatrix with distances from
+    # samples in the testing set (columns) from the samples in the training set
+    # (rows)
+
+    if (is.null(distFun)) distFun <- .defaultDist
+
+    distMat <- distFun(cbind(trainExpData, testExpData), nTop, nBottom)
+    distMat <- distMat[1:dim(trainExpData)[1], (dim(trainExpData)[2] + 1):
+                           (dim(trainExpData)[2] + dim(testExpData)[2])]
+
+    # classification: if unweighted count, for each vector, the number of nodes
+    # for each group that are connected and pass the N threshold; if weighted:
+    # if pruned exclude nodes based on N, if not only compute mean weight and
+    # perform test (t or w), issue classification and p-value. Possibly
+    # consider different number of neighbours
+
+    if (weighted) {
+        if (pruned) {
+
+        } else {
+            distSums <- aggregate(distMat, by = list(trainGroups), FUN = sum)
+
+        }
+    } else {
+
     }
-    # Performing Scudo on testing set -----------------------------------------
 
-    testScudoResult <- .performScudo(testExpData, testGroups, nTop, nBottom,
-                                     norm = TRUE)
-
-    # Use trainScudoNet to perform classification
-
-
+    # compute signatures
 }
 

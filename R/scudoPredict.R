@@ -21,7 +21,8 @@ NULL
 #'
 #' @param nTop number of up-regulated features to include in the signatures.
 #'
-#' @param nBottom number of down-regulated features to include in the signatures.
+#' @param nBottom number of down-regulated features to include in the
+#' signatures.
 #'
 #' @param norm logical, whether or not to normalize the test expression data.
 #'   See Details for a description of the normalization used.
@@ -37,7 +38,7 @@ NULL
 #' @export
 scudoPredict <- function(trainScudoRes, testExpData, testGroups = NULL,
                          nTop = NULL, nBottom = NULL, norm = TRUE,
-                         groupedNorm = TRUE, distFun = NULL) {
+                         groupedNorm = FALSE, distFun = NULL) {
 
     # InputCheck --------------------------------------------------------------
 

@@ -59,8 +59,8 @@ setMethod("scudoNetwork", signature = "scudoResults", definition =
         result <- igraph::graph_from_adjacency_matrix(adjMatrix,
             mode = "undirected", diag = FALSE)
 
-        # add weights
-        igraph::E(result)$weight <- distMatrix(object)[as.logical(adjMatrix) &
+        # add distances
+        igraph::E(result)$distance <- distMatrix(object)[as.logical(adjMatrix) &
             lower.tri(distMatrix(object))]
 
         # add group and color annotation
