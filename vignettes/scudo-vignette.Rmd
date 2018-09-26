@@ -125,7 +125,7 @@ We can use a `ScudoResults` object and the function `scudoTest` to analyze the t
 
 ```{r}
 ScudoTest <- scudoTest(ScudoTrain, test, bt[-inTrain], nTop = 100, nBottom = 100)
-ScudoTest
+#ScudoTest
 ```
 
 We can plot the resulting network and we can attempt to identify communities.

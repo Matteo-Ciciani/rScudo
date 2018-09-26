@@ -36,7 +36,7 @@ NULL
 #' used depends on the number of groups and the \code{parametric} parameter.
 #' The parameter \code{pAdj} controls the method used to adjust p-values for
 #' multiple hypothesis testing. For a list of adjustment methods see
-#' \code{\link[stat]{p.adjust}}. Features with an adjusted p-value less than
+#' \code{\link[stats]{p.adjust}}. Features with an adjusted p-value less than
 #' \code{pValue} are selected.
 #'
 #' After these two optional steps, the signatures for each sample are computed.
@@ -120,6 +120,26 @@ NULL
 #' \code{\linkS4class{scudoResults}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#'
+#' @examples
+#' # generate dummy dataset
+#' exprData <- data.frame(a = 11:20, b = 16:25,
+#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#' rownames(exprData) <- letters[11:20]
+#' grps <- as.factor(c("G1", "G1", "G2", "G2"))
+#' nTop <- 2
+#' nBottom <- 3
+#'
+#' # run scudo
+#' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+#' show(res)
+#'
+#' # examine top signatures and top consensus signatures
+#' upSignatures(res)
+#' consensusUpSignatures(res)
+#'
+#' # examine distance matrix
+#' distMatrix(res)
 #'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,

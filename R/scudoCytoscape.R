@@ -3,17 +3,37 @@ NULL
 
 #' Create a Cytoscape network from the output of scudoNetwork
 #'
-#' A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of a
-#' SCUDO analysis in Cytoscape.
+#' A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of
+#' \code{\link{scudoNetwork}} in Cytoscape 3. Cytoscape must be open before
+#' running this function.
 #'
-#' @param graph Object of class \code{\link[igraph:igraph-package]{igraph}},
+#' @param graph object of class \code{\link[igraph:igraph-package]{igraph}},
 #' like the result of \code{\link{scudoNetwork}}
-#' @param title The title of the network. If NULL it defaults to
+#' @param title the title of the network. If NULL it defaults to
 #'   \code{deparse(substitute(graph))}
-#' @param collection The name of the Cytoscape collection
-#' @param base.url See \code{\link[RCy3]{createNetworkFromIgraph}}
+#' @param collection the name of the Cytoscape collection
+#' @param base.url see \code{\link[RCy3]{createNetworkFromIgraph}}
 #'
 #' @return The network SUID (an integer).
+#'
+#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#'
+#' @examples
+#' # generate dummy dataset
+#' exprData <- data.frame(a = 11:20, b = 16:25,
+#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#' rownames(exprData) <- letters[11:20]
+#' grps <- as.factor(c("G1", "G1", "G2", "G2"))
+#' nTop <- 2
+#' nBottom <- 3
+#'
+#' # run scudo and scudoNetwork
+#' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+#' col <- c("#FF00FF", "#FF00FF", "#00FF00", "#00FF00")
+#' net <- scudoNetwork(res, N = 0.5, colors = col)
+#'
+#' # run scudoCytoscape (with Cytoscape open)
+#' scudoCytoscape(res)
 #'
 #' @export
 scudoCytoscape <- function(graph, title = NULL, collection = "SCUDO",

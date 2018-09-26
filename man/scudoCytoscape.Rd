@@ -8,20 +8,42 @@ scudoCytoscape(graph, title = NULL, collection = "SCUDO",
   base.url = NULL)
 }
 \arguments{
-\item{graph}{Object of class \code{\link[igraph:igraph-package]{igraph}},
+\item{graph}{object of class \code{\link[igraph:igraph-package]{igraph}},
 like the result of \code{\link{scudoNetwork}}}
 
-\item{title}{The title of the network. If NULL it defaults to
+\item{title}{the title of the network. If NULL it defaults to
 \code{deparse(substitute(graph))}}
 
-\item{collection}{The name of the Cytoscape collection}
+\item{collection}{the name of the Cytoscape collection}
 
-\item{base.url}{See \code{\link[RCy3]{createNetworkFromIgraph}}}
+\item{base.url}{see \code{\link[RCy3]{createNetworkFromIgraph}}}
 }
 \value{
 The network SUID (an integer).
 }
 \description{
-A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of a
-SCUDO analysis in Cytoscape.
+A wrapper to \code{\link[RCy3]{RCy3}} function calls to plot the result of
+\code{\link{scudoNetwork}} in Cytoscape 3. Cytoscape must be open before
+running this function.
+}
+\examples{
+# generate dummy dataset
+exprData <- data.frame(a = 11:20, b = 16:25,
+            c = rev(1:10), d = c(1:2, rev(3:10)))
+rownames(exprData) <- letters[11:20]
+grps <- as.factor(c("G1", "G1", "G2", "G2"))
+nTop <- 2
+nBottom <- 3
+
+# run scudo and scudoNetwork
+res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+col <- c("#FF00FF", "#FF00FF", "#00FF00", "#00FF00")
+net <- scudoNetwork(res, N = 0.5, colors = col)
+
+# run scudoCytoscape (with Cytoscape open)
+scudoCytoscape(res)
+
+}
+\author{
+Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
 }

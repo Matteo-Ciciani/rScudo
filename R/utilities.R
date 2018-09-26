@@ -158,7 +158,7 @@ NULL
                 x[groups == levels(groups)[2]])$p.value})
         } else {
             pVals <- apply(expressionData, 1, function(x) {
-                anova(lm(x ~ groups))["Pr(>F)"][1,1]})
+                stats::anova(stats::lm(x ~ groups))["Pr(>F)"][1,1]})
         }
     } else {
         if (ngroups == 2) {
