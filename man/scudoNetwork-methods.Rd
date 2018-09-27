@@ -11,18 +11,63 @@ scudoNetwork(object, N, colors = character())
 \arguments{
 \item{object}{a \code{\linkS4class{scudoResults}} object}
 
-\item{N}{a number between 0 and 1. The fraction of all of the
+\item{N}{a number between 0 and 1, representing the fraction of the
 signature-to-signature distances that will be used to draw the graph}
 
-\item{colors}{a character vector of hex color codes, used to color the nodes}
+\item{colors}{a character vector of hexadecimal RGB color codes used to color
+the nodes of the graph. \code{length(colors)} must be equal to the number of
+samples. By default colors are chosen according to the groups in
+\code{object}}
 }
 \description{
-A function to create an \code{\link[igraph:igraph-package]{igraph}} graph,
+A function to create an \code{\link[igraph:igraph-package]{igraph}} object
 from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
 samples and edges quantify the similarity between the nodes.
 }
 \details{
-The distance matrix in the scudoResults
+This function uses the distance matrix in the
+\code{\linkS4class{scudoResults}} object to generates an
+\code{\link[igraph:igraph-package]{igraph}} object, representing a graph
+where nodes are samples and edges quantify the similarity between the
+signatures of pairs of nodes.
+
+The distance matrix in \code{object} is used to generate an unweighted
+adjacency matrix, that is then used to generate the graph. The sample
+quantile of probability N, computed from all the non-zero distances in the
+distance matrix, is used as a threshold to generate the adjacency matrix: all
+the distances larger than this quantile are mapped to 0, all the distances
+smaller than this quantile are mapped to 1 (with the exception of the
+distances of any node from itself, which are equal to 0). Distances are set
+as attributes of the edges of the graph, and can be retrieved using \code{
+igraph::E(igraphObject)$distance}, where \code{igraphObject} is the result
+of \code{scudoNetwork}.
+
+The \code{color} parameter controls the color of the nodes. It must be a
+vector of hexadecimal RGB color codes (like "#FFFFFF"), with lenth equal to
+the number of samples in \code{object}. By default, a different color is
+assigned to each group. If no group is specified in \code{object}, all nodes
+are set to the same color. A vector of node color can be accessed with \code{
+igraph::V(igraphObject)$color}. The group of each node can also be accessed
+with \code{igraph::V(igraphObject)$group} (it returns NULL if no group is
+specified in \code{object}).
+}
+\examples{
+
+# generate dummy dataset and run scudo
+exprData <- data.frame(a = 11:20, b = 16:25,
+            c = rev(1:10), d = c(1:2, rev(3:10)))
+rownames(exprData) <- letters[11:20]
+grps <- as.factor(c("G1", "G1", "G2", "G2"))
+nTop <- 2
+nBottom <- 3
+
+res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+
+# generate network and plot it
+col <- c("#FF0000", "#FF0000", "#0000FF", "#0000FF")
+net <- scudoNetwork(res, N = 0.5, colors = col)
+plot(net)
+
 }
 \seealso{
 \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},

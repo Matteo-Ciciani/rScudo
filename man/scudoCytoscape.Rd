@@ -41,7 +41,7 @@ col <- c("#FF00FF", "#FF00FF", "#00FF00", "#00FF00")
 net <- scudoNetwork(res, N = 0.5, colors = col)
 
 # run scudoCytoscape (with Cytoscape open)
-\dontrun{scudoCytoscape(res)}
+\dontrun{scudoCytoscape(res, title = "scudoCytoscape output")}
 
 }
 \seealso{
