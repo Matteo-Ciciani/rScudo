@@ -38,7 +38,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     nGroupsTrain <- length(levels(trainGroups))
 
     if (nGroupsTrain == 1) {
-        warning(paste0("Just one group in ", deparse(substitute(sampleGroups)),
+        warning(paste0("Just one group in ", deparse(substitute(groups)),
                        ": skipping feature selection"))
         featureSel <- FALSE
     }

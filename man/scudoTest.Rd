@@ -12,7 +12,7 @@ scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
 
 \item{testExpData}{data.frame object containing expressionData used as test.}
 
-\item{testGroups}{factor containing sampleGroups labels for samples in testExpData.}
+\item{testGroups}{factor containing groups labels for samples in testExpData.}
 
 \item{nTop}{number of up-regulated features to include in the signatures.}
 

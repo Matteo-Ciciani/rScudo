@@ -3,7 +3,7 @@ NULL
 
 # .inputCheck ------------------------------------------------------------------
 
-.inputCheck <- function(expressionData, sampleGroups, nTop, nBottom, alpha,
+.inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
                         norm, groupedNorm, featureSel, parametric, pAdj,
                         distFun) {
 
@@ -20,23 +20,23 @@ NULL
                    "contains NAs."))
     }
 
-    # checks on sampleGroups ---------------------------------------------------------
+    # checks on groups ---------------------------------------------------------
 
-    stopifnot(is.factor(sampleGroups))
+    stopifnot(is.factor(groups))
 
-    if (any(is.na(sampleGroups))) {
-        stop(paste(deparse(substitute(sampleGroups)),
+    if (any(is.na(groups))) {
+        stop(paste(deparse(substitute(groups)),
                    "contains NAs."))
     }
 
-    if (length(sampleGroups) != dim(expressionData)[2]) {
-        stop(paste("Length of", deparse(substitute(sampleGroups)),
+    if (length(groups) != dim(expressionData)[2]) {
+        stop(paste("Length of", deparse(substitute(groups)),
                    "is different from number of columns of ",
                    deparse(substitute(expressionData))))
     }
 
-    if (length(sampleGroups) == 0) {
-        stop("sampleGroups has length 0.")
+    if (length(groups) == 0) {
+        stop("groups has length 0.")
     }
 
     # checks on nTop and nBottom -----------------------------------------------
@@ -69,7 +69,7 @@ NULL
                    "only", dim(expressionData)[1], "rows."))
     }
 
-    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ------
+    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
 
     stopifnot(is.numeric(alpha),
               length(alpha) == 1,
@@ -147,27 +147,27 @@ NULL
 
 # .featureSelection ------------------------------------------------------------
 
-.featureSelection <- function(expressionData, alpha, sampleGroups,
-                              nsampleGroups, parametric, pAdj) {
+.featureSelection <- function(expressionData, alpha, groups,
+                              ngroups, parametric, pAdj) {
 
     if (parametric) {
         # should we use limma instead?
-        if (nsampleGroups == 2) {
+        if (ngroups == 2) {
             pVals <- apply(expressionData, 1, function(x) {
-                stats::t.test(x[sampleGroups == levels(sampleGroups)[1]],
-                x[sampleGroups == levels(sampleGroups)[2]])$p.value})
+                stats::t.test(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]])$p.value})
         } else {
             pVals <- apply(expressionData, 1, function(x) {
-                stats::anova(stats::lm(x ~ sampleGroups))["Pr(>F)"][1,1]})
+                stats::anova(stats::lm(x ~ groups))["Pr(>F)"][1,1]})
         }
     } else {
-        if (nsampleGroups == 2) {
+        if (ngroups == 2) {
             pVals <- apply(expressionData, 1, function(x) {
-                .fastWilcoxon(x[sampleGroups == levels(sampleGroups)[1]],
-                x[sampleGroups == levels(sampleGroups)[2]])})
+                .fastWilcoxon(x[groups == levels(groups)[1]],
+                x[groups == levels(groups)[2]])})
         } else {
             pVals <- apply(expressionData, 1, function(x) {
-                stats::kruskal.test(x, sampleGroups)$p.value})
+                stats::kruskal.test(x, groups)$p.value})
         }
     }
 
@@ -179,12 +179,12 @@ NULL
 
 # .normalization ---------------------------------------------------------------
 
-.normalization <- function(ExpressionData, sampleGroups) {
-    if (is.null(sampleGroups)) {
+.normalization <- function(ExpressionData, groups) {
+    if (is.null(groups)) {
         virtControl <- rowMeans(ExpressionData)
     } else {
-        virtControl <- rowMeans(vapply(levels(sampleGroups), function(x) {
-            rowMeans(ExpressionData[sampleGroups == x]) },
+        virtControl <- rowMeans(vapply(levels(groups), function(x) {
+            rowMeans(ExpressionData[groups == x]) },
             rep(0.0, dim(ExpressionData)[1])))
     }
     normExData <- ExpressionData / virtControl
@@ -273,7 +273,7 @@ NULL
 
 # perform analysis -------------------------------------------------------------
 
-.performScudo <- function(expressionData, sampleGroups, nTop, nBottom,
+.performScudo <- function(expressionData, groups, nTop, nBottom,
                           distFun = NULL, ...) {
 
     # transform expressionData in indexes
@@ -287,10 +287,10 @@ NULL
     distances <- .defaultDist(expressionData, nTop, nBottom)
 
     # compute consensus signatures
-    if (!is.null(sampleGroups)) {
+    if (!is.null(groups)) {
         rankedExprData <- as.data.frame(apply(expressionData, 2, rank))
-        groupedRankSums <- vapply(levels(sampleGroups), function(x) {
-            rowSums(rankedExprData[sampleGroups == x])},
+        groupedRankSums <- vapply(levels(groups), function(x) {
+            rowSums(rankedExprData[groups == x])},
             rep(0.0, dim(rankedExprData)[1]))
         ordGroupedRankSums <- apply(groupedRankSums, 2, order,
                                     decreasing = TRUE)
@@ -304,16 +304,16 @@ NULL
     DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
         (nTop + 1):nrow(sigMatrix), ]
     rownames(DwnSig) <- 1:nBottom
-    if (is.null(sampleGroups)) {
+    if (is.null(groups)) {
         ConsUpSig <- data.frame()
         ConsDwnSig <- data.frame()
-    } else if (length(levels(sampleGroups)) == 1) {
+    } else if (length(levels(groups)) == 1) {
         consVec <- as.vector(consensusSigMatrix)
         ConsUpSig <- data.frame(consVec[1:nTop], stringsAsFactors = FALSE)
-        colnames(ConsUpSig) <- levels(sampleGroups)
+        colnames(ConsUpSig) <- levels(groups)
         ConsDwnSig <- data.frame(consVec[(nTop + 1):nrow(sigMatrix)],
                                  stringsAsFactors = FALSE)
-        colnames(ConsDwnSig) <- levels(sampleGroups)
+        colnames(ConsDwnSig) <- levels(groups)
     } else {
         ConsUpSig <- as.data.frame(consensusSigMatrix,
             stringsAsFactors = FALSE)[1:nTop, ]
@@ -335,12 +335,12 @@ NULL
         pars$pAdj <- ..6
     }
 
-    if (is.null(sampleGroups)) sampleGroups <- factor()
+    if (is.null(groups)) groups <- factor()
 
     scudoResults(distMatrix = distances,
         upSignatures = UpSig,
         downSignatures = DwnSig,
-        sampleGroups = sampleGroups,
+        groupsAnnotation = groups,
         consensusUpSignatures = ConsUpSig,
         consensusDownSignatures = ConsDwnSig,
         selectedFeatures = rownames(expressionData),

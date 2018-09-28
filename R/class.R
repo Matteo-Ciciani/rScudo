@@ -18,10 +18,10 @@ NULL
 #' @slot downSignatures Object of class "data.frame". A data.frame with the same
 #'   colnames as distMatrix, representing the down-regualted features in each
 #'   sample.
-#' @slot sampleGroups Object of class "factor". It represents the sampleGroups used for the
-#'   normalization and the feature selection. It corresponds to the
-#'   \code{sampleGroups} argument in --link-- and --link--, but unused levels are
-#'   dropped.
+#' @slot groupsAnnotation Object of class "factor". It represents the groups
+#'   used for the normalization and the feature selection. It corresponds to the
+#'   \code{groupsAnnotation} argument in --link-- and --link--, but unused
+#'   levels are dropped.
 #' @slot consensusUpSignatures Object of class "data.frame". It contains the
 #'   consensus signatures of up-regulated features for each group.
 #' @slot consensusDownSignatures Object of class "data.frame".It contains the
@@ -38,9 +38,9 @@ NULL
 #'   method for obtaining the signature of up-regualted features in each
 #'   sample.} \item{\code{downSignatures}}{\code{signature(object =
 #'   "scudoResults")}: a method for obtaining the signature of down-regulated
-#'   features in each sample.} \item{\code{sampleGroups}}{\code{signature(object =
-#'   "scudoResults")}: a method for obtaining the sampleGroups used for normalization
-#'   and feature selection.}
+#'   features in each sample.} \item{\code{groupsAnnotation}}{\code{signature(
+#'   object = "scudoResults")}: a method for obtaining the groups used for
+#'   normalization and feature selection.}
 #'   \item{\code{consensusUpSignatures}}{\code{signature(object =
 #'   "scudoResults")}: a method for obtaining the consensus signatures of
 #'   up-regualted features in each group.}
@@ -63,7 +63,7 @@ scudoResults <- setClass("scudoResults",
                             distMatrix = "matrix",
                             upSignatures = "data.frame",
                             downSignatures = "data.frame",
-                            sampleGroups = "factor",
+                            groupsAnnotation = "factor",
                             consensusUpSignatures = "data.frame",
                             consensusDownSignatures = "data.frame",
                             selectedFeatures = "character",
@@ -156,17 +156,17 @@ setValidity("scudoResults", function(object) {
         msg <- c(msg, "downSignatures contains non-character values")
     }
 
-    # validity of sampleGroups -------------------------------------------------------
-    if (any(is.na(object@sampleGroups))) {
+    # validity of groupsAnnotation ---------------------------------------------
+    if (any(is.na(object@groupsAnnotation))) {
         valid <- FALSE
-        msg <- c(msg, "sampleGroups contains NAs")
+        msg <- c(msg, "groupsAnnotation contains NAs")
     }
-    if (length(object@sampleGroups) != dim(object@distMatrix)[1] &&
-        length(object@sampleGroups) != 0) {
+    if (length(object@groupsAnnotation) != dim(object@distMatrix)[1] &&
+        length(object@groupsAnnotation) != 0) {
 
         valid <- FALSE
-        msg <- c(msg, paste0("length of sampleGroups different from number of rows ",
-                             "in distMatrix"))
+        msg <- c(msg, paste0("length of groupsAnnotation different from number",
+                             " of rows in distMatrix"))
     }
 
     # validity of consensusUpSignatures ----------------------------------------
@@ -186,10 +186,10 @@ setValidity("scudoResults", function(object) {
             msg <- c(msg, "consensusUpSignatures contains non-character values")
         }
         if (!all(is.element(colnames(object@consensusUpSignatures),
-                            as.character(levels(object@sampleGroups))))) {
+                            as.character(levels(object@groupsAnnotation))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
-                "elements that are not in sampleGroups"))
+                "elements that are not in groupsAnnotation"))
         }
     }
 
@@ -211,10 +211,10 @@ setValidity("scudoResults", function(object) {
                 "non-character values"))
         }
         if (!all(is.element(colnames(object@consensusDownSignatures),
-                            as.character(levels(object@sampleGroups))))) {
+                            as.character(levels(object@groupsAnnotation))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusDownSignatures ",
-                "contains elements that are not in sampleGroups"))
+                "contains elements that are not in groupsAnnotation"))
         }
     }
 

@@ -4,15 +4,15 @@
 \alias{scudo}
 \title{Performs SCUDO analysis}
 \usage{
-scudo(expressionData, sampleGroups, nTop, nBottom, alpha = 0.1,
-  norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
-  parametric = FALSE, pAdj = "none", distFun = NULL)
+scudo(expressionData, groups, nTop, nBottom, alpha = 0.1, norm = TRUE,
+  groupedNorm = FALSE, featureSel = TRUE, parametric = FALSE,
+  pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{data.frame of gene expression data, with a column for
 each sample and a row for each feature}
 
-\item{sampleGroups}{factor containing group labels for each sample in
+\item{groups}{factor containing group labels for each sample in
 \code{expressionData}}
 
 \item{nTop}{number of up-regulated features to include in the signatures}
@@ -32,7 +32,7 @@ normalization. See Details for a description of the normalization used}
 \item{featureSel}{logical, whether or not to perform a feature selection.
 Feature selection is performed using one of four tests: Student's t-test,
 ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
-used depends on the number of sampleGroups and the \code{parametric} argument}
+used depends on the number of groups and the \code{parametric} argument}
 
 \item{parametric}{logical, whether to use a parametric or a non-parametric
 test for the feature selection}
@@ -71,13 +71,13 @@ The the mean of the group means is taken for each feature and the expression
 values are normalized dividing them for this mean value. If the the parameter
 \code{groupedNorm} is \code{FALSE}, the normalized expression values are
 computed dividing the expression value of each feature for the mean
-expression value of that feature (regardless of sampleGroups).
+expression value of that feature (regardless of groups).
 
 The second optional preprocessing step is a feature selection. This step is
 performed in order to select relevant features.
 Feature selection is performed using one of four tests: Student's t-test,
 ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
-used depends on the number of sampleGroups and the \code{parametric} parameter.
+used depends on the number of groups and the \code{parametric} parameter.
 The parameter \code{pAdj} controls the method used to adjust p-values for
 multiple hypothesis testing. For a list of adjustment methods see
 \code{\link[stats]{p.adjust}}. Features with an adjusted p-value less than

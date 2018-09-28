@@ -19,7 +19,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_s4_class(scudo(exData, gr1, 1, 3, 0.1), "scudoResults")
 
-    # Tests on expressionData errors ------------------------------------------
+    # Tests on expressionData errors -------------------------------------------
 
     exDataMa <- as.matrix(exData)
 
@@ -36,7 +36,7 @@ test_that("scudo raises errors on wrong inputs", {
                          c = rep(30,10),
                          d = rep(30,10))
 
-    # Test on group errors ----------------------------------------------------
+    # Test on group errors -----------------------------------------------------
 
     expect_error(scudo(exData, gr4, 1, 3, 0.1))
 
@@ -50,7 +50,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_warning(scudo(exData, gr7, 1, 3, 0.1))
 
-    # Test on nTop, nBottom errors --------------------------------------------
+    # Test on nTop, nBottom errors ---------------------------------------------
 
     expect_error(scudo(exData, gr1, "a", 3, 0.1))
 
@@ -90,7 +90,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, list(1, 2, 3), 0.1))
 
-    # Test alpha --------------------------------------------------------------
+    # Test alpha ---------------------------------------------------------------
 
     expect_error(scudo(exData, gr1, 1, 3, "a"))
 
@@ -110,7 +110,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 3, c(0.5, 0.7)))
 
-    # Test norm --------------------------------------------------------------
+    # Test norm ----------------------------------------------------------------
 
     expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = logical(0)))
 

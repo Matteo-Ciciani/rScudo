@@ -10,8 +10,8 @@
 \alias{upSignatures,scudoResults-method}
 \alias{downSignatures}
 \alias{downSignatures,scudoResults-method}
-\alias{sampleGroups}
-\alias{sampleGroups,scudoResults-method}
+\alias{groupsAnnotation}
+\alias{groupsAnnotation,scudoResults-method}
 \alias{consensusUpSignatures}
 \alias{consensusUpSignatures,scudoResults-method}
 \alias{consensusDownSignatures}
@@ -45,10 +45,10 @@ sample.}
 colnames as distMatrix, representing the down-regualted features in each
 sample.}
 
-\item{\code{sampleGroups}}{Object of class "factor". It represents the sampleGroups used for the
-normalization and the feature selection. It corresponds to the
-\code{sampleGroups} argument in --link-- and --link--, but unused levels are
-dropped.}
+\item{\code{groupsAnnotation}}{Object of class "factor". It represents the groups used
+for the normalization and the feature selection. It corresponds to the
+\code{groupsAnnotation} argument in --link-- and --link--, but unused levels
+are dropped.}
 
 \item{\code{consensusUpSignatures}}{Object of class "data.frame". It contains the
 consensus signatures of up-regulated features for each group.}
@@ -71,9 +71,9 @@ feature present in the input of the scudo functions.}
   method for obtaining the signature of up-regualted features in each
   sample.} \item{\code{downSignatures}}{\code{signature(object =
   "scudoResults")}: a method for obtaining the signature of down-regulated
-  features in each sample.} \item{\code{sampleGroups}}{\code{signature(object =
-  "scudoResults")}: a method for obtaining the sampleGroups used for normalization
-  and feature selection.}
+  features in each sample.} \item{\code{groupsAnnotation}}{\code{signature(object
+  = "scudoResults")}: a method for obtaining the groups used for
+  normalization and feature selection.}
   \item{\code{consensusUpSignatures}}{\code{signature(object =
   "scudoResults")}: a method for obtaining the consensus signatures of
   up-regualted features in each group.}

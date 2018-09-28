@@ -16,7 +16,7 @@ signature-to-signature distances that will be used to draw the graph}
 
 \item{colors}{a character vector of hexadecimal RGB color codes used to color
 the nodes of the graph. \code{length(colors)} must be equal to the number of
-samples. By default colors are chosen according to the sampleGroups in
+samples. By default colors are chosen according to the groups in
 \code{object}}
 }
 \description{

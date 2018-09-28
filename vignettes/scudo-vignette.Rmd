@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 SCUDO is a method for the analysis of gene expression profiles for diagnostic and classification purposes. The method is based on the idea of a sample-specific gene signatures. The expected result is the emergence of a partitioning of the set of samples in separate clusters (propely, communities) on the basis of signature similarity.
 
-First, normalization and feature selection are optionally performed. Feature selection is carried out through a Wilcoxon rank sum test or through a Kruskal-Wallis rank sum test depending on the number of sampleGroups considered.
+First, normalization and feature selection are optionally performed. Feature selection is carried out through a Wilcoxon rank sum test or through a Kruskal-Wallis rank sum test depending on the number of groups considered.
 
 The subsequent operations include single sample gene ranking and the extraction of signatures form up-regulated and down-regulated genes. The sizes of the signatures are customizable. An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance between two samples is computed as the mean of the enrichment scores (ES) of the signature of each sample in the expression profile of the other sample. Consensus signtures are then computed, both for up- and down-regulated genes and for each group. This provides a list of interesting genes of each group.
 
@@ -79,7 +79,7 @@ test <- as.data.frame(expData[, -inTrain])
 ## Analyze training set
 
 ```{r}
-ScudoTrain <- scudo(train, sampleGroups = bt[inTrain], nTop = 100, nBottom = 100, alpha = 0.1)
+ScudoTrain <- scudo(train, groups = bt[inTrain], nTop = 100, nBottom = 100, alpha = 0.1)
 ScudoTrain
 ```
 
@@ -135,7 +135,7 @@ netTest <- scudoNetwork(ScudoTest, N = 0.3)
 plot(netTest)
 ```
 
-The sampleGroups are already well partitioned. We can nonetheless perform the community clustering.
+The groups are already well partitioned. We can nonetheless perform the community clustering.
 
 ```{r,warning=FALSE}
 clusterTest <- igraph::cluster_fast_greedy(netTest)

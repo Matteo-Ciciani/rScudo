@@ -74,7 +74,7 @@ test_that(".performScudo works", {
                            stringsAsFactors = FALSE)
     expect_identical(consensusDownSignatures(res), consDown)
 
-    expect_identical(sampleGroups(res), grps)
+    expect_identical(groupsAnnotation(res), grps)
     expect_identical(selectedFeatures(res), letters[11:20])
     expect_identical(params(res), list(nTop = nTop, nBottom = nBottom,
         alpha = p, norm = FALSE, groupedNorm = FALSE, featureSel = FALSE,
@@ -88,10 +88,10 @@ test_that(".normalization works correctly", {
                      d = 1:5,
                      e = 11:15)
     rownames(df) <- letters[21:25]
-    sampleGroups <- factor(c(1, 1, 1, 2, 2))
+    groups <- factor(c(1, 1, 1, 2, 2))
 
     virtContr <- (3 + 6:10) / 2
     correctRes <- df / virtContr
 
-    expect_equal(.normalization(df, sampleGroups), correctRes)
+    expect_equal(.normalization(df, groups), correctRes)
 })
