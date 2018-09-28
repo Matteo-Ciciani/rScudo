@@ -53,8 +53,8 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
     testG <- testGroups
     if (is.null(testGroups)) testG <- factor(rep("a", dim(testExpData)[2]))
 
-    # use placeholder for pValue, featureSel, pAdj
-    .inputCheck(testExpData, testG, nTop, nBottom, pValue = 0.5,
+    # use placeholder for alpha, featureSel, pAdj
+    .inputCheck(testExpData, testG, nTop, nBottom, alpha = 0.5,
                 norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
                 pAdj = "none", distFun = NULL)
 

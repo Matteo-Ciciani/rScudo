@@ -37,7 +37,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     }
 
     if (featureSel) {
-        trainExpData <- .featureSelection(trainExpData, pValue, trainGroups,
+        trainExpData <- .featureSelection(trainExpData, alpha, trainGroups,
                                           nGroupsTrain, parametric, pAdj)
         if ((nTop + nBottom) > dim(trainExpData)[1]) {
             stop("top and bottom signatures overlap, only ",
@@ -60,7 +60,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     # Performing Scudo on training set -----------------------------------------
 
     trainScudoRes <- .performScudo(trainExpData, trainGroups, nTop, nBottom,
-                                   distFun, pValue, norm, groupedNorm,
+                                   distFun, alpha, norm, groupedNorm,
                                    featureSel, parametric, pAdj)
 
     # compute whole distance matrix, then select submatrix with distances from

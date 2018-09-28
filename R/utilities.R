@@ -3,7 +3,7 @@ NULL
 
 # .inputCheck ------------------------------------------------------------------
 
-.inputCheck <- function(expressionData, groups, nTop, nBottom, pValue,
+.inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
                         norm, groupedNorm, featureSel, parametric, pAdj,
                         distFun) {
 
@@ -69,20 +69,20 @@ NULL
                    "only", dim(expressionData)[1], "rows."))
     }
 
-    # checks on pValue, norm, featureSel, groupedNorm, parametric, pAdj ------
+    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ------
 
-    stopifnot(is.numeric(pValue),
-              length(pValue) == 1,
-              is.vector(pValue),
-              pValue > 0,
-              pValue <= 1)
+    stopifnot(is.numeric(alpha),
+              length(alpha) == 1,
+              is.vector(alpha),
+              alpha > 0,
+              alpha <= 1)
 
-    if (is.nan(pValue)) {
-        stop("pValue cannot be NaN")
+    if (is.nan(alpha)) {
+        stop("alpha cannot be NaN")
     }
 
-    if (is.na(pValue)) {
-        stop("pValue cannot be NA.")
+    if (is.na(alpha)) {
+        stop("alpha cannot be NA.")
     }
 
     stopifnot(is.logical(norm),
@@ -147,7 +147,7 @@ NULL
 
 # .featureSelection ------------------------------------------------------------
 
-.featureSelection <- function(expressionData, pValue, groups,
+.featureSelection <- function(expressionData, alpha, groups,
                               ngroups, parametric, pAdj) {
 
     if (parametric) {
@@ -172,7 +172,7 @@ NULL
     }
 
     pVals <- stats::p.adjust(pVals, method = pAdj)
-    expressionData <- expressionData[pVals <= pValue, ]
+    expressionData <- expressionData[pVals <= alpha, ]
 
     expressionData
 }
@@ -327,7 +327,7 @@ NULL
         pars$norm <- ..1
         pars$groupedNorm <- ..2
     } else {
-        pars$pValue <- ..1
+        pars$alpha <- ..1
         pars$norm <- ..2
         pars$groupedNorm <- ..3
         pars$featureSel <- ..4

@@ -37,7 +37,7 @@ NULL
 #' The parameter \code{pAdj} controls the method used to adjust p-values for
 #' multiple hypothesis testing. For a list of adjustment methods see
 #' \code{\link[stats]{p.adjust}}. Features with an adjusted p-value less than
-#' \code{pValue} are selected.
+#' \code{alpha} are selected.
 #'
 #' After these two optional steps, the signatures for each sample are computed.
 #' Selected features are ranked according to the (normalized) expression values.
@@ -90,8 +90,8 @@ NULL
 #' @param nBottom number of down-regulated features to include in the
 #' signatures
 #'
-#' @param pValue p-value cutoff for the optional feature selection step. If
-#' feature selection is skipped, pValue is ignored
+#' @param alpha p-value cutoff for the optional feature selection step. If
+#' feature selection is skipped, alpha is ignored
 #'
 #' @param norm logical, whether or not to normalize the expression data. See
 #' Details for a description of the normalization used
@@ -142,11 +142,11 @@ NULL
 #' distMatrix(res)
 #'
 #' @export
-scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
+scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
                   norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
                   parametric = FALSE, pAdj = "none", distFun = NULL) {
 
-    .inputCheck(expressionData, groups, nTop, nBottom, pValue,
+    .inputCheck(expressionData, groups, nTop, nBottom, alpha,
                 norm, groupedNorm, featureSel, parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
@@ -167,7 +167,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 
     if (featureSel) {
         expressionData <- .featureSelection(expressionData,
-                                            pValue, groups, ngroups,
+                                            alpha, groups, ngroups,
                                             parametric, pAdj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
             stop("top and bottom signatures overlap, only ",
@@ -177,7 +177,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, pValue = 0.1,
 
     # Performing Scudo ---------------------------------------------------------
 
-    .performScudo(expressionData, groups, nTop, nBottom, distFun, pValue,
+    .performScudo(expressionData, groups, nTop, nBottom, distFun, alpha,
                   norm, groupedNorm, featureSel, parametric, pAdj)
 }
 

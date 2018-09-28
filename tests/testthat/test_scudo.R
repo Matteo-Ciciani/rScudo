@@ -90,7 +90,7 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, list(1, 2, 3), 0.1))
 
-    # Test pValue --------------------------------------------------------------
+    # Test alpha --------------------------------------------------------------
 
     expect_error(scudo(exData, gr1, 1, 3, "a"))
 

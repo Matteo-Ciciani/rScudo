@@ -79,7 +79,7 @@ test <- as.data.frame(expData[, -inTrain])
 ## Analyze training set
 
 ```{r}
-ScudoTrain <- scudo(train, groups = bt[inTrain], nTop = 100, nBottom = 100, pValue = 0.1)
+ScudoTrain <- scudo(train, groups = bt[inTrain], nTop = 100, nBottom = 100, alpha = 0.1)
 ScudoTrain
 ```
 

@@ -59,7 +59,7 @@ setMethod("show", "scudoResults", function(object) {
             }
 
             cat("    p-value cutoff     : ",
-                paste(params(object)$pValue), "\n")
+                paste(params(object)$alpha), "\n")
             cat("    p.adjust method    : ",
                 paste(params(object)$pAdj), "\n")
             cat("    Selected features  : ",

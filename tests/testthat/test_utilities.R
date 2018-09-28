@@ -77,7 +77,7 @@ test_that(".performScudo works", {
     expect_identical(groups(res), grps)
     expect_identical(selectedFeatures(res), letters[11:20])
     expect_identical(params(res), list(nTop = nTop, nBottom = nBottom,
-        pValue = p, norm = FALSE, groupedNorm = FALSE, featureSel = FALSE,
+        alpha = p, norm = FALSE, groupedNorm = FALSE, featureSel = FALSE,
         parametric = FALSE, pAdj = "none"))
 })
 
