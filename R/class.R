@@ -18,9 +18,9 @@ NULL
 #' @slot downSignatures Object of class "data.frame". A data.frame with the same
 #'   colnames as distMatrix, representing the down-regualted features in each
 #'   sample.
-#' @slot groups Object of class "factor". It represents the groups used for the
+#' @slot sampleGroups Object of class "factor". It represents the sampleGroups used for the
 #'   normalization and the feature selection. It corresponds to the
-#'   \code{groups} argument in --link-- and --link--, but unused levels are
+#'   \code{sampleGroups} argument in --link-- and --link--, but unused levels are
 #'   dropped.
 #' @slot consensusUpSignatures Object of class "data.frame". It contains the
 #'   consensus signatures of up-regulated features for each group.
@@ -38,8 +38,8 @@ NULL
 #'   method for obtaining the signature of up-regualted features in each
 #'   sample.} \item{\code{downSignatures}}{\code{signature(object =
 #'   "scudoResults")}: a method for obtaining the signature of down-regulated
-#'   features in each sample.} \item{\code{groups}}{\code{signature(object =
-#'   "scudoResults")}: a method for obtaining the groups used for normalization
+#'   features in each sample.} \item{\code{sampleGroups}}{\code{signature(object =
+#'   "scudoResults")}: a method for obtaining the sampleGroups used for normalization
 #'   and feature selection.}
 #'   \item{\code{consensusUpSignatures}}{\code{signature(object =
 #'   "scudoResults")}: a method for obtaining the consensus signatures of
@@ -63,7 +63,7 @@ scudoResults <- setClass("scudoResults",
                             distMatrix = "matrix",
                             upSignatures = "data.frame",
                             downSignatures = "data.frame",
-                            groups = "factor",
+                            sampleGroups = "factor",
                             consensusUpSignatures = "data.frame",
                             consensusDownSignatures = "data.frame",
                             selectedFeatures = "character",
@@ -156,16 +156,16 @@ setValidity("scudoResults", function(object) {
         msg <- c(msg, "downSignatures contains non-character values")
     }
 
-    # validity of groups -------------------------------------------------------
-    if (any(is.na(object@groups))) {
+    # validity of sampleGroups -------------------------------------------------------
+    if (any(is.na(object@sampleGroups))) {
         valid <- FALSE
-        msg <- c(msg, "groups contains NAs")
+        msg <- c(msg, "sampleGroups contains NAs")
     }
-    if (length(object@groups) != dim(object@distMatrix)[1] &&
-        length(object@groups) != 0) {
+    if (length(object@sampleGroups) != dim(object@distMatrix)[1] &&
+        length(object@sampleGroups) != 0) {
 
         valid <- FALSE
-        msg <- c(msg, paste0("length of groups different from number of rows ",
+        msg <- c(msg, paste0("length of sampleGroups different from number of rows ",
                              "in distMatrix"))
     }
 
@@ -186,10 +186,10 @@ setValidity("scudoResults", function(object) {
             msg <- c(msg, "consensusUpSignatures contains non-character values")
         }
         if (!all(is.element(colnames(object@consensusUpSignatures),
-                            as.character(levels(object@groups))))) {
+                            as.character(levels(object@sampleGroups))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
-                "elements that are not in groups"))
+                "elements that are not in sampleGroups"))
         }
     }
 
@@ -211,10 +211,10 @@ setValidity("scudoResults", function(object) {
                 "non-character values"))
         }
         if (!all(is.element(colnames(object@consensusDownSignatures),
-                            as.character(levels(object@groups))))) {
+                            as.character(levels(object@sampleGroups))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusDownSignatures ",
-                "contains elements that are not in groups"))
+                "contains elements that are not in sampleGroups"))
         }
     }
 

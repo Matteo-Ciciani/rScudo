@@ -17,7 +17,7 @@ NULL
 #'
 #' @param testExpData data.frame object containing expressionData used as test.
 #'
-#' @param testGroups factor containing groups labels for samples in testExpData.
+#' @param testGroups factor containing sampleGroups labels for samples in testExpData.
 #'
 #' @param nTop number of up-regulated features to include in the signatures.
 #'
@@ -59,11 +59,11 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
                 pAdj = "none", distFun = NULL)
 
     nTest <- length(levels(testGroups))
-    nTrain <- length(levels(groups(trainScudoRes)))
+    nTrain <- length(levels(sampleGroups(trainScudoRes)))
 
     if (!is.null(testGroups)) {
         if (!isTRUE(all.equal(nTest, nTrain))) {
-            message("Train and test have different number of groups")
+            message("Train and test have different number of sampleGroups")
         }
     }
 

@@ -1,11 +1,18 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudoTest2 ----------------------------------------------------------------
-
+#' Performes classification using SCUDO
+#'
+#' Placeholder
+#'
+#'
+#'
+#'
+#'
+#'
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
-                          trainGroups, testGroups = NULL, pVaue = 0.1,
+                          trainGroups, testGroups = NULL, alpha = 0.1,
                           norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
                           parametric = FALSE, pAdj = "none", distFun = NULL,
                           neighbours = 1, weighted = TRUE, pruned = FALSE) {
@@ -31,7 +38,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     nGroupsTrain <- length(levels(trainGroups))
 
     if (nGroupsTrain == 1) {
-        warning(paste0("Just one group in ", deparse(substitute(groups)),
+        warning(paste0("Just one group in ", deparse(substitute(sampleGroups)),
                        ": skipping feature selection"))
         featureSel <- FALSE
     }
@@ -83,7 +90,8 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
         if (pruned) {
 
         } else {
-            distSums <- aggregate(distMat, by = list(trainGroups), FUN = sum)
+            distSums <- stats::aggregate(distMat, by = list(trainGroups),
+                                         FUN = sum)
 
         }
     } else {

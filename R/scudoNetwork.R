@@ -38,7 +38,7 @@ NULL
 #' signature-to-signature distances that will be used to draw the graph
 #' @param colors a character vector of hexadecimal RGB color codes used to color
 #' the nodes of the graph. \code{length(colors)} must be equal to the number of
-#' samples. By default colors are chosen according to the groups in
+#' samples. By default colors are chosen according to the sampleGroups in
 #' \code{object}
 #'
 #' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
@@ -114,16 +114,16 @@ setMethod("scudoNetwork", signature = "scudoResults", definition =
             & lower.tri(distMatrix(object))]
 
         # add group and color annotation
-        if (length(groups(object)) == 0) {
+        if (length(sampleGroups(object)) == 0) {
             igraph::V(result)$color <- rep("#FFFFFF",
                 dim(distMatrix(object))[1])
         } else {
-            igraph::V(result)$group <- groups(object)
+            igraph::V(result)$group <- sampleGroups(object)
 
             if (length(colors) == 0) {
-                pal <- grDevices::rainbow(length(levels(groups(object))))
+                pal <- grDevices::rainbow(length(levels(sampleGroups(object))))
                 pal <- stringr::str_extract(pal, "^#[0-9a-fA-F]{6}")
-                igraph::V(result)$color <- pal[as.integer(groups(object))]
+                igraph::V(result)$color <- pal[as.integer(sampleGroups(object))]
             } else {
                 igraph::V(result)$color <- stringr::str_extract(colors,
                     "^#[0-9a-fA-F]{6}")

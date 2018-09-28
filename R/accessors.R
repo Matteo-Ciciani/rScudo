@@ -38,13 +38,13 @@ setMethod("downSignatures", signature = "scudoResults", definition =
 #' @rdname scudoResults-class
 #' @usage NULL
 #' @export
-setGeneric("groups", function(object) standardGeneric("groups"))
+setGeneric("sampleGroups", function(object) standardGeneric("sampleGroups"))
 
 #' @rdname scudoResults-class
-#' @aliases groups,scudoResults-method
+#' @aliases sampleGroups,scudoResults-method
 #' @usage NULL
-setMethod("groups", signature = "scudoResults", definition =
-              function(object) object@groups)
+setMethod("sampleGroups", signature = "scudoResults", definition =
+              function(object) object@sampleGroups)
 
 #' @rdname scudoResults-class
 #' @usage NULL
@@ -53,7 +53,7 @@ setGeneric("consensusUpSignatures",
            function(object) standardGeneric("consensusUpSignatures"))
 
 #' @rdname scudoResults-class
-#' @aliases groups,scudoResults-method
+#' @aliases sampleGroups,scudoResults-method
 #' @usage NULL
 setMethod("consensusUpSignatures", signature = "scudoResults", definition =
               function(object) object@consensusUpSignatures)

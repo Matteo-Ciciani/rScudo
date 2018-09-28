@@ -14,10 +14,10 @@ setMethod("show", "scudoResults", function(object) {
     cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),
         "\n")
 
-    ngroups <- length(colnames(consensusDownSignatures(object)))
-    if (ngroups != 1) {
-        cat("Number of groups       : ", ngroups, "\n")
-        gt <- table(groups(object)[, drop = TRUE])
+    nsampleGroups <- length(colnames(consensusDownSignatures(object)))
+    if (nsampleGroups != 1) {
+        cat("Number of sampleGroups       : ", nsampleGroups, "\n")
+        gt <- table(sampleGroups(object)[, drop = TRUE])
         invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
             "samples\n")))
     }
@@ -41,7 +41,7 @@ setMethod("show", "scudoResults", function(object) {
         if (featureSel) {
             cat("Feature selection      :  performed\n")
             if (params(object)$parametric == T) {
-                if (ngroups == 2) {
+                if (nsampleGroups == 2) {
                     cat("    Test               : ",
                     "t-test", "\n")
                 } else {
@@ -49,7 +49,7 @@ setMethod("show", "scudoResults", function(object) {
                     "anova test", "\n")
                 }
             } else {
-                if (ngroups == 2) {
+                if (nsampleGroups == 2) {
                     cat("    Test               : ",
                         "Wilcoxon rank sum test", "\n")
                 } else {

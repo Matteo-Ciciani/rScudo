@@ -27,13 +27,13 @@ NULL
 #' values are normalized dividing them for this mean value. If the the parameter
 #' \code{groupedNorm} is \code{FALSE}, the normalized expression values are
 #' computed dividing the expression value of each feature for the mean
-#' expression value of that feature (regardless of groups).
+#' expression value of that feature (regardless of sampleGroups).
 #'
 #' The second optional preprocessing step is a feature selection. This step is
 #' performed in order to select relevant features.
 #' Feature selection is performed using one of four tests: Student's t-test,
 #' ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
-#' used depends on the number of groups and the \code{parametric} parameter.
+#' used depends on the number of sampleGroups and the \code{parametric} parameter.
 #' The parameter \code{pAdj} controls the method used to adjust p-values for
 #' multiple hypothesis testing. For a list of adjustment methods see
 #' \code{\link[stats]{p.adjust}}. Features with an adjusted p-value less than
@@ -82,7 +82,7 @@ NULL
 #' @param expressionData data.frame of gene expression data, with a column for
 #' each sample and a row for each feature
 #'
-#' @param groups factor containing group labels for each sample in
+#' @param sampleGroups factor containing group labels for each sample in
 #' \code{expressionData}
 #'
 #' @param nTop number of up-regulated features to include in the signatures
@@ -102,7 +102,7 @@ NULL
 #' @param featureSel logical, whether or not to perform a feature selection.
 #' Feature selection is performed using one of four tests: Student's t-test,
 #' ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
-#' used depends on the number of groups and the \code{parametric} argument
+#' used depends on the number of sampleGroups and the \code{parametric} argument
 #'
 #' @param parametric logical, whether to use a parametric or a non-parametric
 #' test for the feature selection
@@ -142,32 +142,32 @@ NULL
 #' distMatrix(res)
 #'
 #' @export
-scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
+scudo <- function(expressionData, sampleGroups, nTop, nBottom, alpha = 0.1,
                   norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
                   parametric = FALSE, pAdj = "none", distFun = NULL) {
 
-    .inputCheck(expressionData, groups, nTop, nBottom, alpha,
+    .inputCheck(expressionData, sampleGroups, nTop, nBottom, alpha,
                 norm, groupedNorm, featureSel, parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 
-    groups <- groups[, drop = TRUE]
-    ngroups <- length(levels(groups))
-    normGroups <- if(groupedNorm) groups else NULL
+    sampleGroups <- sampleGroups[, drop = TRUE]
+    nsampleGroups <- length(levels(sampleGroups))
+    normGroups <- if(groupedNorm) sampleGroups else NULL
 
     if (norm) expressionData <- .normalization(expressionData, normGroups)
 
     # Feature Selection --------------------------------------------------------
 
-    if (ngroups == 1) {
-        warning(paste0("Just one group in ", deparse(substitute(groups)),
+    if (nsampleGroups == 1) {
+        warning(paste0("Just one group in ", deparse(substitute(sampleGroups)),
                       ": skipping feature selection"))
         featureSel <- FALSE
     }
 
     if (featureSel) {
         expressionData <- .featureSelection(expressionData,
-                                            alpha, groups, ngroups,
+                                            alpha, sampleGroups, nsampleGroups,
                                             parametric, pAdj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
             stop("top and bottom signatures overlap, only ",
@@ -177,7 +177,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
 
     # Performing Scudo ---------------------------------------------------------
 
-    .performScudo(expressionData, groups, nTop, nBottom, distFun, alpha,
+    .performScudo(expressionData, sampleGroups, nTop, nBottom, distFun, alpha,
                   norm, groupedNorm, featureSel, parametric, pAdj)
 }
 

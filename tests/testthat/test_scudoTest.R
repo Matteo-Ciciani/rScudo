@@ -29,7 +29,7 @@ test_that("scudoTest selects right features", {
     # Testing ScudoRes obj produced
     expect_s4_class(scudoTest(res, testExpData, grps1, 1, 3), "scudoResults")
 
-    # test for null groups
+    # test for null sampleGroups
     expect_s4_class(scudoTest(res, testExpData, grps3, 1, 3), "scudoResults")
 
     # tests on warnings and errors
