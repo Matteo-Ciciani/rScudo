@@ -2,39 +2,72 @@
 NULL
 
 # scudoTest ----------------------------------------------------------------
-
-#' Performs scudoTest on test Expression Data
+#' Performs SCUDO analysis on test data
 #'
-#' Performes SCUDO on test Expression Data using feature selected from a
-#' previous computed train Scudo Results object.
+#' A function to perform SCUDO analysis on test data, given an object of
+#' class \code{scudoResults} used as training data. For more informations see
+#' Details.
 #'
-#' \code{scudoTest} works as a common predict function by testing on a
-#' different expressionData object previous feature selection results obtained
-#' in a train Scudo Result object. This could be helpful in order to check the
-#' effectiveness of previously chosen parameters.
+#' Feature selection in testing data is obtained considering just features
+#' selected in training data (collected in the \code{scudoResult} object).
 #'
-#' @param trainScudoRes  scudoResults object used as training object.
+#' Data normalization and SCUDO analysis is performed in the same way as
+#' explained in \code{\link{scudo}} function details. In this case, groups can
+#' also not being specified, as well as nTop and nBottom. If the latter are not
+#' specified, same values as the ones in \code{scudoResult} object are used.
 #'
-#' @param testExpData data.frame object containing expressionData used as test.
+#' @param trainScudoRes an object of class \code{ScudoResult} used as
+#' training.
 #'
-#' @param testGroups factor containing groups labels for samples in testExpData.
+#' @param testExpData data.frame of gene expression data, with a column for
+#' each sample and a row for each feature, used as testing data.
 #'
-#' @param nTop number of up-regulated features to include in the signatures.
+#' @param testGroups factor containing group labels for each sample in
+#' \code{testExpData}
+#'
+#' @param nTop number of up-regulated features to include in the signatures. See
+#' Details.
 #'
 #' @param nBottom number of down-regulated features to include in the
-#' signatures.
+#' signatures. See Details.
 #'
-#' @param norm logical, whether or not to normalize the test expression data.
-#'   See Details for a description of the normalization used.
+#' @param norm logical, whether or not to normalize the expression data. See
+#' Details for a description of the normalization used
 #'
 #' @param groupedNorm logical, whether or not to performed grouped
-#' normalization. See Details for a description of the normalization used
+#' normalization. See \code{\link{scudo}} function Details for a
+#' description of the normalization used
 #'
 #' @param distFun the function used to compute the distance between two
-#' samples. See Details
+#' samples. See See \code{\link{scudo}} function Details for the specification
+#' of this function
 #'
-#' @return S4 class object \linkS4class{scudoResults}.
+#' @return Object of class \code{\linkS4class{scudoResults}}.
 #'
+#' @seealso \code{\link{scudo}}, \code{\link{scudoNetwork}},
+#' \code{\linkS4class{scudoResults}}
+#'
+#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#'
+#' @examples
+#' # generate dummy train dataset
+#' exprData_train <- data.frame(a = 11:20, b = 16:25,
+#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#' exprData_test <- data.frame(e = 1:10, f = 11:20,
+#'             g = rev(11:20), h = c(1:2, rev(3:10)))
+#' rownames(exprData_train) <- rownames(exprData_test) <- letters[11:20]
+#' grps_train <- as.factor(c("G1", "G1", "G2", "G2"))
+#' nTop <- 2
+#' nBottom <- 3
+#'
+#' # run scudo
+#' res <- scudo(exprData_train, grps_train, nTop, nBottom, norm = FALSE,
+#'              featureSel = FALSE)
+#' show(res)
+#'
+#' # run scudoTest
+#' test_res <- scudoTest(res, exprData_test, norm = FALSE)
+#' show(test_res)
 #' @export
 scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
                          nTop = NULL, nBottom = NULL, norm = TRUE,
