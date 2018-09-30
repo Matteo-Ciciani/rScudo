@@ -2,42 +2,79 @@
 % Please edit documentation in R/scudoTest.R
 \name{scudoTest}
 \alias{scudoTest}
-\title{Performs scudoTest on test Expression Data}
+\title{Performs SCUDO analysis on test data}
 \usage{
 scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
   nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
 }
 \arguments{
-\item{trainScudoRes}{scudoResults object used as training object.}
+\item{trainScudoRes}{an object of class \code{ScudoResult} used as
+training.}
 
-\item{testExpData}{data.frame object containing expressionData used as test.}
+\item{testExpData}{data.frame of gene expression data, with a column for
+each sample and a row for each feature, used as testing data.}
 
-\item{testGroups}{factor containing groups labels for samples in testExpData.}
+\item{testGroups}{factor containing group labels for each sample in
+\code{testExpData}}
 
-\item{nTop}{number of up-regulated features to include in the signatures.}
+\item{nTop}{number of up-regulated features to include in the signatures. See
+Details.}
 
 \item{nBottom}{number of down-regulated features to include in the
-signatures.}
+signatures. See Details.}
 
-\item{norm}{logical, whether or not to normalize the test expression data.
-See Details for a description of the normalization used.}
+\item{norm}{logical, whether or not to normalize the expression data. See
+Details for a description of the normalization used}
 
 \item{groupedNorm}{logical, whether or not to performed grouped
-normalization. See Details for a description of the normalization used}
+normalization. See \code{\link{scudo}} function Details for a
+description of the normalization used}
 
 \item{distFun}{the function used to compute the distance between two
-samples. See Details}
+samples. See See \code{\link{scudo}} function Details for the specification
+of this function}
 }
 \value{
-S4 class object \linkS4class{scudoResults}.
+Object of class \code{\linkS4class{scudoResults}}.
 }
 \description{
-Performes SCUDO on test Expression Data using feature selected from a
-previous computed train Scudo Results object.
+A function to perform SCUDO analysis on test data, given an object of
+class \code{scudoResults} used as training data. For more informations see
+Details.
 }
 \details{
-\code{scudoTest} works as a common predict function by testing on a
-different expressionData object previous feature selection results obtained
-in a train Scudo Result object. This could be helpful in order to check the
-effectiveness of previously chosen parameters.
+Feature selection in testing data is obtained considering just features
+selected in training data (collected in the \code{scudoResult} object).
+
+Data normalization and SCUDO analysis is performed in the same way as
+explained in \code{\link{scudo}} function details. In this case, groups can
+also not being specified, as well as nTop and nBottom. If the latter are not
+specified, same values as the ones in \code{scudoResult} object are used.
+}
+\examples{
+# generate dummy train dataset
+exprData_train <- data.frame(a = 11:20, b = 16:25,
+            c = rev(1:10), d = c(1:2, rev(3:10)))
+exprData_test <- data.frame(e = 1:10, f = 11:20,
+            g = rev(11:20), h = c(1:2, rev(3:10)))
+rownames(exprData_train) <- rownames(exprData_test) <- letters[11:20]
+grps_train <- as.factor(c("G1", "G1", "G2", "G2"))
+nTop <- 2
+nBottom <- 3
+
+# run scudo
+res <- scudo(exprData_train, grps_train, nTop, nBottom, norm = FALSE,
+             featureSel = FALSE)
+show(res)
+
+# run scudoTest
+test_res <- scudoTest(res, exprData_test, norm = FALSE)
+show(test_res)
+}
+\seealso{
+\code{\link{scudo}}, \code{\link{scudoNetwork}},
+\code{\linkS4class{scudoResults}}
+}
+\author{
+Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
 }

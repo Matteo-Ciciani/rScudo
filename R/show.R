@@ -17,7 +17,7 @@ setMethod("show", "scudoResults", function(object) {
     ngroups <- length(colnames(consensusDownSignatures(object)))
     if (ngroups != 1) {
         cat("Number of groups       : ", ngroups, "\n")
-        gt <- table(groups(object)[, drop = TRUE])
+        gt <- table(groupsAnnotation(object)[, drop = TRUE])
         invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
             "samples\n")))
     }
@@ -28,15 +28,13 @@ setMethod("show", "scudoResults", function(object) {
         "\n")
     cat("Normalization          : ", paste0(ifelse(params(object)$norm,
         "", "not "), "performed"), "\n")
+    if (params(object)$groupedNorm) cat("    GroupedNorm        :  performed\n")
 
     featureSel <- params(object)$featureSel
 
-    if (length(params(object)) != 8) {
+    if (length(params(object)) == 4) {
         if (is.null(featureSel)) featureSel <- F
-        cat("Feature selection      : ", paste0(
-            (if (featureSel) "" else "not "),
-            "performed"), "\n")
-
+        cat("Feature selection      :  performed from training")
      } else {
         if (featureSel) {
             cat("Feature selection      :  performed\n")
@@ -64,6 +62,8 @@ setMethod("show", "scudoResults", function(object) {
                 paste(params(object)$pAdj), "\n")
             cat("    Selected features  : ",
                 paste(length(selectedFeatures(object))))
+        } else {
+            cat("Feature selection      :  not performed\n")
         }
 
     }
