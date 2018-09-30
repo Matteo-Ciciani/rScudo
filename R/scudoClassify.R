@@ -76,20 +76,36 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     if (is.null(distFun)) distFun <- .defaultDist
 
-    distMat <- distFun(cbind(trainExpData, testExpData), nTop, nBottom)
-    distMat <- distMat[1:dim(trainExpData)[1], (dim(trainExpData)[2] + 1):
-                           (dim(trainExpData)[2] + dim(testExpData)[2])]
-
     # classification: if unweighted count, for each vector, the number of nodes
     # for each group that are connected and pass the N threshold; if weighted:
     # if pruned exclude nodes based on N, if not only compute mean weight and
     # perform test (t or w), issue classification and p-value. Possibly
     # consider different number of neighbours
 
+    # if weighted unpruned: only consider first neighbours, compute using the
+    #                       disance matrix
+    # if weighted pruned: consider neighbours at distance d, recompute the graph
+    #                     with each neighbour using N, then bfs to find
+    #                     distances
+    # if unweighetd: similar to weighted pruned, but use counts instrtead of
+    #                weights
+
+
     if (weighted) {
         if (pruned) {
+            # need a bunch of new functions: take train, add a test sample one
+            # one at a time, compute n igraph objects, with n = # test samples,
+            # run bfs on each, use distance d to compute group scores for each
+            # group. A similar function can be used for unweighed
 
         } else {
+            # compute all-to-all distance matrix
+            distMat <- distFun(cbind(trainExpData, testExpData), nTop, nBottom)
+            distMat <- distMat[1:dim(trainExpData)[1],
+                (dim(trainExpData)[2] + 1):(dim(trainExpData)[2]
+                + dim(testExpData)[2])]
+
+            # get sums for each new sample
             distSums <- stats::aggregate(distMat, by = list(trainGroups),
                                          FUN = sum)
 
@@ -100,4 +116,44 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     # compute signatures
 }
+
+.computeTestNetwork <- function(dMatrix, N, trainGroups) {
+    # compute adjacency matrix
+    adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])
+    NQuantile <- stats::quantile(dMatrix[dMatrix > sqrt(.Machine$double.eps)],
+        probs = N)
+    adjMatrix[dMatrix <= NQuantile] <- 1
+    colnames(adjMatrix) <- colnames(dMatrix)
+
+    # generate graph using graph_from_adjacency_matrix
+    result <- igraph::graph_from_adjacency_matrix(adjMatrix,
+        mode = "undirected", diag = FALSE)
+
+    # add distances
+    igraph::E(result)$distance <- dMatrix[as.logical(adjMatrix)
+        & lower.tri(dMatrix)]
+
+    # add groups
+    igraph::V(result)$group <- as.factor(c(0, trainGroups))
+
+    result
+}
+
+.networksFromDistMatrix <- function(dMatrix, nTrain, N, trainGroups) {
+    iTest <- (nTrain + 1):(dim(dMatrix)[1])
+    res <- lapply(iTest, function(i) .computeTestNetwork(dMatrix[c(i, 1:nTrain),
+        c(i, 1:nTrain)], N, trainGroups))
+    res
+}
+
+.visitEdges<- function(net, weighted, maxDist) {
+    visited <- c()
+    toVisit <- rep(FALSE, length(V(net)))
+    toVisit[1] <- TRUE
+    while (any(toVisit)) {
+        neig <- neighbors(net, root)
+    }
+
+}
+
 
