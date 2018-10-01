@@ -111,9 +111,9 @@ NULL
 
     if (!is.null(distFun)){
         stopifnot(is.function(distFun))
-        if (is.null(formals(distFun))) {
-            stop(paste('"distFun" should take in input at least one argument,',
-                       ' i.e "expressionData".'))
+        if (length(formals(distFun)) != 3) {
+            stop(paste('distFun should take as input three arguments:',
+                       'expressionData, nTop, nBottom'))
         }
     }
 }

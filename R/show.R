@@ -9,17 +9,19 @@ NULL
 #' @usage NULL
 setMethod("show", "scudoResults", function(object) {
     cat("Object of class scudoResults\n")
-    cat("Result of", ifelse(length(params(object)) == 3,
+    cat("Result of", ifelse(length(params(object)) == 4,
         "scudoTest", "scudo"), "\n\n")
     cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),
         "\n")
 
-    ngroups <- length(colnames(consensusDownSignatures(object)))
-    if (ngroups != 1) {
+    ngroups <- ncol(consensusDownSignatures(object))
+    if (ngroups != 0) {
         cat("Number of groups       : ", ngroups, "\n")
         gt <- table(groupsAnnotation(object)[, drop = TRUE])
         invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
             "samples\n")))
+    } else {
+        cat("No groups specified\n")
     }
 
     cat("upSignatures length    : ", paste(params(object)$nTop),
@@ -28,44 +30,31 @@ setMethod("show", "scudoResults", function(object) {
         "\n")
     cat("Normalization          : ", paste0(ifelse(params(object)$norm,
         "", "not "), "performed"), "\n")
-    if (params(object)$groupedNorm) cat("    GroupedNorm        :  performed\n")
+    if (params(object)$norm) cat("    groupedNorm        : ", paste0(ifelse(
+        params(object)$groupedNorm, "", "not "), "performed"), "\n")
 
-    featureSel <- params(object)$featureSel
-
-    if (length(params(object)) == 4) {
-        if (is.null(featureSel)) featureSel <- F
-        cat("Feature selection      :  performed from training")
-     } else {
-        if (featureSel) {
-            cat("Feature selection      :  performed\n")
-            if (params(object)$parametric == T) {
-                if (ngroups == 2) {
-                    cat("    Test               : ",
-                    "t-test", "\n")
-                } else {
-                    cat("    Test               : ",
-                    "anova test", "\n")
-                }
+    if (length(params(object)) == 8 && params(object)$featureSel) {
+        cat("Feature selection      :  performed\n")
+        if (params(object)$parametric) {
+            if (ngroups == 2) {
+                cat("    Test               :  Student's t-test\n")
             } else {
-                if (ngroups == 2) {
-                    cat("    Test               : ",
-                        "Wilcoxon rank sum test", "\n")
-                } else {
-                    cat("    Test               : ",
-                        "Kruskal-Wallis rank sum test", "\n")
-                }
+                cat("    Test               :  anova test\n")
             }
-
-            cat("    p-value cutoff     : ",
-                paste(params(object)$alpha), "\n")
-            cat("    p.adjust method    : ",
-                paste(params(object)$pAdj), "\n")
-            cat("    Selected features  : ",
-                paste(length(selectedFeatures(object))))
         } else {
-            cat("Feature selection      :  not performed\n")
+            if (ngroups == 2) {
+                cat("    Test               :  Wilcoxon rank sum test\n")
+            } else {
+                cat("    Test               :  Kruskal-Wallis rank sum test\n")
+            }
         }
-
+        cat("    p-value cutoff     : ", paste(params(object)$alpha), "\n")
+        cat("    p.adjust method    : ", paste(params(object)$pAdj), "\n")
+        cat("    Selected features  : ", paste(length(selectedFeatures(
+            object))))
+    } else  if (length(params(object)) == 8) {
+        cat("Feature selection      :  not performed\n")
     }
+
     invisible(NULL)
 })
