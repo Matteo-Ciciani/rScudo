@@ -1,4 +1,4 @@
-#' @include class.R accessors.R utilities.R
+#' @include class.R accessors.R utilities.R scudoClassifyUtilities.R
 NULL
 
 #' Performes classification using SCUDO
@@ -116,44 +116,4 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     # compute signatures
 }
-
-.computeTestNetwork <- function(dMatrix, N, trainGroups) {
-    # compute adjacency matrix
-    adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])
-    NQuantile <- stats::quantile(dMatrix[dMatrix > sqrt(.Machine$double.eps)],
-        probs = N)
-    adjMatrix[dMatrix <= NQuantile] <- 1
-    colnames(adjMatrix) <- colnames(dMatrix)
-
-    # generate graph using graph_from_adjacency_matrix
-    result <- igraph::graph_from_adjacency_matrix(adjMatrix,
-        mode = "undirected", diag = FALSE)
-
-    # add distances
-    igraph::E(result)$distance <- dMatrix[as.logical(adjMatrix)
-        & lower.tri(dMatrix)]
-
-    # add groups
-    igraph::V(result)$group <- as.factor(c(0, trainGroups))
-
-    result
-}
-
-.networksFromDistMatrix <- function(dMatrix, nTrain, N, trainGroups) {
-    iTest <- (nTrain + 1):(dim(dMatrix)[1])
-    res <- lapply(iTest, function(i) .computeTestNetwork(dMatrix[c(i, 1:nTrain),
-        c(i, 1:nTrain)], N, trainGroups))
-    res
-}
-
-.visitEdges<- function(net, weighted, maxDist) {
-    visited <- c()
-    toVisit <- rep(FALSE, length(V(net)))
-    toVisit[1] <- TRUE
-    while (any(toVisit)) {
-        neig <- neighbors(net, root)
-    }
-
-}
-
 

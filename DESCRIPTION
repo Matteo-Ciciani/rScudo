@@ -1,7 +1,7 @@
 Package: scudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
-Version: 0.1.3
+Version: 0.2.0
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com", role = c("aut", "cre")),
     person("Thomas", "Cantore", email = "cantorethomas@gmail.com", role = "aut"),
     person("Enrica", "Colasurdo", email = "enrica.colasurdo@gmail.com", role = "aut"))

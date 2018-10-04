@@ -13,7 +13,7 @@ NULL
 #' a sample and an edge between two nodes quantitatively represents the
 #' similarity between their respective signatures.
 #'
-#' Given a set of expression profiles with known classification, SCUDO
+#' Given a set of expression profiles with known classification, \code{scudo}
 #' computes a list of signatures composed of genes over- and under-expressed
 #' in each sample. It also compute consensus signatures for each group and
 #' uses the signatures to compute a distance matrix that quantifies the
@@ -66,8 +66,8 @@ NULL
 #' computed as the average of the ES of the top and the bottom signatures.
 #' The distance between two samples is computed as the average ES:
 #' \deqn{d(A,B)=(ES(A,B)+ES(B,A))/2}
-#' Note that the ES employed by default also known as the Kolmogorov-Smirnov
-#' running sum, and is analogous to the ES used in the unweighted early
+#' Note that the ES employed by default is also known as the Kolmogorov-Smirnov
+#' running sum and is analogous to the ES used in the unweighted early
 #' version of GSEA.
 #'
 #' Alternatively, a user specified function can be used to compute the distance
