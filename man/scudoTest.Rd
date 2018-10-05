@@ -2,26 +2,26 @@
 % Please edit documentation in R/scudoTest.R
 \name{scudoTest}
 \alias{scudoTest}
-\title{Performs SCUDO analysis on test data}
+\title{Performs SCUDO analysis on test dataset}
 \usage{
 scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
   nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
 }
 \arguments{
 \item{trainScudoRes}{an object of class \code{ScudoResult} used as
-training.}
+training model}
 
-\item{testExpData}{data.frame of gene expression data, with a column for
-each sample and a row for each feature, used as testing data.}
+\item{testExpData}{either an \code{\link[Biobase]{ExpressionSet}}
+or a data.frame or a matrix of gene expression data, with a column for
+each sample and a row for each feature}
 
 \item{testGroups}{factor containing group labels for each sample in
 \code{testExpData}}
 
-\item{nTop}{number of up-regulated features to include in the signatures. See
-Details.}
+\item{nTop}{number of up-regulated features to include in the signatures}
 
 \item{nBottom}{number of down-regulated features to include in the
-signatures. See Details.}
+signatures}
 
 \item{norm}{logical, whether or not to normalize the expression data. See
 Details for a description of the normalization used}
@@ -38,13 +38,14 @@ of this function}
 Object of class \code{\linkS4class{scudoResults}}.
 }
 \description{
-A function to perform SCUDO analysis on test data, given an object of
-class \code{scudoResults} used as training data. For more informations see
-Details.
+A function to perform the SCUDO analysis on test data, given an object of
+class \code{scudoResults} used as training model.
 }
 \details{
-Feature selection in testing data is obtained considering just features
-selected in training data (collected in the \code{scudoResult} object).
+This function creates an object of class \code{\linkS4class{scudoResults}}
+
+Only the features selected in the trainig step are considered for the
+analysis.
 
 Data normalization and SCUDO analysis is performed in the same way as
 explained in \code{\link{scudo}} function details. In this case, groups can
@@ -53,23 +54,24 @@ specified, same values as the ones in \code{scudoResult} object are used.
 }
 \examples{
 # generate dummy train dataset
-exprData_train <- data.frame(a = 11:20, b = 16:25,
+exprDataTrain <- data.frame(a = 11:20, b = 16:25,
             c = rev(1:10), d = c(1:2, rev(3:10)))
-exprData_test <- data.frame(e = 1:10, f = 11:20,
+exprDataTest <- data.frame(e = 1:10, f = 11:20,
             g = rev(11:20), h = c(1:2, rev(3:10)))
-rownames(exprData_train) <- rownames(exprData_test) <- letters[11:20]
-grps_train <- as.factor(c("G1", "G1", "G2", "G2"))
+rownames(exprDataTrain) <- rownames(exprDataTest) <- letters[11:20]
+grpsTrain <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2
 nBottom <- 3
 
 # run scudo
-res <- scudo(exprData_train, grps_train, nTop, nBottom, norm = FALSE,
+res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, norm = FALSE,
              featureSel = FALSE)
 show(res)
 
 # run scudoTest
-test_res <- scudoTest(res, exprData_test, norm = FALSE)
-show(test_res)
+testRes <- scudoTest(res, exprDataTest, norm = FALSE)
+show(testRes)
+
 }
 \seealso{
 \code{\link{scudo}}, \code{\link{scudoNetwork}},

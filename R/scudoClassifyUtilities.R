@@ -42,7 +42,7 @@
 .getScores <- function(net, root, nodes) {
     i <- vapply(names(nodes), function(x) igraph::get.edge.ids(net,
         c(names(root), x), directed = FALSE), numeric(1))
-    1 - igraph::get.edge.attribute(net, "distance", i)
+    2 - igraph::get.edge.attribute(net, "distance", i)
 }
 
 .visitEdges <- function(net, maxDist, groups) {
@@ -60,7 +60,7 @@
         toVisit[as.integer(u)] <- FALSE
         firstNeighbors <- igraph::neighborhood(net, nodes = u, mindist = 1)[[1]]
         firstNeighbors <- firstNeighbors[!(firstNeighbors %in%
-                                               igraph::V(net)[visited])]
+            igraph::V(net)[visited])]
         neighborsGroups <- as.factor(firstNeighbors$group)
         neighborsScores <- .getScores(net, u, firstNeighbors)
         newScores <- vapply(split(neighborsScores, neighborsGroups), sum, 1.0)

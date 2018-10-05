@@ -97,7 +97,7 @@ test_that(".visitEdges works", {
     scores3 <- .visitEdges(net1, 2, levels(g))
     edges <- igraph::get.edge.ids(net1, c("i", "a", "i", "b", "b", "a",
         "a", "e", "e", "b"), directed = FALSE)
-    w <- 1 - igraph::get.edge.attribute(net1, "distance", edges)
+    w <- 2 - igraph::get.edge.attribute(net1, "distance", edges)
     res3 <- c(sum(w[1:3]), sum(w[4:5]))/sum(w)
     names(res3) <- levels(g)
     expect_equal(scores3, res3)

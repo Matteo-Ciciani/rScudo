@@ -21,8 +21,9 @@ NULL
 #' @param trainScudoRes an object of class \code{ScudoResult} used as
 #' training model
 #'
-#' @param testExpData data.frame of gene expression data, with a column for
-#' each sample and a row for each feature, used as testing data
+#' @param testExpData either an \code{\link[Biobase]{ExpressionSet}}
+#' or a data.frame or a matrix of gene expression data, with a column for
+#' each sample and a row for each feature
 #'
 #' @param testGroups factor containing group labels for each sample in
 #' \code{testExpData}
@@ -56,7 +57,7 @@ NULL
 #'             c = rev(1:10), d = c(1:2, rev(3:10)))
 #' exprDataTest <- data.frame(e = 1:10, f = 11:20,
 #'             g = rev(11:20), h = c(1:2, rev(3:10)))
-#' rownames(exprData_train) <- rownames(exprDataTest) <- letters[11:20]
+#' rownames(exprDataTrain) <- rownames(exprDataTest) <- letters[11:20]
 #' grpsTrain <- as.factor(c("G1", "G1", "G2", "G2"))
 #' nTop <- 2
 #' nBottom <- 3
@@ -76,6 +77,13 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
                          groupedNorm = FALSE, distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
+
+    if (is(testExpData, "ExpressionSet")) {
+        testExpData <- as.data.frame(Biobase::exprs(testExpData))
+    }
+    if (is(testExpData, "matrix")) {
+        testExpData <- as.data.frame(testExpData)
+    }
 
     if (is(trainScudoRes, "scudoResults")) {
         if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop

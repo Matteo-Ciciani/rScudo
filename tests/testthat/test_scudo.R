@@ -21,10 +21,6 @@ test_that("scudo raises errors on wrong inputs", {
 
     # Tests on expressionData errors -------------------------------------------
 
-    exDataMa <- as.matrix(exData)
-
-    expect_error(scudo(exDataMa, gr1, 1, 3, 0.1))
-
     exData[,1] <- NA
     expect_error(scudo(exData, gr1, 1, 3, 0.1))
 

@@ -24,6 +24,7 @@ Collate:
     'accessors.R'
     'utilities.R'
     'scudo.R'
+    'scudoClassifyUtilities.R'
     'scudoClassify.R'
     'scudoCytoscape.R'
     'scudoNetwork.R'
@@ -36,7 +37,8 @@ Imports: methods,
     igraph,
     RCy3,
     stringr,
-    grDevices
+    grDevices,
+    Biobase
 Suggests: testthat,
     BiocStyle,
     knitr,
