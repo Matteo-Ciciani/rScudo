@@ -75,7 +75,11 @@
 .computeWeightedScores <- function(dMatrix, N, trainGroups, maxDist) {
     # make test networks and run weighted edge visit on each network
     nets <- .networksFromDistMatrix(dMatrix, N, trainGroups)
-    lapply(nets, .visitEdges, maxDist, levels(trainGroups))
+    scores <- lapply(nets, .visitEdges, maxDist, levels(trainGroups))
+    scores <- t(as.data.frame(scores))
+    rownames(scores) <- colnames(dMatrix)[
+        (length(trainGroups) + 1):(dim(dMatrix)[2])]
+    scores
 }
 
 

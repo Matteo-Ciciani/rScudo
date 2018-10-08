@@ -167,9 +167,8 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
 
     # Feature Selection --------------------------------------------------------
 
-    if (ngroups == 1) {
-        warning(paste0("Just one group in ", deparse(substitute(groups)),
-                      ": skipping feature selection"))
+    if (ngroups == 1 && featureSel) {
+        warning("Just one group in groups: skipping feature selection.")
         featureSel <- FALSE
     }
 
