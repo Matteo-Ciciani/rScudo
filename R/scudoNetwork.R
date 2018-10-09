@@ -118,7 +118,7 @@ setMethod("scudoNetwork", signature = "scudoResults", definition =
             igraph::V(result)$color <- rep("#FFFFFF",
                 dim(distMatrix(object))[1])
         } else {
-            igraph::V(result)$group <- groupsAnnotation(object)
+            igraph::V(result)$group <- as.character(groupsAnnotation(object))
 
             if (length(colors) == 0) {
                 pal <- grDevices::rainbow(length(levels(groupsAnnotation(

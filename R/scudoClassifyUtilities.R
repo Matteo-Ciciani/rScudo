@@ -45,7 +45,7 @@
     2 - igraph::get.edge.attribute(net, "distance", i)
 }
 
-.visitEdges <- function(net, maxDist, groups) {
+.visitEdges <- function(net, maxDist, groups, weighted, beta) {
     root <- igraph::V(net)[1]
     bfsRes <- igraph::bfs(net, root, unreachable = FALSE, dist = TRUE)
     toVisit <- rep(FALSE, length(igraph::V(net)))
@@ -62,7 +62,13 @@
         firstNeighbors <- firstNeighbors[!(firstNeighbors %in%
             igraph::V(net)[visited])]
         neighborsGroups <- as.factor(firstNeighbors$group)
-        neighborsScores <- .getScores(net, u, firstNeighbors)
+        if (weighted) {
+            neighborsScores <- .getScores(net, u, firstNeighbors)
+            coeff <- beta ^ bfsRes$dist[u]
+            neighborsScores <- coeff * neighborsScores
+        } else {
+            neighborsScores <- rep(1, length(neighborsGroups))
+        }
         newScores <- vapply(split(neighborsScores, neighborsGroups), sum, 1.0)
         groupScores[as.character(levels(neighborsGroups))] <- groupScores[
             as.character(levels(neighborsGroups))] + newScores
@@ -72,10 +78,11 @@
     groupScores
 }
 
-.computeWeightedScores <- function(dMatrix, N, trainGroups, maxDist) {
+.computeScores <- function(dMatrix, N, trainGroups, maxDist, weighted, beta) {
     # make test networks and run weighted edge visit on each network
     nets <- .networksFromDistMatrix(dMatrix, N, trainGroups)
-    scores <- lapply(nets, .visitEdges, maxDist, levels(trainGroups))
+    scores <- lapply(nets, .visitEdges, maxDist, levels(trainGroups), weighted,
+                     beta)
     scores <- t(as.data.frame(scores))
     rownames(scores) <- colnames(dMatrix)[
         (length(trainGroups) + 1):(dim(dMatrix)[2])]

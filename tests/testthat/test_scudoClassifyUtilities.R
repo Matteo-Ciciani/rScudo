@@ -81,7 +81,7 @@ test_that(".visitEdges works", {
     sr1 <- scudo(expData[, c(9, 1:8)], g, 4, 4, alpha = 0.5, norm = FALSE,
         featureSel = FALSE)
     net1 <- scudoNetwork(sr1, 0.2)
-    scores1 <- .visitEdges(net1, 1, levels(g))
+    scores1 <- .visitEdges(net1, 1, levels(g), TRUE, 1)
     res1 <- 1:0
     names(res1) <- levels(g)
     expect_equal(scores1, res1)
@@ -89,12 +89,12 @@ test_that(".visitEdges works", {
     sr2 <- scudo(expData[, c(7, 1:6, 8:9)], g, 4, 4, alpha = 0.5, norm = FALSE,
                  featureSel = FALSE)
     net2 <- scudoNetwork(sr2, 0.2)
-    scores2 <- .visitEdges(net2, 1, levels(g))
+    scores2 <- .visitEdges(net2, 1, levels(g), TRUE, 1)
     res2 <- c(NaN, NaN)
     names(res2) <- levels(g)
     expect_equal(scores2, res2)
 
-    scores3 <- .visitEdges(net1, 2, levels(g))
+    scores3 <- .visitEdges(net1, 2, levels(g), TRUE, 1)
     edges <- igraph::get.edge.ids(net1, c("i", "a", "i", "b", "b", "a",
         "a", "e", "e", "b"), directed = FALSE)
     w <- 2 - igraph::get.edge.attribute(net1, "distance", edges)
@@ -102,5 +102,18 @@ test_that(".visitEdges works", {
     names(res3) <- levels(g)
     expect_equal(scores3, res3)
 
+    scores4 <- .visitEdges(net1, 2, levels(g), FALSE, 1)
+    res4 <- c(3/5, 2/5)
+    names(res4) <- levels(g)
+    expect_equal(scores4, res4)
+
+    scores5 <- .visitEdges(net1, 2, levels(g), TRUE, 0.5)
+    edges <- igraph::get.edge.ids(net1, c("i", "a", "i", "b", "b", "a",
+        "a", "e", "e", "b"), directed = FALSE)
+    w <- 2 - igraph::get.edge.attribute(net1, "distance", edges)
+    w <- w * c(1, 1, 0.5, 0.5, 0.5)
+    res5 <- c(sum(w[1:3]), sum(w[4:5]))/sum(w)
+    names(res5) <- levels(g)
+    expect_equal(scores5, res5)
 })
 

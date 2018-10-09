@@ -1,4 +1,4 @@
-#' @include class.R accessors.R utilities.R scudoClassifyUtilities.R
+#' @include utilities.R scudoClassifyUtilities.R
 NULL
 
 #' Performes classification using SCUDO
@@ -12,7 +12,8 @@ NULL
 #'
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
-                          trainGroups, neighbors = 1, testGroups = NULL,
+                          trainGroups, neighbors = 1, weighted = TRUE,
+                          complete = FALSE, beta = 1, testGroups = NULL,
                           alpha = 0.1, norm = TRUE, groupedNorm = FALSE,
                           featureSel = TRUE, parametric = FALSE, pAdj = "none",
                           distFun = NULL) {
@@ -68,9 +69,23 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     if (is.null(distFun)) distFun <- .defaultDist
     distMat <- distFun(cbind(trainExpData, testExpData), nTop, nBottom)
 
-    # Compute weighted score ---------------------------------------------------
+    # Compute scores -----------------------------------------------------------
 
-    scores <- .computeWeightedScores(distMat, N, trainGroups, neighbors)
+    if (complete) {
+        distMat <- distMat[1:dim(trainExpData)[1],
+            (dim(trainExpData)[2] + 1):
+            (dim(trainExpData)[2] + dim(testExpData)[2])]
+
+        # get sums for each new sample
+        scores <- stats::aggregate(distMat, by = list(trainGroups),
+                                     FUN = sum)
+        scores <- t(apply(scores[, -1], 2, function(x) x/sum(x)))
+        colnames(scores) <- levels(trainGroups)
+    } else {
+        scores <- .computeScores(distMat, N, trainGroups, neighbors, weighted,
+                                 beta)
+    }
+
     scores
 }
 
