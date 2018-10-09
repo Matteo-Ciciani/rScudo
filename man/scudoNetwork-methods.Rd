@@ -19,6 +19,9 @@ the nodes of the graph. \code{length(colors)} must be equal to the number of
 samples. By default colors are chosen according to the groups in
 \code{object}}
 }
+\value{
+An object of class \code{\link[igraph:igraph-package]{igraph}}.
+}
 \description{
 A function to create an \code{\link[igraph:igraph-package]{igraph}} object
 from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
@@ -66,7 +69,7 @@ res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
 # generate network and plot it
 col <- c("#FF0000", "#FF0000", "#0000FF", "#0000FF")
 net <- scudoNetwork(res, N = 0.5, colors = col)
-plot(net)
+scudoPlot(net)
 
 }
 \seealso{

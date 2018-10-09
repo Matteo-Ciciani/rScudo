@@ -79,7 +79,8 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
         # get sums for each new sample
         scores <- stats::aggregate(distMat, by = list(trainGroups),
                                      FUN = sum)
-        scores <- t(apply(scores[, -1], 2, function(x) x/sum(x)))
+        scores <- scores[, -1] / table(trainGroups)
+        scores <- t(apply(scores, 2, function(x) x/sum(x)))
         colnames(scores) <- levels(trainGroups)
     } else {
         scores <- .computeScores(distMat, N, trainGroups, neighbors, weighted,

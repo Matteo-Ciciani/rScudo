@@ -5,9 +5,10 @@
 \title{Performes classification using SCUDO}
 \usage{
 scudoClassify(trainExpData, testExpData, N, nTop, nBottom, trainGroups,
+  neighbors = 1, weighted = TRUE, complete = FALSE, beta = 1,
   testGroups = NULL, alpha = 0.1, norm = TRUE, groupedNorm = FALSE,
   featureSel = TRUE, parametric = FALSE, pAdj = "none",
-  distFun = NULL, neighbours = 1, weighted = TRUE, pruned = FALSE)
+  distFun = NULL)
 }
 \description{
 Placeholder

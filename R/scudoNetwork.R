@@ -41,13 +41,14 @@ NULL
 #' samples. By default colors are chosen according to the groups in
 #' \code{object}
 #'
+#' @return An object of class \code{\link[igraph:igraph-package]{igraph}}.
+#'
 #' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
 #' \code{\link[igraph:igraph-package]{igraph}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
 #'
 #' @examples
-#'
 #' # generate dummy dataset and run scudo
 #' exprData <- data.frame(a = 11:20, b = 16:25,
 #'             c = rev(1:10), d = c(1:2, rev(3:10)))
@@ -61,7 +62,7 @@ NULL
 #' # generate network and plot it
 #' col <- c("#FF0000", "#FF0000", "#0000FF", "#0000FF")
 #' net <- scudoNetwork(res, N = 0.5, colors = col)
-#' plot(net)
+#' scudoPlot(net)
 #'
 #' @rdname scudoNetwork-methods
 #' @export
