@@ -55,7 +55,6 @@ with \code{igraph::V(igraphObject)$group} (it returns NULL if no group is
 specified in \code{object}).
 }
 \examples{
-
 # generate dummy dataset and run scudo
 exprData <- data.frame(a = 11:20, b = 16:25,
             c = rev(1:10), d = c(1:2, rev(3:10)))

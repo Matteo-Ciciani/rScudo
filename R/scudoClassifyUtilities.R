@@ -1,3 +1,165 @@
+.classifyInputCheck <- function(trainExpData, testExpData, N, nTop, nBottom,
+                                trainGroups, neighbors, testGroups,
+                                alpha, norm, groupedNorm, featureSel,
+                                parametric, pAdj, distFun) {
+
+    # checks on expressionData -------------------------------------------------
+
+    stopifnot(is.data.frame(trainExpData) &
+              is.data.frame(testExpData))
+
+    if (!all(sapply(trainExpData, is.numeric))) {
+        stop("trainExpData contains some non-numeric data.")
+    }
+
+    if(!all(sapply(testExpData, is.numeric))) {
+        stop("testExpData contains some non-numeric data.")
+    }
+
+    if (any(is.na(trainExpData))) {
+        stop(paste(deparse(substitute(trainExpData)),
+                   "contains NAs."))
+    }
+
+    if (any(is.na(testExpData))) {
+        stop(paste(deparse(substitute(testExpData)),
+                   "contains NAs"))
+    }
+
+    # checks on N, nTop, nBottom -----------------------------------------------
+
+    stopifnot(
+        is.numeric(N),
+        is.vector(N),
+        length(N) == 1,
+        N > 0,
+        N <= 1.0
+    )
+
+    stopifnot(is.numeric(nTop),
+              is.numeric(nBottom),
+              length(nTop) == 1,
+              length(nBottom) == 1,
+              is.vector(nTop),
+              is.vector(nBottom),
+              is.finite(nTop),
+              is.finite(nBottom),
+              nTop > 0,
+              nBottom > 0)
+
+    if (is.nan(nTop) | is.nan(nBottom)) {
+        stop("nTop and nBottom cannot be NaN.")
+    }
+
+    if (is.na(nTop) | is.na(nBottom)) {
+        stop("nTop and nBottom cannot be NA.")
+    }
+
+    if ((nTop %% 1 != 0) | (nBottom %% 1 != 0)) {
+        stop("nTop and nBottom must be integers.")
+    }
+
+    # checks on trainGroups, testGroups ----------------------------------------
+
+    stopifnot(is.factor(trainGroups))
+
+    if (any(is.na(trainGroups))) {
+        stop(paste(deparse(substitute(trainGroups)),
+                   "contains NAs."))
+    }
+
+
+    if (length(trainGroups) != dim(trainExpData)[2]) {
+        stop(paste("Length of", deparse(substitute(trainGroups)),
+                   "is different from number of columns of ",
+                   deparse(substitute(trainExpData))))
+    }
+
+    if (length(trainGroups) == 0) {
+        stop("trainGroups has length 0.")
+    }
+
+    if (!is.null(testGroups)) {
+
+        stopifnot(is.factor(testGroups))
+
+        if (any(is.na(testGroups))) {
+            stop(paste(deparse(substitute(testGroups)),
+                       "contains NAs"))
+        }
+
+
+        if (length(testGroups) != dim(testExpData)[2]) {
+            stop(paste("Length of", deparse(substitute(testGroups)),
+                       "is different from number of columns of ",
+                       deparse(substitute(testExpData))))
+        }
+
+
+        if (length(testGroups) == 0) {
+            stop("testGroups has length 0.")
+        }
+    }
+
+    # checks on neighbors ------------------------------------------------------
+
+    stopifnot(is.numeric(neighbors),
+              is.vector(neighbors),
+              neighbors > 0,
+              length(neighbors) == 1,
+              is.finite(neighbors))
+
+    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
+
+    stopifnot(is.numeric(alpha),
+              length(alpha) == 1,
+              is.vector(alpha),
+              alpha > 0,
+              alpha <= 1)
+
+    if (is.nan(alpha)) {
+        stop("alpha cannot be NaN")
+    }
+
+    if (is.na(alpha)) {
+        stop("alpha cannot be NA.")
+    }
+
+    stopifnot(is.logical(norm),
+              is.logical(featureSel),
+              is.logical(groupedNorm),
+              is.logical(parametric),
+              is.vector(norm),
+              is.vector(featureSel),
+              is.vector(groupedNorm),
+              is.vector(parametric),
+              length(norm) == 1,
+              length(featureSel) == 1,
+              length(groupedNorm) == 1,
+              length(parametric) == 1,
+              is.character(pAdj),
+              is.vector(pAdj),
+              length(pAdj) == 1)
+
+    if (!(pAdj %in% stats::p.adjust.methods)) {
+        stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',
+                   '"bonferroni", "BH", "BY", "fdr", "none".',
+                   'Check stats::p.adjust documentation.'))
+    }
+
+    # check on distFun ---------------------------------------------------------
+
+    if (!is.null(distFun)){
+        stopifnot(is.function(distFun))
+        if (length(formals(distFun)) != 3) {
+            stop(paste('distFun should take as input three arguments:',
+                       'expressionData, nTop, nBottom'))
+        }
+    }
+}
+
+
+
 .computeTestNetwork <- function(dMatrix, N, trainGroups) {
     # compute adjacency matrix
     adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])

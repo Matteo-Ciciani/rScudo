@@ -19,7 +19,11 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
                           distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
-    # perform input checks
+
+    .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
+                         trainGroups, neighbors, testGroups,
+                         alpha, norm, groupedNorm, featureSel,
+                         parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 
