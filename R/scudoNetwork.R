@@ -19,7 +19,9 @@ NULL
 #' distance matrix, is used as a threshold to generate the adjacency matrix: all
 #' the distances larger than this quantile are mapped to 0, all the distances
 #' smaller than this quantile are mapped to 1 (with the exception of the
-#' distances of any node from itself, which are equal to 0). Distances are set
+#' distances of any node from itself, which are equal to 0).
+#'
+#' Distances are set
 #' as attributes of the edges of the graph, and can be retrieved using \code{
 #' igraph::E(igraphObject)$distance}, where \code{igraphObject} is the result
 #' of \code{scudoNetwork}.
@@ -28,10 +30,10 @@ NULL
 #' vector of hexadecimal RGB color codes (like "#FFFFFF"), with lenth equal to
 #' the number of samples in \code{object}. By default, a different color is
 #' assigned to each group. If no group is specified in \code{object}, all nodes
-#' are set to the same color. A vector of node color can be accessed with \code{
-#' igraph::V(igraphObject)$color}. The group of each node can also be accessed
-#' with \code{igraph::V(igraphObject)$group} (it returns NULL if no group is
-#' specified in \code{object}).
+#' are set to the same color. A vector of node colors can be accessed with
+#' \code{ igraph::V(igraphObject)$color}. The group label of each node can also
+#' be accessed with \code{igraph::V(igraphObject)$group} (it returns NULL if no
+#' group is specified in \code{object}).
 #'
 #' @param object a \code{\linkS4class{scudoResults}} object
 #' @param N a number between 0 and 1, representing the fraction of the
@@ -46,12 +48,12 @@ NULL
 #' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
 #' \code{\link[igraph:igraph-package]{igraph}}
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'
 #' @examples
 #' # generate dummy dataset and run scudo
 #' exprData <- data.frame(a = 11:20, b = 16:25,
-#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#'     c = rev(1:10), d = c(1:2, rev(3:10)))
 #' rownames(exprData) <- letters[11:20]
 #' grps <- as.factor(c("G1", "G1", "G2", "G2"))
 #' nTop <- 2
@@ -59,9 +61,20 @@ NULL
 #'
 #' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
 #'
-#' # generate network and plot it
+#' # generate network
 #' col <- c("#FF0000", "#FF0000", "#0000FF", "#0000FF")
 #' net <- scudoNetwork(res, N = 0.5, colors = col)
+#'
+#' # retrieve node colors and groups
+#' nodes <- igraph::V(net)
+#' colors <- nodes$color
+#' groups <- nodes$group
+#'
+#' # retrieve distances from edges
+#' edges <- igraph::E(net)
+#' dist <- edges$distance
+#'
+#' # plot the network
 #' scudoPlot(net)
 #'
 #' @rdname scudoNetwork-methods

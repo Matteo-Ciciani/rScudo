@@ -78,5 +78,5 @@ show(testRes)
 \code{\linkS4class{scudoResults}}
 }
 \author{
-Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
+Matteo Ciciani \email{matteo.ciciani@gmail.com}
 }

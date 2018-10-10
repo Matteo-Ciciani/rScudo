@@ -52,7 +52,7 @@ NULL
 #'   \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
 #'   for obtaining the parameters that were used to generate the result.} }
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'
 #' @examples
 #'

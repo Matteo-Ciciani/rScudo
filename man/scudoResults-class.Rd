@@ -116,5 +116,5 @@ scudoR <- scudoResults(distMatrix = m,
 
 }
 \author{
-Matteo Ciciani \email{matteo.ciciani@studenti.unitn.it}
+Matteo Ciciani \email{matteo.ciciani@gmail.com}
 }

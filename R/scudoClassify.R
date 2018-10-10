@@ -66,6 +66,13 @@ NULL
 #' @return A \code{data.frame} containing classification scores for each sample
 #' in \code{testExpData}
 #'
+#' @seealso \code{\link{scudo}}
+#'
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
+#'
+#' @examples
+#' a <- "Placeholder"
+#'
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,

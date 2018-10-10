@@ -16,14 +16,14 @@
 #'
 #' @return Returns \code{NULL}, invisibly.
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@studenti.unitn.it}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'
 #' @seealso \code{\link{scudoNetwork}}, \code{\link[igraph]{plot.igraph}}
 #'
 #' @examples
 #' # generate dummy dataset, run scudo and scudoNetwork
 #' exprData <- data.frame(a = 11:20, b = 16:25,
-#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#'    c = rev(1:10), d = c(1:2, rev(3:10)))
 #' rownames(exprData) <- letters[11:20]
 #' grps <- as.factor(c("G1", "G1", "G2", "G2"))
 #' nTop <- 2

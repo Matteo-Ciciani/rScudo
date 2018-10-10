@@ -71,7 +71,7 @@ A \code{data.frame} containing classification scores for each sample
 in \code{testExpData}
 }
 \description{
-Performes classification using SCUDO
+placeholder
 }
 \details{
 Placeholder
