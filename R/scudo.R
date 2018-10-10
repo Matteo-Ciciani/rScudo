@@ -79,8 +79,8 @@ NULL
 #' The distance matrix is included in the returned object and can be used to
 #' generate a graph of samples using \code{\link{scudoNetwork}}.
 #'
-#' @param expressionData either an \code{\link[Biobase]{ExpressionSet}}
-#' or a data.frame or a matrix of gene expression data, with a column for
+#' @param expressionData either an \code{\link[Biobase]{ExpressionSet}},
+#' a data.frame or a matrix of gene expression data, with a column for
 #' each sample and a row for each feature
 #'
 #' @param groups factor containing group labels for each sample in

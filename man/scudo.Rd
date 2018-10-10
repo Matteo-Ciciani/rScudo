@@ -9,8 +9,8 @@ scudo(expressionData, groups, nTop, nBottom, alpha = 0.1, norm = TRUE,
   pAdj = "none", distFun = NULL)
 }
 \arguments{
-\item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}}
-or a data.frame or a matrix of gene expression data, with a column for
+\item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}},
+a data.frame or a matrix of gene expression data, with a column for
 each sample and a row for each feature}
 
 \item{groups}{factor containing group labels for each sample in

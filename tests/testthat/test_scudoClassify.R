@@ -244,25 +244,6 @@ test_that("scudoClassify raises correct errors", {
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr1, norm = list(TRUE)))
 
-    # Test groupedNorm ---------------------------------------------------------
-
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, groupedNorm = logical(0)))
-
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, groupedNorm = "ABC"))
-
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1,
-                               groupedNorm = c(TRUE, FALSE)))
-
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1,
-                               groupedNorm = matrix(TRUE)))
-
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, groupedNorm = list(TRUE)))
-
     # Test featureSel ----------------------------------------------------------
 
     expect_error(scudoClassify(trainExpData, testExpData,

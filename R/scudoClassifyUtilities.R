@@ -3,8 +3,7 @@ NULL
 
 .classifyInputCheck <- function(trainExpData, testExpData, N, nTop, nBottom,
     trainGroups, neighbors, weighted, complete,
-    beta, testGroups, alpha, norm, groupedNorm,
-    featureSel, parametric, pAdj, distFun) {
+    beta, alpha, norm, featureSel, parametric, pAdj, distFun) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -77,24 +76,6 @@ NULL
         stop("trainGroups has length 0.")
     }
 
-    if (!is.null(testGroups)) {
-
-        stopifnot(is.factor(testGroups))
-
-        if (any(is.na(testGroups))) {
-            stop("testGroups contains NAs")
-        }
-
-        if (length(testGroups) != dim(testExpData)[2]) {
-            stop(paste("Length of testGroups is different from number of",
-                "columns of testExpData"))
-        }
-
-        if (length(testGroups) == 0) {
-            stop("testGroups has length 0.")
-        }
-    }
-
     # checks on neighbors ------------------------------------------------------
 
     stopifnot(is.numeric(neighbors),
@@ -104,7 +85,7 @@ NULL
         is.finite(neighbors),
         (neighbors %% 1 == 0))
 
-    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
+    # checks on alpha, norm, featureSel, parametric, pAdj, ... -----------------
 
     stopifnot(is.numeric(alpha),
         length(alpha) == 1,
@@ -119,19 +100,16 @@ NULL
 
     stopifnot(is.logical(norm),
         is.logical(featureSel),
-        is.logical(groupedNorm),
         is.logical(parametric),
         is.logical(weighted),
         is.logical(complete),
         is.vector(norm),
         is.vector(featureSel),
-        is.vector(groupedNorm),
         is.vector(parametric),
         is.vector(weighted),
         is.vector(complete),
         length(norm) == 1,
         length(featureSel) == 1,
-        length(groupedNorm) == 1,
         length(parametric) == 1,
         length(weighted) == 1,
         length(complete) == 1,
@@ -211,11 +189,11 @@ NULL
         neighborsGroups <- as.factor(firstNeighbors$group)
         if (weighted) {
             neighborsScores <- .getScores(net, u, firstNeighbors)
-            coeff <- beta ^ bfsRes$dist[u]
-            neighborsScores <- coeff * neighborsScores
         } else {
             neighborsScores <- rep(1, length(neighborsGroups))
         }
+        coeff <- beta ^ bfsRes$dist[u]
+        neighborsScores <- coeff * neighborsScores
         newScores <- vapply(split(neighborsScores, neighborsGroups), sum,
                             numeric(1))
         groupScores[as.character(levels(neighborsGroups))] <- groupScores[
