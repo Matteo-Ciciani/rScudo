@@ -29,7 +29,7 @@ running this function.
 \examples{
 # generate dummy dataset
 exprData <- data.frame(a = 11:20, b = 16:25,
-            c = rev(1:10), d = c(1:2, rev(3:10)))
+    c = rev(1:10), d = c(1:2, rev(3:10)))
 rownames(exprData) <- letters[11:20]
 grps <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2

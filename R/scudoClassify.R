@@ -5,6 +5,8 @@ NULL
 #'
 #' Placeholder
 #'
+#' Placeholder
+#'
 #'
 #'
 #'
@@ -12,18 +14,18 @@ NULL
 #'
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
-                          trainGroups, neighbors = 1, weighted = TRUE,
-                          complete = FALSE, beta = 1, testGroups = NULL,
-                          alpha = 0.1, norm = TRUE, groupedNorm = FALSE,
-                          featureSel = TRUE, parametric = FALSE, pAdj = "none",
-                          distFun = NULL) {
+    trainGroups, neighbors = 1, weighted = TRUE,
+    complete = FALSE, beta = 1, testGroups = NULL,
+    alpha = 0.1, norm = TRUE, groupedNorm = FALSE,
+    featureSel = TRUE, parametric = FALSE, pAdj = "none",
+    distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
 
     .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
-                         trainGroups, neighbors, testGroups,
-                         alpha, norm, groupedNorm, featureSel,
-                         parametric, pAdj, distFun)
+        trainGroups, neighbors, weighted, complete, beta,
+        testGroups, alpha, norm, groupedNorm, featureSel,
+        parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 
@@ -49,10 +51,10 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     if (featureSel) {
         trainExpData <- .featureSelection(trainExpData, alpha, trainGroups,
-                                          nGroupsTrain, parametric, pAdj)
+            nGroupsTrain, parametric, pAdj)
         if ((nTop + nBottom) > dim(trainExpData)[1]) {
             stop("top and bottom signatures overlap, only ",
-                 dim(trainExpData)[1], " features selected.")
+                dim(trainExpData)[1], " features selected.")
         }
     }
 
@@ -63,7 +65,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     if (length(missing) != 0) {
         stop(paste(length(missing), "features present in trainExpData are",
-                      "absent in testExpData:\n"))
+            "absent in testExpData:\n"))
     }
 
     testExpData <- testExpData[rownames(trainExpData)[present], ]
@@ -76,19 +78,19 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     # Compute scores -----------------------------------------------------------
 
     if (complete) {
-        distMat <- distMat[1:dim(trainExpData)[1],
-            (dim(trainExpData)[2] + 1):
-            (dim(trainExpData)[2] + dim(testExpData)[2])]
+        distMat <- distMat[seq_len(dim(trainExpData)[1]),
+            seq((dim(trainExpData)[2] + 1),
+            (dim(trainExpData)[2] + dim(testExpData)[2]))]
 
         # get sums for each new sample
         scores <- stats::aggregate(distMat, by = list(trainGroups),
-                                     FUN = sum)
+            FUN = sum)
         scores <- scores[, -1] / table(trainGroups)
         scores <- t(apply(scores, 2, function(x) x/sum(x)))
         colnames(scores) <- levels(trainGroups)
     } else {
         scores <- .computeScores(distMat, N, trainGroups, neighbors, weighted,
-                                 beta)
+            beta)
     }
 
     scores

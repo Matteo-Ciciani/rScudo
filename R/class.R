@@ -61,26 +61,26 @@ NULL
 #' diag(m) <- 0
 #' rownames(m) <- colnames(m) <- letters[1:4]
 #' SigUp <- data.frame(a = letters[1:5], b = letters[6:10], c = letters[11:15],
-#'                     d = letters[16:20], stringsAsFactors = FALSE)
+#'     d = letters[16:20], stringsAsFactors = FALSE)
 #' SigDown <- data.frame(a = letters[1:10], b = letters[11:20],
-#'                       c = letters[1:10], d = letters[11:20],
-#'                       stringsAsFactors = FALSE)
+#'     c = letters[1:10], d = letters[11:20],
+#'     stringsAsFactors = FALSE)
 #' groups <- as.factor(c("G1", "G1", "G2", "G2"))
 #' ConsUp <- data.frame(G1 = letters[11:15], G2 = letters[21:25],
-#'                      stringsAsFactors = FALSE)
+#'     stringsAsFactors = FALSE)
 #' ConsDown <- data.frame(G1 = letters[16:25], G2 = letters[1:10],
-#'                        stringsAsFactors = FALSE)
+#'     stringsAsFactors = FALSE)
 #' Feats <- letters[1:20]
 #' Pars <- list()
 #'
 #' scudoR <- scudoResults(distMatrix = m,
-#'                        upSignatures = SigUp,
-#'                        downSignatures = SigDown,
-#'                        groupsAnnotation = groups,
-#'                        consensusUpSignatures = ConsUp,
-#'                        consensusDownSignatures = ConsDown,
-#'                        selectedFeatures = Feats,
-#'                        params = Pars)
+#'     upSignatures = SigUp,
+#'     downSignatures = SigDown,
+#'     groupsAnnotation = groups,
+#'     consensusUpSignatures = ConsUp,
+#'     consensusDownSignatures = ConsDown,
+#'     selectedFeatures = Feats,
+#'     params = Pars)
 #'
 #' @name scudoResults-class
 #' @rdname scudoResults-class
@@ -88,15 +88,15 @@ NULL
 #' @export scudoResults
 #' @exportClass scudoResults
 scudoResults <- setClass("scudoResults",
-                        slots = list(
-                            distMatrix = "matrix",
-                            upSignatures = "data.frame",
-                            downSignatures = "data.frame",
-                            groupsAnnotation = "factor",
-                            consensusUpSignatures = "data.frame",
-                            consensusDownSignatures = "data.frame",
-                            selectedFeatures = "character",
-                            params = "list"))
+    slots = list(
+        distMatrix = "matrix",
+        upSignatures = "data.frame",
+        downSignatures = "data.frame",
+        groupsAnnotation = "factor",
+        consensusUpSignatures = "data.frame",
+        consensusDownSignatures = "data.frame",
+        selectedFeatures = "character",
+        params = "list"))
 
 setValidity("scudoResults", function(object) {
     valid <- TRUE
@@ -128,8 +128,9 @@ setValidity("scudoResults", function(object) {
         msg <- c(msg, "distMatrix is not symmetric")
     }
     if (all(is.numeric(object@distMatrix)) &&
-        !all(sapply(diag(object@distMatrix),
-                    function(x) isTRUE(all.equal(x, 0))))) {
+        !all(vapply(diag(object@distMatrix), function(x)
+            isTRUE(all.equal(x, 0)), logical(1)))) {
+
         valid <- FALSE
         msg <- c(msg, "distMatrix contains non-zero elements in the diagonal")
     }
@@ -151,15 +152,15 @@ setValidity("scudoResults", function(object) {
     if (!all(dim(object@upSignatures)[2] == dim(object@distMatrix))) {
         valid <- FALSE
         msg <- c(msg, paste0("number of columns in upSignatures is different",
-                             " from the dimension of distMatrix"))
+            " from the dimension of distMatrix"))
     }
     if (!identical(colnames(object@distMatrix),
-                   colnames(object@upSignatures))) {
+        colnames(object@upSignatures))) {
         valid <- FALSE
         msg <- c(msg, paste0("colnames in upSignatures are different from",
-                             " colnames in distMatrix"))
+            " colnames in distMatrix"))
     }
-    if (!all(sapply(object@upSignatures, is.character))) {
+    if (!all(vapply(object@upSignatures, is.character, logical(1)))) {
         valid <- FALSE
         msg <- c(msg, "upSignatures contains non-character values")
     }
@@ -172,15 +173,15 @@ setValidity("scudoResults", function(object) {
     if (!all(dim(object@downSignatures)[2] == dim(object@distMatrix))) {
         valid <- FALSE
         msg <- c(msg, paste0("number of columns in downSignatures is different",
-                             " from the dimension of distMatrix"))
+            " from the dimension of distMatrix"))
     }
     if (!identical(colnames(object@distMatrix),
-                   colnames(object@downSignatures))) {
+        colnames(object@downSignatures))) {
         valid <- FALSE
         msg <- c(msg, paste0("colnames in downSignatures are different from",
-                             " colnames in distMatrix"))
+            " colnames in distMatrix"))
     }
-    if (!all(sapply(object@downSignatures, is.character))) {
+    if (!all(vapply(object@downSignatures, is.character, logical(1)))) {
         valid <- FALSE
         msg <- c(msg, "downSignatures contains non-character values")
     }
@@ -195,7 +196,7 @@ setValidity("scudoResults", function(object) {
 
         valid <- FALSE
         msg <- c(msg, paste0("length of groupsAnnotation different from number",
-                             " of rows in distMatrix"))
+            " of rows in distMatrix"))
     }
 
     # validity of consensusUpSignatures ----------------------------------------
@@ -210,12 +211,13 @@ setValidity("scudoResults", function(object) {
             msg <- c(msg, paste0("number of rows in consensusUpSignatures ",
                 "different from number of rows in upSignatures"))
         }
-        if (!all(sapply(object@consensusUpSignatures, is.character))) {
+        if (!all(vapply(object@consensusUpSignatures, is.character,
+            logical(1)))) {
             valid <- FALSE
             msg <- c(msg, "consensusUpSignatures contains non-character values")
         }
         if (!all(is.element(colnames(object@consensusUpSignatures),
-                            as.character(levels(object@groupsAnnotation))))) {
+            as.character(levels(object@groupsAnnotation))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusUpSignatures contains ",
                 "elements that are not in groupsAnnotation"))
@@ -234,13 +236,14 @@ setValidity("scudoResults", function(object) {
             msg <- c(msg, paste0("number of rows in consensusDownSignatures ",
                 "different from number of rows in downSignatures"))
         }
-        if (!all(sapply(object@consensusDownSignatures, is.character))) {
+        if (!all(vapply(object@consensusDownSignatures, is.character,
+            logical(1)))) {
             valid <- FALSE
             msg <- c(msg, paste0("consensusDownSignatures contains ",
                 "non-character values"))
         }
         if (!all(is.element(colnames(object@consensusDownSignatures),
-                            as.character(levels(object@groupsAnnotation))))) {
+            as.character(levels(object@groupsAnnotation))))) {
             valid <- FALSE
             msg <- c(msg, paste0("colnames of consensusDownSignatures ",
                 "contains elements that are not in groupsAnnotation"))

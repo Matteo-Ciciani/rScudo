@@ -55,9 +55,9 @@ specified, same values as the ones in \code{scudoResult} object are used.
 \examples{
 # generate dummy train dataset
 exprDataTrain <- data.frame(a = 11:20, b = 16:25,
-            c = rev(1:10), d = c(1:2, rev(3:10)))
+    c = rev(1:10), d = c(1:2, rev(3:10)))
 exprDataTest <- data.frame(e = 1:10, f = 11:20,
-            g = rev(11:20), h = c(1:2, rev(3:10)))
+    g = rev(11:20), h = c(1:2, rev(3:10)))
 rownames(exprDataTrain) <- rownames(exprDataTest) <- letters[11:20]
 grpsTrain <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2
@@ -65,7 +65,7 @@ nBottom <- 3
 
 # run scudo
 res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, norm = FALSE,
-             featureSel = FALSE)
+    featureSel = FALSE)
 show(res)
 
 # run scudoTest

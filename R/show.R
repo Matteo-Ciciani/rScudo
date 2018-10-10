@@ -18,8 +18,7 @@ setMethod("show", "scudoResults", function(object) {
     if (ngroups != 0) {
         cat("Number of groups       : ", ngroups, "\n")
         gt <- table(groupsAnnotation(object)[, drop = TRUE])
-        invisible(sapply(names(gt), function(x) cat("   ", x, ": ", gt[x],
-            "samples\n")))
+        for (x in names(gt)) cat("   ", x, ": ", gt[x], "samples\n")
     } else {
         cat("No groups specified\n")
     }

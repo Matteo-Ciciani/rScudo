@@ -13,3 +13,6 @@ scudoClassify(trainExpData, testExpData, N, nTop, nBottom, trainGroups,
 \description{
 Placeholder
 }
+\details{
+Placeholder
+}

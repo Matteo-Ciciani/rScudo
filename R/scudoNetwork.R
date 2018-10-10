@@ -90,7 +90,7 @@ setMethod("scudoNetwork", signature = "scudoResults", definition =
             if (any(is.na(colors))) stop("colors contains NAs")
             if (length(colors) != dim(distMatrix(object))[1]) {
                 stop(paste("length of colors differs from number of samples",
-                           "in object"))
+                    "in object"))
             }
             if (any(is.na(stringr::str_match(colors, "^#[0-9a-fA-F]{6,8}$")))) {
                 stop(paste("colors contains invalid hexadecimal colors (see",

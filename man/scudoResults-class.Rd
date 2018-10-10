@@ -93,26 +93,26 @@ m <- matrix(1, ncol = 4, nrow = 4)
 diag(m) <- 0
 rownames(m) <- colnames(m) <- letters[1:4]
 SigUp <- data.frame(a = letters[1:5], b = letters[6:10], c = letters[11:15],
-                    d = letters[16:20], stringsAsFactors = FALSE)
+    d = letters[16:20], stringsAsFactors = FALSE)
 SigDown <- data.frame(a = letters[1:10], b = letters[11:20],
-                      c = letters[1:10], d = letters[11:20],
-                      stringsAsFactors = FALSE)
+    c = letters[1:10], d = letters[11:20],
+    stringsAsFactors = FALSE)
 groups <- as.factor(c("G1", "G1", "G2", "G2"))
 ConsUp <- data.frame(G1 = letters[11:15], G2 = letters[21:25],
-                     stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE)
 ConsDown <- data.frame(G1 = letters[16:25], G2 = letters[1:10],
-                       stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE)
 Feats <- letters[1:20]
 Pars <- list()
 
 scudoR <- scudoResults(distMatrix = m,
-                       upSignatures = SigUp,
-                       downSignatures = SigDown,
-                       groupsAnnotation = groups,
-                       consensusUpSignatures = ConsUp,
-                       consensusDownSignatures = ConsDown,
-                       selectedFeatures = Feats,
-                       params = Pars)
+    upSignatures = SigUp,
+    downSignatures = SigDown,
+    groupsAnnotation = groups,
+    consensusUpSignatures = ConsUp,
+    consensusDownSignatures = ConsDown,
+    selectedFeatures = Feats,
+    params = Pars)
 
 }
 \author{

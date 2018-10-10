@@ -125,7 +125,7 @@ NULL
 #' @examples
 #' # generate dummy dataset
 #' exprData <- data.frame(a = 11:20, b = 16:25,
-#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#'     c = rev(1:10), d = c(1:2, rev(3:10)))
 #' rownames(exprData) <- letters[11:20]
 #' grps <- as.factor(c("G1", "G1", "G2", "G2"))
 #' nTop <- 2
@@ -144,8 +144,8 @@ NULL
 #'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
-                  norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
-                  parametric = FALSE, pAdj = "none", distFun = NULL) {
+    norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
+    parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     if (is(expressionData, "ExpressionSet")) {
         expressionData <- as.data.frame(Biobase::exprs(expressionData))
@@ -155,7 +155,7 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     }
 
     .inputCheck(expressionData, groups, nTop, nBottom, alpha,
-                norm, groupedNorm, featureSel, parametric, pAdj, distFun)
+        norm, groupedNorm, featureSel, parametric, pAdj, distFun)
 
     # normalization ------------------------------------------------------------
 
@@ -174,17 +174,16 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
 
     if (featureSel) {
         expressionData <- .featureSelection(expressionData,
-                                            alpha, groups, ngroups,
-                                            parametric, pAdj)
+            alpha, groups, ngroups, parametric, pAdj)
         if ((nTop + nBottom) > dim(expressionData)[1]) {
             stop("top and bottom signatures overlap, only ",
-                 dim(expressionData)[1], " features selected.")
+                dim(expressionData)[1], " features selected.")
         }
     }
 
     # Performing Scudo ---------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, distFun, alpha,
-                  norm, groupedNorm, featureSel, parametric, pAdj)
+        norm, groupedNorm, featureSel, parametric, pAdj)
 }
 

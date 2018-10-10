@@ -54,9 +54,9 @@ NULL
 #' @examples
 #' # generate dummy train dataset
 #' exprDataTrain <- data.frame(a = 11:20, b = 16:25,
-#'             c = rev(1:10), d = c(1:2, rev(3:10)))
+#'     c = rev(1:10), d = c(1:2, rev(3:10)))
 #' exprDataTest <- data.frame(e = 1:10, f = 11:20,
-#'             g = rev(11:20), h = c(1:2, rev(3:10)))
+#'     g = rev(11:20), h = c(1:2, rev(3:10)))
 #' rownames(exprDataTrain) <- rownames(exprDataTest) <- letters[11:20]
 #' grpsTrain <- as.factor(c("G1", "G1", "G2", "G2"))
 #' nTop <- 2
@@ -64,7 +64,7 @@ NULL
 #'
 #' # run scudo
 #' res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, norm = FALSE,
-#'              featureSel = FALSE)
+#'     featureSel = FALSE)
 #' show(res)
 #'
 #' # run scudoTest
@@ -73,8 +73,8 @@ NULL
 #'
 #' @export
 scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
-                         nTop = NULL, nBottom = NULL, norm = TRUE,
-                         groupedNorm = FALSE, distFun = NULL) {
+    nTop = NULL, nBottom = NULL, norm = TRUE,
+    groupedNorm = FALSE, distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
 
@@ -90,7 +90,7 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
         if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
     } else {
         stop("trainScudoRes must be an object of class scudoResults. Current",
-             " class is ", class(trainScudoRes))
+            " class is ", class(trainScudoRes))
     }
 
     testG <- testGroups
@@ -98,8 +98,8 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     # use placeholder for alpha, featureSel, pAdj
     .inputCheck(testExpData, testG, nTop, nBottom, alpha = 0.5,
-                norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
-                pAdj = "none", distFun = NULL)
+        norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
+        pAdj = "none", distFun = NULL)
 
     nTest <- length(levels(testGroups))
     nTrain <- length(levels(groupsAnnotation(trainScudoRes)))
@@ -124,18 +124,18 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     if (length(missing) != 0) {
         warning(paste(length(missing), "features present in trainScudoRes are",
-                      "absent in testExpData:\n"))
+            "absent in testExpData:\n"))
     }
 
     testExpData <- testExpData[selectedFeatures(trainScudoRes)[present], ]
 
     if ((nTop + nBottom) > dim(testExpData)[1]) {
         stop("top and bottom signatures overlap, only",
-             dim(testExpData)[1], "features selected.")
+            dim(testExpData)[1], "features selected.")
     }
 
     .performScudo(testExpData, testGroups, nTop, nBottom, distFun, norm,
-                  groupedNorm)
+        groupedNorm)
 
 }
 

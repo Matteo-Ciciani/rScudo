@@ -11,13 +11,12 @@ NULL
 
     stopifnot(is.data.frame(expressionData))
 
-    if (!all(sapply(expressionData, is.numeric))) {
-        stop("expressionData contains some non-numeric data.")
+    if (!all(vapply(expressionData, is.numeric, logical(1)))) {
+        stop("expressionData contains some non-numeric data")
     }
 
     if (any(is.na(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)),
-                   "contains NAs."))
+        stop(paste(deparse(substitute(expressionData)), "contains NAs."))
     }
 
     # checks on groups ---------------------------------------------------------
@@ -26,31 +25,31 @@ NULL
 
     if (any(is.na(groups))) {
         stop(paste(deparse(substitute(groups)),
-                   "contains NAs."))
+            "contains NAs."))
     }
 
     if (length(groups) != dim(expressionData)[2]) {
         stop(paste("Length of", deparse(substitute(groups)),
-                   "is different from number of columns of ",
-                   deparse(substitute(expressionData))))
+            "is different from number of columns of ",
+            deparse(substitute(expressionData))))
     }
 
     if (length(groups) == 0) {
-        stop("groups has length 0.")
+        stop("groups has length 0")
     }
 
     # checks on nTop and nBottom -----------------------------------------------
 
     stopifnot(is.numeric(nTop),
-              is.numeric(nBottom),
-              length(nTop) == 1,
-              length(nBottom) == 1,
-              is.vector(nTop),
-              is.vector(nBottom),
-              is.finite(nTop),
-              is.finite(nBottom),
-              nTop > 0,
-              nBottom > 0)
+        is.numeric(nBottom),
+        length(nTop) == 1,
+        length(nBottom) == 1,
+        is.vector(nTop),
+        is.vector(nBottom),
+        is.finite(nTop),
+        is.finite(nBottom),
+        nTop > 0,
+        nBottom > 0)
 
     if (is.nan(nTop) | is.nan(nBottom)) {
         stop("nTop and nBottom cannot be NaN.")
@@ -66,16 +65,16 @@ NULL
 
     if ((nTop + nBottom) > dim(expressionData)[1]) {
         stop(paste("top and bottom signatures overlap, expressionData has",
-                   "only", dim(expressionData)[1], "rows."))
+            "only", dim(expressionData)[1], "rows."))
     }
 
     # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
 
     stopifnot(is.numeric(alpha),
-              length(alpha) == 1,
-              is.vector(alpha),
-              alpha > 0,
-              alpha <= 1)
+        length(alpha) == 1,
+        is.vector(alpha),
+        alpha > 0,
+        alpha <= 1)
 
     if (is.nan(alpha)) {
         stop("alpha cannot be NaN")
@@ -86,25 +85,25 @@ NULL
     }
 
     stopifnot(is.logical(norm),
-              is.logical(featureSel),
-              is.logical(groupedNorm),
-              is.logical(parametric),
-              is.vector(norm),
-              is.vector(featureSel),
-              is.vector(groupedNorm),
-              is.vector(parametric),
-              length(norm) == 1,
-              length(featureSel) == 1,
-              length(groupedNorm) == 1,
-              length(parametric) == 1,
-              is.character(pAdj),
-              is.vector(pAdj),
-              length(pAdj) == 1)
+        is.logical(featureSel),
+        is.logical(groupedNorm),
+        is.logical(parametric),
+        is.vector(norm),
+        is.vector(featureSel),
+        is.vector(groupedNorm),
+        is.vector(parametric),
+        length(norm) == 1,
+        length(featureSel) == 1,
+        length(groupedNorm) == 1,
+        length(parametric) == 1,
+        is.character(pAdj),
+        is.vector(pAdj),
+        length(pAdj) == 1)
 
     if (!(pAdj %in% stats::p.adjust.methods)) {
         stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',
-                   '"bonferroni", "BH", "BY", "fdr", "none".',
-                   'Check stats::p.adjust documentation.'))
+            '"bonferroni", "BH", "BY", "fdr", "none".',
+            'Check stats::p.adjust documentation.'))
     }
 
     # check on distFun ---------------------------------------------------------
@@ -113,7 +112,7 @@ NULL
         stopifnot(is.function(distFun))
         if (length(formals(distFun)) != 3) {
             stop(paste('distFun should take as input three arguments:',
-                       'expressionData, nTop, nBottom'))
+                'expressionData, nTop, nBottom'))
         }
     }
 }
@@ -147,8 +146,8 @@ NULL
 
 # .featureSelection ------------------------------------------------------------
 
-.featureSelection <- function(expressionData, alpha, groups,
-                              ngroups, parametric, pAdj) {
+.featureSelection <- function(expressionData, alpha, groups, ngroups,
+    parametric, pAdj) {
 
     if (parametric) {
         # should we use limma instead?
@@ -232,6 +231,17 @@ NULL
     ES
 }
 
+.minimize <- function(distances) {
+    nonZero <- distances > sqrt(.Machine$double.eps)
+    if (any(nonZero)) {
+        minVal <- min(distances[nonZero])
+        if (!isTRUE(all.equal(minVal, 2))) {
+            distances[nonZero] <- distances[nonZero] - floor(100 * minVal) / 100
+        }
+    }
+    distances
+}
+
 .defaultDist <- function(expressionData, nTop, nBottom) {
 
     # compute matrix of indexes
@@ -242,9 +252,9 @@ NULL
     ESmatrix <- outer(colnames(expressionData), colnames(expressionData),
         Vectorize(function(x, y)
             .computeES(
-                indexMatrix[1:nTop, x],
-                indexMatrix[(dim(indexMatrix)[1] - nBottom +1):
-                    (dim(indexMatrix)[1]), x],
+                indexMatrix[seq_len(nTop), x],
+                indexMatrix[seq(dim(indexMatrix)[1] - nBottom +1,
+                    dim(indexMatrix)[1]), x],
                 indexMatrix[, y]
             )
         )
@@ -253,28 +263,21 @@ NULL
 
     # compute distance matrix
     distances <- 1 - (ESmatrix + t(ESmatrix)) / 2
-    nonZero <- distances > sqrt(.Machine$double.eps)
-    if (any(nonZero)) {
-        minVal <- min(distances[nonZero])
-        if (!isTRUE(all.equal(minVal, 2))) {
-            distances[nonZero] <- distances[nonZero] - floor(100 * minVal) / 100
-        }
-    }
-
-    distances
+    .minimize(distances)
 }
 
 # compute signatures -----------------------------------------------------------
 
 .computeSignature <- function(indeces, nTop, nBottom) {
     ordNames <- names(indeces)[indeces]
-    ordNames[c(1:nTop, (length(ordNames) - nBottom + 1):length(ordNames))]
+    ordNames[c(seq_len(nTop), seq(length(ordNames) - nBottom + 1,
+        length(ordNames)))]
 }
 
 # perform analysis -------------------------------------------------------------
 
 .performScudo <- function(expressionData, groups, nTop, nBottom,
-                          distFun = NULL, ...) {
+    distFun = NULL, ...) {
 
     # transform expressionData in indexes
     indexMatrix <- apply(expressionData, 2, order, decreasing = TRUE)
@@ -293,33 +296,34 @@ NULL
             rowSums(rankedExprData[groups == x])},
             rep(0.0, dim(rankedExprData)[1]))
         ordGroupedRankSums <- apply(groupedRankSums, 2, order,
-                                    decreasing = TRUE)
+            decreasing = TRUE)
         rownames(ordGroupedRankSums) <- rownames(expressionData)
         consensusSigMatrix <- apply(ordGroupedRankSums, 2, .computeSignature,
-                                    nTop, nBottom)
+            nTop, nBottom)
     }
 
     # create scudoResults object to return
-    UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[1:nTop, ]
+    UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[seq_len(nTop), ]
     DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
-        (nTop + 1):nrow(sigMatrix), ]
-    rownames(DwnSig) <- 1:nBottom
+        seq(nTop + 1, nrow(sigMatrix)), ]
+    rownames(DwnSig) <- seq_len(nBottom)
     if (is.null(groups)) {
         ConsUpSig <- data.frame()
         ConsDwnSig <- data.frame()
     } else if (length(levels(groups)) == 1) {
         consVec <- as.vector(consensusSigMatrix)
-        ConsUpSig <- data.frame(consVec[1:nTop], stringsAsFactors = FALSE)
+        ConsUpSig <- data.frame(consVec[seq_len(nTop)],
+            stringsAsFactors = FALSE)
         colnames(ConsUpSig) <- levels(groups)
-        ConsDwnSig <- data.frame(consVec[(nTop + 1):nrow(sigMatrix)],
-                                 stringsAsFactors = FALSE)
+        ConsDwnSig <- data.frame(consVec[seq(nTop + 1, nrow(sigMatrix))],
+            stringsAsFactors = FALSE)
         colnames(ConsDwnSig) <- levels(groups)
     } else {
         ConsUpSig <- as.data.frame(consensusSigMatrix,
-            stringsAsFactors = FALSE)[1:nTop, ]
+            stringsAsFactors = FALSE)[seq_len(nTop), ]
         ConsDwnSig <- as.data.frame(consensusSigMatrix,
-            stringsAsFactors = FALSE)[(nTop + 1):nrow(sigMatrix), ]
-        rownames(ConsDwnSig) <- 1:nBottom
+            stringsAsFactors = FALSE)[seq(nTop + 1, nrow(sigMatrix)), ]
+        rownames(ConsDwnSig) <- seq_len(nBottom)
     }
     pars <- list(nTop = nTop, nBottom = nBottom)
 
