@@ -60,8 +60,8 @@ test_that("scudoClassify raises correct errors", {
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr4))
 
-    #expect_error(scudoClassify(trainExpData, testExpData,
-    #                           N, nTop, nBottom, trainGroups = gr2))
+    expect_error(scudoClassify(trainExpData, testExpData,
+                               N, nTop, nBottom, trainGroups = gr2))
 
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr3))
@@ -75,8 +75,8 @@ test_that("scudoClassify raises correct errors", {
     expect_error(scudoClassify(trainExpData, testExpData,  # testGroups
                                N, nTop, nBottom, gr1, testGroups = gr4))
 
-    #expect_error(scudoClassify(trainExpData, testExpData,
-    #                           N, nTop, nBottom, gr1, testGroups = gr2))
+    expect_error(scudoClassify(trainExpData, testExpData,
+                               N, nTop, nBottom, gr1, testGroups = gr2))
 
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr1, testGroups = gr3))

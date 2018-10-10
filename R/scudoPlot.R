@@ -29,17 +29,17 @@
 #' nTop <- 2
 #' nBottom <- 3
 #' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
-#' net <- scudoNetwork(res, N = 0.5, colors = col)
+#' net <- scudoNetwork(res, N = 0.5)
 #'
 #' # Plot with scudoPlot
 #' scudoPlot(net)
 #'
 #' @export
 scudoPlot <- function(net, x = "bottomright", y = NULL, ...) {
-    plot(net, ...)
+    igraph::plot.igraph(net, ...)
     df <- unique(data.frame(igraph::V(net)$color, igraph::V(net)$group,
         stringsAsFactors = FALSE))
-    legend(x, y, legend = df[, 2],
+    graphics::legend(x, y, legend = df[, 2],
         col = df[, 1], pch=c(15,15),
         pt.cex=2)
 }
