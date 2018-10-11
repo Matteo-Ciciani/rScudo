@@ -351,3 +351,21 @@ NULL
         params = pars
     )
 }
+
+.makeNetwork <- function(dMatrix, N) {
+    # compute adjacency matrix
+    adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])
+    NQuantile <- stats::quantile(dMatrix[dMatrix > sqrt(.Machine$double.eps)],
+        probs = N)
+    adjMatrix[dMatrix <= NQuantile] <- 1
+    colnames(adjMatrix) <- colnames(dMatrix)
+
+    # generate graph using graph_from_adjacency_matrix
+    result <- igraph::graph_from_adjacency_matrix(adjMatrix,
+        mode = "undirected", diag = FALSE)
+
+    # add distances
+    igraph::E(result)$distance <- dMatrix[as.logical(adjMatrix)
+        & lower.tri(dMatrix)]
+    result
+}

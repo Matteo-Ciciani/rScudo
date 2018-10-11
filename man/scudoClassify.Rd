@@ -76,3 +76,13 @@ placeholder
 \details{
 Placeholder
 }
+\examples{
+a <- "Placeholder"
+
+}
+\seealso{
+\code{\link{scudo}}
+}
+\author{
+Matteo Ciciani \email{matteo.ciciani@gmail.com}
+}

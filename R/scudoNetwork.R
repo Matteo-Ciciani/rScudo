@@ -1,4 +1,4 @@
-#' @include class.R scudo.R accessors.R
+#' @include class.R scudo.R accessors.R utilities.R
 NULL
 
 #' Create graph from a scudoResults object
@@ -111,21 +111,8 @@ setMethod("scudoNetwork", signature = "scudoResults", definition =
             }
         }
 
-        # get distance matrix and generate adjacency matrix according to N
-        adjMatrix <- matrix(0, nrow = dim(distMatrix(object))[1],
-            ncol = dim(distMatrix(object))[1])
-        NQuantile <- stats::quantile(distMatrix(object)[
-            distMatrix(object) > sqrt(.Machine$double.eps)], probs = N)
-        adjMatrix[distMatrix(object) <= NQuantile] <- 1
-        colnames(adjMatrix) <- colnames(distMatrix(object))
-
-        # generate graph using graph_from_adjacency_matrix
-        result <- igraph::graph_from_adjacency_matrix(adjMatrix,
-            mode = "undirected", diag = FALSE)
-
-        # add distances
-        igraph::E(result)$distance <- distMatrix(object)[as.logical(adjMatrix)
-            & lower.tri(distMatrix(object))]
+        # get distance matrix and generate igraph object
+        result <- .makeNetwork(distMatrix(object), N)
 
         # add group and color annotation
         if (length(groupsAnnotation(object)) == 0) {
