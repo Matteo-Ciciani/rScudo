@@ -18,6 +18,9 @@ NULL
 #' also not being specified, as well as nTop and nBottom. If the latter are not
 #' specified, same values as the ones in \code{scudoResult} object are used.
 #'
+#' @usage scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
+#'     nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
+#'
 #' @param trainScudoRes an object of class \code{ScudoResult} used as
 #' training model
 #'

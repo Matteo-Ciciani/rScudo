@@ -4,10 +4,10 @@
 \alias{scudoClassify}
 \title{Performes classification using SCUDO}
 \usage{
-scudoClassify(trainExpData, testExpData, N, nTop, nBottom, trainGroups,
-  maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
-  alpha = 0.1, norm = TRUE, featureSel = TRUE, parametric = FALSE,
-  pAdj = "none", distFun = NULL)
+scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
+    trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
+    alpha = 0.1, norm = TRUE, featureSel = TRUE, parametric = FALSE,
+    pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{trainExpData}{either an \code{\link[Biobase]{ExpressionSet}},

@@ -5,8 +5,8 @@
 \title{Performs SCUDO analysis}
 \usage{
 scudo(expressionData, groups, nTop, nBottom, alpha = 0.1, norm = TRUE,
-  groupedNorm = FALSE, featureSel = TRUE, parametric = FALSE,
-  pAdj = "none", distFun = NULL)
+    groupedNorm = FALSE, featureSel = TRUE, parametric = FALSE,
+    pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}},
@@ -53,7 +53,7 @@ Object of class \code{\linkS4class{scudoResults}}.
 SCUDO (Signature-based ClUstering for DiagnOstic purposes) is a method for
 the analysis on gene expression data. This function
 computes gene signatures for each sample and consensus signatures for each
-group specified. A distance matrix is also computed, that can be use by the
+group specified. A distance matrix is also computed, that can be used by the
 function \code{\link{scudoNetwork}} to generate a graph in which each node is
 a sample and an edge between two nodes quantitatively represents the
 similarity between their respective signatures.

@@ -7,6 +7,9 @@ NULL
 #' \code{\link{scudoNetwork}} in Cytoscape 3. Cytoscape must be open before
 #' running this function.
 #'
+#' @usage scudoCytoscape(graph, title = NULL, collection = "SCUDO",
+#'     base.url = NULL)
+#'
 #' @param graph object of class \code{\link[igraph:igraph-package]{igraph}},
 #' like the result of \code{\link{scudoNetwork}}
 #' @param title the title of the network. If NULL it defaults to

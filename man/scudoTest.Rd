@@ -5,7 +5,7 @@
 \title{Performs SCUDO analysis on test dataset}
 \usage{
 scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
-  nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
+    nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
 }
 \arguments{
 \item{trainScudoRes}{an object of class \code{ScudoResult} used as

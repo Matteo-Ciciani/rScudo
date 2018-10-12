@@ -7,6 +7,11 @@ NULL
 #'
 #' Placeholder
 #'
+#' @usage scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
+#'     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
+#'     alpha = 0.1, norm = TRUE, featureSel = TRUE, parametric = FALSE,
+#'     pAdj = "none", distFun = NULL)
+#'
 #' @param trainExpData either an \code{\link[Biobase]{ExpressionSet}},
 #' a data.frame or a matrix of gene expression data, with a column for
 #' each sample and a row for each feature, to be used as a training set

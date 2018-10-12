@@ -13,44 +13,49 @@ NULL
 #'
 #' @slot distMatrix Object of class matrix. A symmetric matrix with
 #'   non-negative numeric elements.
-#' @slot upSignatures Object of class data.frame. A data.frame with the same
-#'   colnames as distMatrix, representing the up-regualted features in each
+#' @slot upSignatures Object of class data.frame. A data.frame with the
+#'   same colnames as distMatrix, representing the up-regualted features in each
 #'   sample.
-#' @slot downSignatures Object of class data.frame. A data.frame with the same
-#'   colnames as distMatrix, representing the down-regualted features in each
-#'   sample.
+#' @slot downSignatures Object of class data.frame. A data.frame with the
+#'   same colnames as distMatrix, representing the down-regualted
+#'   features in each sample.
 #' @slot groupsAnnotation Object of class factor. It represents the groups
 #'   used for the normalization and the feature selection.
 #' @slot consensusUpSignatures Object of class data.frame. It contains the
 #'   consensus signatures of up-regulated features for each group.
-#' @slot consensusDownSignatures Object of class data.frame. It contains the
-#'   consensus signatures of dowm-regulated features for each group.
+#' @slot consensusDownSignatures Object of class data.frame. It contains
+#'   the consensus signatures of dowm-regulated features for each group.
 #' @slot selectedFeatures Object of class character. A vector of selected
 #'   features. If the feature selection was not performed, it contains every
 #'   feature present in the input of the scudo functions.
-#' @slot params Object of class list. A list of the parameters used to run the
-#' function that created the instance of the class.
+#' @slot params Object of class list. A list of the parameters used to run
+#'   the function that created the instance of the class.
 #'
-#' @section Methods: \describe{ \item{\code{distMatrix}}{\code{signature(object
-#'   = "scudoResults")}: a method for obtaining the distance matrix.}
-#'   \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
-#'   method for obtaining the signature of up-regualted features in each
-#'   sample.} \item{\code{downSignatures}}{\code{signature(object =
-#'   "scudoResults")}: a method for obtaining the signature of down-regulated
-#'   features in each sample.} \item{\code{groupsAnnotation}}{\code{signature(
-#'   object = "scudoResults")}: a method for obtaining the groups used for
-#'   normalization and feature selection.}
-#'   \item{\code{consensusUpSignatures}}{\code{signature(object =
-#'   "scudoResults")}: a method for obtaining the consensus signatures of
-#'   up-regualted features in each group.}
-#'   \item{\code{consensusDownSignatures}}{\code{signature(object =
-#'   "scudoResults")}: a method for obtaining the consensus signatures of
-#'   down-regulated features in each group.}
-#'   \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}: a
-#'   method for obtaining the names of the features seleted. If no feature
-#'   selection was performed, the names of every feature are returned.}
-#'   \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
-#'   for obtaining the parameters that were used to generate the result.} }
+#' @section Methods:
+#' \describe{
+#'     \item{\code{distMatrix}}{\code{signature(object = "scudoResults")}:
+#'     a method for obtaining the distance matrix.}
+#'     \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
+#'     method for obtaining the signature of up-regualted features in each
+#'     sample.}
+#'     \item{\code{downSignatures}}{\code{signature(object =
+#'     "scudoResults")}: a method for obtaining the signature of down-regulated
+#'     features in each sample.}
+#'     \item{\code{groupsAnnotation}}{\code{signature(object = "scudoResults")}:
+#'     a method for obtaining the groups used for
+#'     normalization and feature selection.}
+#'     \item{\code{consensusUpSignatures}}{\code{signature(object =
+#'     "scudoResults")}: a method for obtaining the consensus signatures of
+#'     up-regualted features in each group.}
+#'     \item{\code{consensusDownSignatures}}{\code{signature(object =
+#'     "scudoResults")}: a method for obtaining the consensus signatures of
+#'     down-regulated features in each group.}
+#'     \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}:
+#'     a method for obtaining the names of the features seleted. If no feature
+#'     selection was performed, the names of every feature are returned.}
+#'     \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
+#'     for obtaining the parameters that were used to generate the result.}
+#' }
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'

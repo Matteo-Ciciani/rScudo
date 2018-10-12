@@ -5,7 +5,7 @@
 \title{Create a Cytoscape network from the output of scudoNetwork}
 \usage{
 scudoCytoscape(graph, title = NULL, collection = "SCUDO",
-  base.url = NULL)
+    base.url = NULL)
 }
 \arguments{
 \item{graph}{object of class \code{\link[igraph:igraph-package]{igraph}},
