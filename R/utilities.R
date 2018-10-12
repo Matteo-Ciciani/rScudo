@@ -68,6 +68,15 @@ NULL
             "only", dim(expressionData)[1], "rows."))
     }
 
+    # check other parameters
+
+    .checkParams(alpha, norm, groupedNorm, featureSel,
+        parametric, pAdj, distFun)
+}
+
+.checkParams <- function(alpha, norm, groupedNorm, featureSel,
+    parametric, pAdj, distFun) {
+
     # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
 
     stopifnot(is.numeric(alpha),

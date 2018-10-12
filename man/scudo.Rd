@@ -24,11 +24,12 @@ signatures}
 \item{alpha}{p-value cutoff for the optional feature selection step. If
 feature selection is skipped, alpha is ignored}
 
-\item{norm}{logical, whether or not to normalize the expression data. See
-Details for a description of the normalization used}
+\item{norm}{logical, whether or not to compute fold-changes from expression
+data}
 
-\item{groupedNorm}{logical, whether or not to performed grouped
-normalization. See Details for a description of the normalization used}
+\item{groupedNorm}{logical, whether or not to take into account the groups
+when computing fold-changes. See Details for a description of the
+computation of fold-changes}
 
 \item{featureSel}{logical, whether or not to perform a feature selection.
 Feature selection is performed using one of four tests: Student's t-test,
@@ -65,12 +66,13 @@ uses the signatures to compute a distance matrix that quantifies the
 similarity between the signatures of pairs of samples.
 
 Before computing the signatures, two optional perprocessing steps are
-performed. The first step is a normalization of expression values. If the
-parameter \code{groupedNorm} is \code{TRUE}, the normalization is performed
-computing the mean expression value for each feature in each group.
-The the mean of the group means is taken for each feature and the expression
-values are normalized dividing them for this mean value. If the the parameter
-\code{groupedNorm} is \code{FALSE}, the normalized expression values are
+performed. In the first step fold-changes are compured from expression
+values. If the parameter \code{groupedNorm} is \code{TRUE}, the fold-changes
+are computed in two steps: first the mean expression value for each feature
+in each group is computed. Then, the fold-changes for each feature are
+computed dividing the expression values for the mean of the group means.
+If the the parameter
+\code{groupedNorm} is \code{FALSE}, the fold-changes are
 computed dividing the expression value of each feature for the mean
 expression value of that feature (regardless of groups).
 
@@ -85,8 +87,8 @@ multiple hypothesis testing. For a list of adjustment methods see
 \code{alpha} are selected.
 
 After these two optional steps, the signatures for each sample are computed.
-Selected features are ranked according to the (normalized) expression values.
-Than the
+Selected features are ranked according to the expression values (or the
+fold-change, if computed). Than the
 first \code{nTop} and the last \code{nBottom} features are selected from the
 ranked list of features. Two \code{data.frame}s are containing the signatures
 of up-regulated genes and down-regulated genes for each sample are produced

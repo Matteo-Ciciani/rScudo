@@ -89,53 +89,25 @@ NULL
         is.finite(neighbors),
         (neighbors %% 1 == 0))
 
-    # checks on alpha, norm, featureSel, parametric, pAdj, ... -----------------
-
-    stopifnot(is.numeric(alpha),
-        length(alpha) == 1,
-        is.vector(alpha),
-        alpha > 0,
-        alpha <= 1)
+    # check beta, weighted, complete -------------------------------------------
 
     stopifnot(is.numeric(beta),
         length(beta) == 1,
         is.vector(beta),
         beta > 0)
 
-    stopifnot(is.logical(norm),
-        is.logical(featureSel),
-        is.logical(parametric),
-        is.logical(weighted),
+    stopifnot(is.logical(weighted),
         is.logical(complete),
-        is.vector(norm),
-        is.vector(featureSel),
-        is.vector(parametric),
         is.vector(weighted),
         is.vector(complete),
-        length(norm) == 1,
-        length(featureSel) == 1,
-        length(parametric) == 1,
         length(weighted) == 1,
-        length(complete) == 1,
-        is.character(pAdj),
-        is.vector(pAdj),
-        length(pAdj) == 1)
+        length(complete) == 1)
 
-    if (!(pAdj %in% stats::p.adjust.methods)) {
-        stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',
-            '"bonferroni", "BH", "BY", "fdr", "none".',
-            'Check stats::p.adjust documentation.'))
-    }
+    # check other parameters, use placeholder for groupedNorm ------------------
 
-    # check on distFun ---------------------------------------------------------
+    .checkParams(alpha, norm, TRUE, featureSel,
+        parametric, pAdj, distFun)
 
-    if (!is.null(distFun)){
-        stopifnot(is.function(distFun))
-        if (length(formals(distFun)) != 3) {
-            stop(paste('distFun should take as input three arguments:',
-                'expressionData, nTop, nBottom'))
-        }
-    }
 }
 
 .computeTestNetwork <- function(dMatrix, N, trainGroups) {

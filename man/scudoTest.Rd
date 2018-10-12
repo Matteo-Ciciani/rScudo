@@ -23,12 +23,12 @@ each sample and a row for each feature}
 \item{nBottom}{number of down-regulated features to include in the
 signatures}
 
-\item{norm}{logical, whether or not to normalize the expression data. See
-Details for a description of the normalization used}
+\item{norm}{logical, whether or not to compute fold-changes from expression
+data}
 
-\item{groupedNorm}{logical, whether or not to performed grouped
-normalization. See \code{\link{scudo}} function Details for a
-description of the normalization used}
+\item{groupedNorm}{logical, whether or not to take into account the groups
+when computing fold-changes. See Details for a description of the
+computation of fold-changes}
 
 \item{distFun}{the function used to compute the distance between two
 samples. See See \code{\link{scudo}} function Details for the specification
@@ -47,7 +47,7 @@ This function creates an object of class \code{\linkS4class{scudoResults}}
 Only the features selected in the trainig step are considered for the
 analysis.
 
-Data normalization and SCUDO analysis is performed in the same way as
+Fold-change computation and SCUDO analysis is performed in the same way as
 explained in \code{\link{scudo}} function details. In this case, groups can
 also not being specified, as well as nTop and nBottom. If the latter are not
 specified, same values as the ones in \code{scudoResult} object are used.
