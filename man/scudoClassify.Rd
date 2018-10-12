@@ -77,7 +77,15 @@ placeholder
 Placeholder
 }
 \examples{
-a <- "Placeholder"
+expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,
+    e = c(1:4, 10:5), f = c(7:10, 6:1), g = c(8:4, 1:3, 10, 9),
+    h = c(6:10, 5:1), i = c(5:1, 6:10))
+rownames(expData) <- letters[1:10]
+groups <- factor(c(1,1,1,2,2,2,1,1,1))
+inTrain <- 1:5
+
+res <- scudoClassify(expData[, inTrain], expData[, -inTrain], 0.9, 3, 3,
+    groups[inTrain], featureSel = FALSE)
 
 }
 \seealso{

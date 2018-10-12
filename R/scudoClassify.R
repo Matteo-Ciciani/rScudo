@@ -63,15 +63,29 @@ NULL
 #' @param distFun the function used to compute the distance between two
 #' samples. See Details for the specification of this function
 #'
-#' @return A \code{data.frame} containing classification scores for each sample
-#' in \code{testExpData}
+#' @return A \code{list} containing the predictions for each sample in
+#' \code{testExpData} and the classification scores used to generate the
+#' predictions.
 #'
 #' @seealso \code{\link{scudo}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'
 #' @examples
-#' a <- "Placeholder"
+#' expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,
+#'     e = c(1:4, 10:5), f = c(7:10, 6:1), g = c(8:4, 1:3, 10, 9),
+#'     h = c(6:10, 5:1), i = c(5:1, 6:10))
+#' rownames(expData) <- letters[1:10]
+#' groups <- factor(c(1,1,1,2,2,2,1,1,1))
+#' inTrain <- 1:5
+#'
+#' # perform classification
+#' res <- scudoClassify(expData[, inTrain], expData[, -inTrain], 0.9, 3, 3,
+#'     groups[inTrain], featureSel = FALSE)
+#'
+#' #explore predictions
+#' predictions <- res$predicted
+#' scores <- res$scores
 #'
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
@@ -80,6 +94,20 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     pAdj = "none", distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
+
+    if (is(trainExpData, "ExpressionSet")) {
+        trainExpData <- as.data.frame(Biobase::exprs(trainExpData))
+    }
+    if (is(trainExpData, "matrix")) {
+        trainExpData <- as.data.frame(trainExpData)
+    }
+
+    if (is(testExpData, "ExpressionSet")) {
+        testExpData <- as.data.frame(Biobase::exprs(testExpData))
+    }
+    if (is(testExpData, "matrix")) {
+        testExpData <- as.data.frame(testExpData)
+    }
 
     .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
         trainGroups, maxDist, weighted, complete, beta,
@@ -148,5 +176,10 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
             beta)
     }
 
-    scores
+    # predict and return -------------------------------------------------------
+
+    predicted <- colnames(scores)[apply(scores, 1, which.max)]
+    names(predicted) <- rownames(scores)
+
+    list(predicted = predicted, scores = scores)
 }

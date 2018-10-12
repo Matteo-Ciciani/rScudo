@@ -76,6 +76,10 @@ NULL
         stop("trainGroups has length 0.")
     }
 
+    if (length(levels(trainGroups))  < 2) {
+        stop("trainGroups must contain at least 2 groups")
+    }
+
     # checks on neighbors ------------------------------------------------------
 
     stopifnot(is.numeric(neighbors),

@@ -101,7 +101,7 @@ netTrain <- scudoNetwork(ScudoTrain, N = 0.3)
 The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
 
 ```{r}
-plot(netTrain)
+scudoPlot(netTrain)
 ```
 
 This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
