@@ -41,6 +41,11 @@ NULL
 scudoCytoscape <- function(graph, title = NULL, collection = "SCUDO",
     base.url = NULL) {
 
+    if (!requireNamespace("RCy3", quietly = TRUE)) {
+        stop("Package \"RCy3\" needed for this function to work.", "
+            Please install it.",  call. = FALSE)
+    }
+
     # perform checks
     if (is.null(title)) title <- deparse(substitute(graph))
 

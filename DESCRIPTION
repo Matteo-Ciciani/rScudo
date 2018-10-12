@@ -1,7 +1,7 @@
 Package: scudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com",
     role = c("aut", "cre")), person("Thomas", "Cantore",
     email = "cantorethomas@gmail.com", role = "aut"), person("Enrica",
@@ -12,8 +12,7 @@ Description: SCUDO is a rank-based method for the analysis of gene expression
     Starting from gene expression data, it identifies sample-specific gene 
     signatures and uses them to build a graph of samples. Edges are present
     between two nodes if the samples have a similar expression profile. The
-    measure of similarity is a metric similar to GSEA. The visualization of the
-    grpah is possible both in R and in Cytoscape.
+    graph can be used to perform supervised classification.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -36,7 +35,6 @@ Depends: R (>= 3.5.0)
 Imports: methods,
     stats,
     igraph,
-    RCy3,
     stringr,
     grDevices,
     Biobase
@@ -44,5 +42,6 @@ Suggests: testthat,
     BiocStyle,
     knitr,
     rmarkdown,
-    ALL
+    ALL,
+    RCy3
 VignetteBuilder: knitr

@@ -69,7 +69,7 @@ test_that("scudoClassify raises correct errors", {
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr5))
 
-    expect_warning(scudoClassify(trainExpData, testExpData,
+    expect_error(scudoClassify(trainExpData, testExpData,
                                  N, nTop, nBottom, gr7))
 
     expect_error(scudoClassify(trainExpData, testExpData,  # testGroups

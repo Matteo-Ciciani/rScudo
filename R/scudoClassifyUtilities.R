@@ -76,6 +76,10 @@ NULL
         stop("trainGroups has length 0.")
     }
 
+    if (length(levels(trainGroups))  < 2) {
+        stop("trainGroups must contain at least 2 groups")
+    }
+
     # checks on neighbors ------------------------------------------------------
 
     stopifnot(is.numeric(neighbors),
@@ -135,24 +139,9 @@ NULL
 }
 
 .computeTestNetwork <- function(dMatrix, N, trainGroups) {
-    # compute adjacency matrix
-    adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])
-    NQuantile <- stats::quantile(dMatrix[dMatrix > sqrt(.Machine$double.eps)],
-        probs = N)
-    adjMatrix[dMatrix <= NQuantile] <- 1
-    colnames(adjMatrix) <- colnames(dMatrix)
-
-    # generate graph using graph_from_adjacency_matrix
-    result <- igraph::graph_from_adjacency_matrix(adjMatrix,
-        mode = "undirected", diag = FALSE)
-
-    # add distances
-    igraph::E(result)$distance <- dMatrix[as.logical(adjMatrix)
-        & lower.tri(dMatrix)]
-
+    result <- .makeNetwork(dMatrix, N)
     # add groups
     igraph::V(result)$group <- c("0", as.character(trainGroups))
-
     result
 }
 
