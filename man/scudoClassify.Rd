@@ -67,8 +67,9 @@ adjustment methods}
 samples. See Details for the specification of this function}
 }
 \value{
-A \code{data.frame} containing classification scores for each sample
-in \code{testExpData}
+A \code{list} containing the predictions for each sample in
+\code{testExpData} and the classification scores used to generate the
+predictions.
 }
 \description{
 placeholder
@@ -84,8 +85,13 @@ rownames(expData) <- letters[1:10]
 groups <- factor(c(1,1,1,2,2,2,1,1,1))
 inTrain <- 1:5
 
+# perform classification
 res <- scudoClassify(expData[, inTrain], expData[, -inTrain], 0.9, 3, 3,
     groups[inTrain], featureSel = FALSE)
+
+#explore predictions
+predictions <- res$predicted
+scores <- res$scores
 
 }
 \seealso{

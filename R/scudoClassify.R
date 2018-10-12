@@ -45,8 +45,8 @@ NULL
 #' @param alpha p-value cutoff for the optional feature selection step. If
 #' feature selection is skipped, alpha is ignored
 #'
-#' @param norm logical, whether or not to normalize the expression data. See
-#' Details for a description of the normalization used
+#' @param norm logical, whether or not to compute fold-changes from expression
+#' data
 #'
 #' @param featureSel logical, whether or not to perform a feature selection.
 #' Feature selection is performed using one of four tests: Student's t-test,

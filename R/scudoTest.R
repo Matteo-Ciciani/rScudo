@@ -13,7 +13,7 @@ NULL
 #' Only the features selected in the trainig step are considered for the
 #' analysis.
 #'
-#' Data normalization and SCUDO analysis is performed in the same way as
+#' Fold-change computation and SCUDO analysis is performed in the same way as
 #' explained in \code{\link{scudo}} function details. In this case, groups can
 #' also not being specified, as well as nTop and nBottom. If the latter are not
 #' specified, same values as the ones in \code{scudoResult} object are used.
@@ -33,12 +33,12 @@ NULL
 #' @param nBottom number of down-regulated features to include in the
 #' signatures
 #'
-#' @param norm logical, whether or not to normalize the expression data. See
-#' Details for a description of the normalization used
+#' @param norm logical, whether or not to compute fold-changes from expression
+#' data
 #'
-#' @param groupedNorm logical, whether or not to performed grouped
-#' normalization. See \code{\link{scudo}} function Details for a
-#' description of the normalization used
+#' @param groupedNorm logical, whether or not to take into account the groups
+#' when computing fold-changes. See Details for a description of the
+#' computation of fold-changes
 #'
 #' @param distFun the function used to compute the distance between two
 #' samples. See See \code{\link{scudo}} function Details for the specification
