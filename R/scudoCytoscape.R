@@ -1,4 +1,4 @@
-#' @include class.R scudo.R accessors.R
+#' @include class.R scudoTrain.R accessors.R
 NULL
 
 #' Create a Cytoscape network from the output of scudoNetwork

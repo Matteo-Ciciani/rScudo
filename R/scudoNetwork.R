@@ -1,4 +1,4 @@
-#' @include class.R scudo.R accessors.R utilities.R
+#' @include class.R scudoTrain.R accessors.R utilities.R
 NULL
 
 #' Create graph from a scudoResults object
