@@ -188,6 +188,7 @@ NULL
 # .normalization ---------------------------------------------------------------
 
 .normalization <- function(ExpressionData, groups) {
+
     if (is.null(groups)) {
         virtControl <- rowMeans(ExpressionData)
     } else {
@@ -195,7 +196,18 @@ NULL
             rowMeans(ExpressionData[groups == x]) },
             rep(0.0, dim(ExpressionData)[1])))
     }
-    normExData <- ExpressionData / virtControl
+
+    qx <- as.numeric(stats::quantile(ExpressionData,
+                              c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
+    logC <- (qx[5] > 100) || #checking if not log transfromed
+        (qx[6]-qx[1] > 50 && qx[2] > 0) ||
+        (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)
+
+    if (logC) {
+        normExData <- ExpressionData / virtControl
+    } else {
+        normExData <- ExpressionData - virtControl
+    }
     normExData
 }
 

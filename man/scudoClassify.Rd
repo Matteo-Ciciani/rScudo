@@ -78,6 +78,9 @@ placeholder
 Placeholder
 }
 \examples{
+<<<<<<< HEAD
+a <- "Placeholder"
+=======
 expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,
     e = c(1:4, 10:5), f = c(7:10, 6:1), g = c(8:4, 1:3, 10, 9),
     h = c(6:10, 5:1), i = c(5:1, 6:10))
@@ -88,6 +91,7 @@ inTrain <- 1:5
 # perform classification
 res <- scudoClassify(expData[, inTrain], expData[, -inTrain], 0.9, 3, 3,
     groups[inTrain], featureSel = FALSE)
+>>>>>>> 0b6ff61a253fe2b93be36ce6739ab1d56719701d
 
 #explore predictions
 predictions <- res$predicted

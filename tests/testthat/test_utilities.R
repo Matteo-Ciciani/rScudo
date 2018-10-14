@@ -82,7 +82,7 @@ test_that(".performScudo works", {
 })
 
 test_that(".normalization works correctly", {
-    df <- data.frame(a = rep(1, 5),
+    df <- data.frame(a = rep(1, 5), # appears to be log transformed
                      b = rep(3, 5),
                      c = rep(5, 5),
                      d = 1:5,
@@ -91,7 +91,7 @@ test_that(".normalization works correctly", {
     groups <- factor(c(1, 1, 1, 2, 2))
 
     virtContr <- (3 + 6:10) / 2
-    correctRes <- df / virtContr
+    correctRes <- df - virtContr
 
     expect_equal(.normalization(df, groups), correctRes)
 })
