@@ -65,7 +65,7 @@ grps <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2
 nBottom <- 3
 
-res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+res <- scudoTrain(exprData, grps, nTop, nBottom, foldChange = FALSE,
     featureSel = FALSE)
 
 # generate network

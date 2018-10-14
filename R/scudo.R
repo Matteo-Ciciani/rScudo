@@ -1,7 +1,7 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudo ------------------------------------------------------------------------
+# scudoTrain -------------------------------------------------------------------
 
 #' Performs SCUDO analysis
 #'
@@ -13,7 +13,8 @@ NULL
 #' a sample and an edge between two nodes quantitatively represents the
 #' similarity between their respective signatures.
 #'
-#' Given a set of expression profiles with known classification, \code{scudo}
+#' Given a set of expression profiles with known classification,
+#' \code{scudoTrain}
 #' computes a list of signatures composed of genes over- and under-expressed
 #' in each sample. It also compute consensus signatures for each group and
 #' uses the signatures to compute a distance matrix that quantifies the
@@ -81,7 +82,7 @@ NULL
 #' The distance matrix is included in the returned object and can be used to
 #' generate a graph of samples using \code{\link{scudoNetwork}}.
 #'
-#' @usage scudo(expressionData, groups, nTop, nBottom, alpha = 0.1,
+#' @usage scudoTrain(expressionData, groups, nTop, nBottom, alpha = 0.1,
 #'     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
 #'     parametric = FALSE, pAdj = "none", distFun = NULL)
 #
@@ -139,7 +140,7 @@ NULL
 #' nBottom <- 3
 #'
 #' # run scudo
-#' res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+#' res <- scudoTrain(exprData, grps, nTop, nBottom, foldChange = FALSE,
 #'     featureSel = FALSE)
 #' show(res)
 #'
@@ -151,7 +152,7 @@ NULL
 #' distMatrix(res)
 #'
 #' @export
-scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
+scudoTrain <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
     parametric = FALSE, pAdj = "none", distFun = NULL) {
 

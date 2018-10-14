@@ -32,8 +32,8 @@ groups when computing fold-changes. See Details for a description of the
 computation of fold-changes}
 
 \item{distFun}{the function used to compute the distance between two
-samples. See See \code{\link{scudo}} function Details for the specification
-of this function}
+samples. See See \code{\link{scudoTrain}} function Details for the
+specification of this function}
 }
 \value{
 Object of class \code{\linkS4class{scudoResults}}.
@@ -49,9 +49,9 @@ Only the features selected in the trainig step are considered for the
 analysis.
 
 Fold-change computation and SCUDO analysis is performed in the same way as
-explained in \code{\link{scudo}} function details. In this case, groups can
-also not being specified, as well as nTop and nBottom. If the latter are not
-specified, same values as the ones in \code{scudoResult} object are used.
+explained in \code{\link{scudoTrain}} function details. In this case, groups
+can also not being specified, as well as nTop and nBottom. If the latter are
+not specified, same values as the ones in \code{scudoResult} object are used.
 }
 \examples{
 # generate dummy train dataset
@@ -65,8 +65,8 @@ nTop <- 2
 nBottom <- 3
 
 # run scudo
-res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, foldChange = FALSE,
-    featureSel = FALSE)
+res <- scudoTrain(exprDataTrain, grpsTrain, nTop, nBottom,
+    foldChange = FALSE, featureSel = FALSE)
 show(res)
 
 # run scudoTest
@@ -75,7 +75,7 @@ show(testRes)
 
 }
 \seealso{
-\code{\link{scudo}}, \code{\link{scudoNetwork}},
+\code{\link{scudoTrain}}, \code{\link{scudoNetwork}},
 \code{\linkS4class{scudoResults}}
 }
 \author{

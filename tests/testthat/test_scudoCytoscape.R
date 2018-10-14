@@ -9,7 +9,7 @@ test_that("scudoCytoscape raises errors when it should", {
     rownames(exData) <- letters[5:14]
 
     groups <- factor(c("h","h","d","d"))
-    res <- scudo(exData, groups, 1, 3, 0.1)
+    res <- scudoTrain(exData, groups, 1, 3, 0.1)
     expect_s4_class(res, "scudoResults")
 
     scudoNet <- scudoNetwork(res, 0.2)

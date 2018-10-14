@@ -95,7 +95,7 @@ scores <- res$scores
 
 }
 \seealso{
-\code{\link{scudo}}
+\code{\link{scudoTrain}}
 }
 \author{
 Matteo Ciciani \email{matteo.ciciani@gmail.com}

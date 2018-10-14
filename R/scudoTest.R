@@ -14,9 +14,9 @@ NULL
 #' analysis.
 #'
 #' Fold-change computation and SCUDO analysis is performed in the same way as
-#' explained in \code{\link{scudo}} function details. In this case, groups can
-#' also not being specified, as well as nTop and nBottom. If the latter are not
-#' specified, same values as the ones in \code{scudoResult} object are used.
+#' explained in \code{\link{scudoTrain}} function details. In this case, groups
+#' can also not being specified, as well as nTop and nBottom. If the latter are
+#' not specified, same values as the ones in \code{scudoResult} object are used.
 #'
 #' @usage scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
 #'     nBottom = NULL, foldChange = TRUE, groupedFoldChange = FALSE,
@@ -45,12 +45,12 @@ NULL
 #' computation of fold-changes
 #'
 #' @param distFun the function used to compute the distance between two
-#' samples. See See \code{\link{scudo}} function Details for the specification
-#' of this function
+#' samples. See See \code{\link{scudoTrain}} function Details for the
+#' specification of this function
 #'
 #' @return Object of class \code{\linkS4class{scudoResults}}.
 #'
-#' @seealso \code{\link{scudo}}, \code{\link{scudoNetwork}},
+#' @seealso \code{\link{scudoTrain}}, \code{\link{scudoNetwork}},
 #' \code{\linkS4class{scudoResults}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
@@ -67,8 +67,8 @@ NULL
 #' nBottom <- 3
 #'
 #' # run scudo
-#' res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, foldChange = FALSE,
-#'     featureSel = FALSE)
+#' res <- scudoTrain(exprDataTrain, grpsTrain, nTop, nBottom,
+#'     foldChange = FALSE, featureSel = FALSE)
 #' show(res)
 #'
 #' # run scudoTest

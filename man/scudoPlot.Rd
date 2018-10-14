@@ -26,14 +26,14 @@ A wrapper to \code{\link[igraph]{plot.igraph}} and
 \code{\link{scudoNetwork}} with a color legend.
 }
 \examples{
-# generate dummy dataset, run scudo and scudoNetwork
+# generate dummy dataset, run scudoTrain and scudoNetwork
 exprData <- data.frame(a = 11:20, b = 16:25,
     c = rev(1:10), d = c(1:2, rev(3:10)))
 rownames(exprData) <- letters[11:20]
 grps <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2
 nBottom <- 3
-res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+res <- scudoTrain(exprData, grps, nTop, nBottom, foldChange = FALSE,
     featureSel = FALSE)
 net <- scudoNetwork(res, N = 0.5)
 

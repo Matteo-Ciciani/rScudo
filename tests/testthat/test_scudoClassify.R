@@ -297,13 +297,13 @@ test_that("scudoClassify raises correct errors", {
 
     f <- function(){}
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = NA))
+    expect_error(scudoTrain(exData, gr1, 1, 3, 0.1, distFun = NA))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = "ABC"))
+    expect_error(scudoTrain(exData, gr1, 1, 3, 0.1, distFun = "ABC"))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = character(0)))
+    expect_error(scudoTrain(exData, gr1, 1, 3, 0.1, distFun = character(0)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = f))
+    expect_error(scudoTrain(exData, gr1, 1, 3, 0.1, distFun = f))
 
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr1, distFun = NA))

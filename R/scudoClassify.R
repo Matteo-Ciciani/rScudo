@@ -72,7 +72,7 @@ NULL
 #' \code{testExpData} and the classification scores used to generate the
 #' predictions.
 #'
-#' @seealso \code{\link{scudo}}
+#' @seealso \code{\link{scudoTrain}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'
