@@ -106,29 +106,31 @@ test_that("scudo raises errors on wrong inputs", {
 
     expect_error(scudo(exData, gr1, 1, 3, c(0.5, 0.7)))
 
-    # Test norm ----------------------------------------------------------------
+    # Test foldChange ----------------------------------------------------------
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = logical(0)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, foldChange = logical(0)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = "ABC"))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, foldChange = "ABC"))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = c(TRUE, FALSE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, foldChange = c(TRUE, FALSE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = matrix(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, foldChange = matrix(TRUE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, norm = list(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, foldChange = list(TRUE)))
 
-    # Test groupedNorm ---------------------------------------------------------
+    # Test groupedFoldChange ---------------------------------------------------
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = logical(0)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedFoldChange = logical(0)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = "ABC"))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedFoldChange = "ABC"))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = c(TRUE, FALSE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1,
+        groupedFoldChange = c(TRUE, FALSE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = matrix(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1,
+        groupedFoldChange = matrix(TRUE)))
 
-    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedNorm = list(TRUE)))
+    expect_error(scudo(exData, gr1, 1, 3, 0.1, groupedFoldChange = list(TRUE)))
 
     # Test featureSel ----------------------------------------------------------
 
@@ -177,9 +179,3 @@ test_that("scudo raises errors on wrong inputs", {
     expect_error(scudo(exData, gr1, 1, 3, 0.1, distFun = f))
 
 })
-
-
-# expect_warning goes in conflict with .Normalization that raises errors:
-# check commented tests
-
-

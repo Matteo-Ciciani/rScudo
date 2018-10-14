@@ -65,7 +65,8 @@ grps <- as.factor(c("G1", "G1", "G2", "G2"))
 nTop <- 2
 nBottom <- 3
 
-res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+    featureSel = FALSE)
 
 # generate network
 col <- c("#FF0000", "#FF0000", "#0000FF", "#0000FF")

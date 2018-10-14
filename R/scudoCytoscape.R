@@ -33,7 +33,8 @@ NULL
 #' nBottom <- 3
 #'
 #' # run scudo and scudoNetwork
-#' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+#' res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+#'     featureSel = FALSE)
 #' col <- c("#FF00FF", "#FF00FF", "#00FF00", "#00FF00")
 #' net <- scudoNetwork(res, N = 0.5, colors = col)
 #'

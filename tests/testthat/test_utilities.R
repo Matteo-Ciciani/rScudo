@@ -77,11 +77,11 @@ test_that(".performScudo works", {
     expect_identical(groupsAnnotation(res), grps)
     expect_identical(selectedFeatures(res), letters[11:20])
     expect_identical(params(res), list(nTop = nTop, nBottom = nBottom,
-        alpha = p, norm = FALSE, groupedNorm = FALSE, featureSel = FALSE,
-        parametric = FALSE, pAdj = "none"))
+        alpha = p, foldChange = FALSE, groupedFoldChange = FALSE,
+        featureSel = FALSE, parametric = FALSE, pAdj = "none"))
 })
 
-test_that(".normalization works correctly", {
+test_that(".computeFC works correctly", {
     df <- data.frame(a = rep(1, 5), # appears to be log transformed
                      b = rep(3, 5),
                      c = rep(5, 5),
@@ -93,5 +93,5 @@ test_that(".normalization works correctly", {
     virtContr <- (3 + 6:10) / 2
     correctRes <- df - virtContr
 
-    expect_equal(.normalization(df, groups), correctRes)
+    expect_equal(.computeFC(df, groups), correctRes)
 })

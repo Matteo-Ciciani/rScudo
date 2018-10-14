@@ -19,7 +19,8 @@ NULL
 #' specified, same values as the ones in \code{scudoResult} object are used.
 #'
 #' @usage scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
-#'     nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
+#'     nBottom = NULL, foldChange = TRUE, groupedFoldChange = FALSE,
+#'     distFun = NULL)
 #'
 #' @param trainScudoRes an object of class \code{ScudoResult} used as
 #' training model
@@ -36,11 +37,11 @@ NULL
 #' @param nBottom number of down-regulated features to include in the
 #' signatures
 #'
-#' @param norm logical, whether or not to compute fold-changes from expression
-#' data
+#' @param foldChange logical, whether or not to compute fold-changes from
+#' expression data
 #'
-#' @param groupedNorm logical, whether or not to take into account the groups
-#' when computing fold-changes. See Details for a description of the
+#' @param groupedFoldChange logical, whether or not to take into account the
+#' groups when computing fold-changes. See Details for a description of the
 #' computation of fold-changes
 #'
 #' @param distFun the function used to compute the distance between two
@@ -66,18 +67,18 @@ NULL
 #' nBottom <- 3
 #'
 #' # run scudo
-#' res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, norm = FALSE,
+#' res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, foldChange = FALSE,
 #'     featureSel = FALSE)
 #' show(res)
 #'
 #' # run scudoTest
-#' testRes <- scudoTest(res, exprDataTest, norm = FALSE)
+#' testRes <- scudoTest(res, exprDataTest, foldChange = FALSE)
 #' show(testRes)
 #'
 #' @export
 scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
-    nTop = NULL, nBottom = NULL, norm = TRUE,
-    groupedNorm = FALSE, distFun = NULL) {
+    nTop = NULL, nBottom = NULL, foldChange = TRUE,
+    groupedFoldChange = FALSE, distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
 
@@ -101,7 +102,7 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     # use placeholder for alpha, featureSel, pAdj
     .inputCheck(testExpData, testG, nTop, nBottom, alpha = 0.5,
-        norm, groupedNorm, featureSel = FALSE, parametric = FALSE,
+        foldChange, groupedFoldChange, featureSel = FALSE, parametric = FALSE,
         pAdj = "none", distFun = NULL)
 
     nTest <- length(levels(testGroups))
@@ -113,12 +114,12 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
         }
     }
 
-    # normalization ------------------------------------------------------------
+    # computeFC ------------------------------------------------------------
 
     testGroups <- testGroups[, drop = TRUE]
-    normGroups <- if(groupedNorm) testGroups else NULL
+    foldChangeGroups <- if(groupedFoldChange) testGroups else NULL
 
-    if (norm) testExpData <- .normalization(testExpData, normGroups)
+    if (foldChange) testExpData <- .computeFC(testExpData, foldChangeGroups)
 
     # Test Feature Selection ---------------------------------------------------
 
@@ -137,8 +138,8 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
             dim(testExpData)[1], "features selected.")
     }
 
-    .performScudo(testExpData, testGroups, nTop, nBottom, distFun, norm,
-        groupedNorm)
+    .performScudo(testExpData, testGroups, nTop, nBottom, distFun, foldChange,
+        groupedFoldChange)
 
 }
 

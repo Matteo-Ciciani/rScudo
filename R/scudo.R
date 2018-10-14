@@ -21,12 +21,13 @@ NULL
 #'
 #' Before computing the signatures, two optional perprocessing steps are
 #' performed. In the first step fold-changes are compured from expression
-#' values. If the parameter \code{groupedNorm} is \code{TRUE}, the fold-changes
+#' values. If the parameter \code{groupedFoldChange} is \code{TRUE}, the
+#' fold-changes
 #' are computed in two steps: first the mean expression value for each feature
 #' in each group is computed. Then, the fold-changes for each feature are
 #' computed dividing the expression values for the mean of the group means.
 #' If the the parameter
-#' \code{groupedNorm} is \code{FALSE}, the fold-changes are
+#' \code{groupedFoldChange} is \code{FALSE}, the fold-changes are
 #' computed dividing the expression value of each feature for the mean
 #' expression value of that feature (regardless of groups).
 #'
@@ -80,9 +81,9 @@ NULL
 #' The distance matrix is included in the returned object and can be used to
 #' generate a graph of samples using \code{\link{scudoNetwork}}.
 #'
-#' @usage scudo(expressionData, groups, nTop, nBottom, alpha = 0.1, norm = TRUE,
-#'     groupedNorm = FALSE, featureSel = TRUE, parametric = FALSE,
-#'     pAdj = "none", distFun = NULL)
+#' @usage scudo(expressionData, groups, nTop, nBottom, alpha = 0.1,
+#'     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
+#'     parametric = FALSE, pAdj = "none", distFun = NULL)
 #
 #' @param expressionData either an \code{\link[Biobase]{ExpressionSet}},
 #' a data.frame or a matrix of gene expression data, with a column for
@@ -99,11 +100,11 @@ NULL
 #' @param alpha p-value cutoff for the optional feature selection step. If
 #' feature selection is skipped, alpha is ignored
 #'
-#' @param norm logical, whether or not to compute fold-changes from expression
-#' data
+#' @param foldChange logical, whether or not to compute fold-changes from
+#' expression data
 #'
-#' @param groupedNorm logical, whether or not to take into account the groups
-#' when computing fold-changes. See Details for a description of the
+#' @param groupedFoldChange logical, whether or not to take into account the
+#' groups when computing fold-changes. See Details for a description of the
 #' computation of fold-changes
 #'
 #' @param featureSel logical, whether or not to perform a feature selection.
@@ -138,7 +139,8 @@ NULL
 #' nBottom <- 3
 #'
 #' # run scudo
-#' res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+#' res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+#'     featureSel = FALSE)
 #' show(res)
 #'
 #' # examine top signatures and top consensus signatures
@@ -150,7 +152,7 @@ NULL
 #'
 #' @export
 scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
-    norm = TRUE, groupedNorm = FALSE, featureSel = TRUE,
+    foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
     parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     if (is(expressionData, "ExpressionSet")) {
@@ -161,15 +163,17 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     }
 
     .inputCheck(expressionData, groups, nTop, nBottom, alpha,
-        norm, groupedNorm, featureSel, parametric, pAdj, distFun)
+        foldChange, groupedFoldChange, featureSel, parametric, pAdj, distFun)
 
-    # normalization ------------------------------------------------------------
+    # computeFC ------------------------------------------------------------
 
     groups <- groups[, drop = TRUE]
     ngroups <- length(levels(groups))
-    normGroups <- if(groupedNorm) groups else NULL
+    foldChangeGroups <- if(groupedFoldChange) groups else NULL
 
-    if (norm) expressionData <- .normalization(expressionData, normGroups)
+    if (foldChange) {
+        expressionData <- .computeFC(expressionData, foldChangeGroups)
+    }
 
     # Feature Selection --------------------------------------------------------
 
@@ -190,6 +194,6 @@ scudo <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     # Performing Scudo ---------------------------------------------------------
 
     .performScudo(expressionData, groups, nTop, nBottom, distFun, alpha,
-        norm, groupedNorm, featureSel, parametric, pAdj)
+        foldChange, groupedFoldChange, featureSel, parametric, pAdj)
 }
 

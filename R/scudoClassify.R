@@ -9,7 +9,7 @@ NULL
 #'
 #' @usage scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
 #'     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
-#'     alpha = 0.1, norm = TRUE, featureSel = TRUE, parametric = FALSE,
+#'     alpha = 0.1, foldChange = TRUE, featureSel = TRUE, parametric = FALSE,
 #'     pAdj = "none", distFun = NULL)
 #'
 #' @param trainExpData either an \code{\link[Biobase]{ExpressionSet}},
@@ -50,8 +50,8 @@ NULL
 #' @param alpha p-value cutoff for the optional feature selection step. If
 #' feature selection is skipped, alpha is ignored
 #'
-#' @param norm logical, whether or not to compute fold-changes from expression
-#' data
+#' @param foldChange logical, whether or not to compute fold-changes from
+#' expression data
 #'
 #' @param featureSel logical, whether or not to perform a feature selection.
 #' Feature selection is performed using one of four tests: Student's t-test,
@@ -95,7 +95,7 @@ NULL
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
-    alpha = 0.1, norm = TRUE, featureSel = TRUE, parametric = FALSE,
+    alpha = 0.1, foldChange = TRUE, featureSel = TRUE, parametric = FALSE,
     pAdj = "none", distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
@@ -116,15 +116,15 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
         trainGroups, maxDist, weighted, complete, beta,
-        alpha, norm, featureSel, parametric, pAdj, distFun)
+        alpha, foldChange, featureSel, parametric, pAdj, distFun)
 
-    # normalization ------------------------------------------------------------
+    # computeFC ------------------------------------------------------------
 
     trainGroups <- trainGroups[, drop = TRUE]
 
-    if (norm) {
-        trainExpData <- .normalization(trainExpData, NULL)
-        testExpData <- .normalization(testExpData, NULL)
+    if (foldChange) {
+        trainExpData <- .computeFC(trainExpData, NULL)
+        testExpData <- .computeFC(testExpData, NULL)
     }
 
     # Feature Selection --------------------------------------------------------

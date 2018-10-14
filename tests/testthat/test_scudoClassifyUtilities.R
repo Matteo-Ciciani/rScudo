@@ -6,7 +6,8 @@ test_that(".computeTestNetwork works", {
                           e = c(1:4, 10:5), f = c(7:10, 6:1))
     rownames(expData) <- letters[1:10]
     g <- factor(c(1,1,1,2,2,2))
-    sr <- scudo(expData, g, 4, 4, alpha = 0.5, norm = FALSE, featureSel = FALSE)
+    sr <- scudo(expData, g, 4, 4, alpha = 0.5, foldChange = FALSE,
+        featureSel = FALSE)
     dm <- distMatrix(sr)
     net <- scudoNetwork(sr, 0.2)
 
@@ -27,17 +28,18 @@ test_that(".networksFromDistMatrix works", {
                           i = c(5:1, 6:10))
     rownames(expData) <- letters[1:10]
     g <- factor(c(1,1,1,2,2,2,1,1,1))
-    sr <- scudo(expData, g, 4, 4, alpha = 0.5, norm = FALSE, featureSel = FALSE)
+    sr <- scudo(expData, g, 4, 4, alpha = 0.5, foldChange = FALSE,
+        featureSel = FALSE)
     dm <- distMatrix(sr)
 
     sr1 <- scudoNetwork(scudo(expData[, c(6, 1:5)], g[c(6, 1:5)], 4, 4,
-        alpha = 0.5, norm = FALSE, featureSel = FALSE), 0.2)
+        alpha = 0.5, foldChange = FALSE, featureSel = FALSE), 0.2)
     sr2 <- scudoNetwork(scudo(expData[, c(7, 1:5)], g[c(7, 1:5)], 4, 4,
-        alpha = 0.5, norm = FALSE, featureSel = FALSE), 0.2)
+        alpha = 0.5, foldChange = FALSE, featureSel = FALSE), 0.2)
     sr3 <- scudoNetwork(scudo(expData[, c(8, 1:5)], g[c(8, 1:5)], 4, 4,
-        alpha = 0.5, norm = FALSE, featureSel = FALSE), 0.2)
+        alpha = 0.5, foldChange = FALSE, featureSel = FALSE), 0.2)
     sr4 <- scudoNetwork(scudo(expData[, c(9, 1:5)], g[c(9, 1:5)], 4, 4,
-        alpha = 0.5, norm = FALSE, featureSel = FALSE), 0.2)
+        alpha = 0.5, foldChange = FALSE, featureSel = FALSE), 0.2)
 
     nets <- .networksFromDistMatrix(dm, 0.2, g[1:5])
 
@@ -78,7 +80,7 @@ test_that(".visitEdges works", {
     rownames(expData) <- letters[1:10]
     g <- factor(c(1,1,1,2,2,2,1,1,1))
 
-    sr1 <- scudo(expData[, c(9, 1:8)], g, 4, 4, alpha = 0.5, norm = FALSE,
+    sr1 <- scudo(expData[, c(9, 1:8)], g, 4, 4, alpha = 0.5, foldChange = FALSE,
         featureSel = FALSE)
     net1 <- scudoNetwork(sr1, 0.2)
     scores1 <- .visitEdges(net1, 1, levels(g), TRUE, 1)
@@ -86,8 +88,8 @@ test_that(".visitEdges works", {
     names(res1) <- levels(g)
     expect_equal(scores1, res1)
 
-    sr2 <- scudo(expData[, c(7, 1:6, 8:9)], g, 4, 4, alpha = 0.5, norm = FALSE,
-                 featureSel = FALSE)
+    sr2 <- scudo(expData[, c(7, 1:6, 8:9)], g, 4, 4, alpha = 0.5,
+        foldChange = FALSE, featureSel = FALSE)
     net2 <- scudoNetwork(sr2, 0.2)
     scores2 <- .visitEdges(net2, 1, levels(g), TRUE, 1)
     res2 <- c(NaN, NaN)

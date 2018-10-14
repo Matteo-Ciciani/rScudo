@@ -4,9 +4,9 @@
 \alias{scudo}
 \title{Performs SCUDO analysis}
 \usage{
-scudo(expressionData, groups, nTop, nBottom, alpha = 0.1, norm = TRUE,
-    groupedNorm = FALSE, featureSel = TRUE, parametric = FALSE,
-    pAdj = "none", distFun = NULL)
+scudo(expressionData, groups, nTop, nBottom, alpha = 0.1,
+    foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
+    parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}},
@@ -24,11 +24,11 @@ signatures}
 \item{alpha}{p-value cutoff for the optional feature selection step. If
 feature selection is skipped, alpha is ignored}
 
-\item{norm}{logical, whether or not to compute fold-changes from expression
-data}
+\item{foldChange}{logical, whether or not to compute fold-changes from
+expression data}
 
-\item{groupedNorm}{logical, whether or not to take into account the groups
-when computing fold-changes. See Details for a description of the
+\item{groupedFoldChange}{logical, whether or not to take into account the
+groups when computing fold-changes. See Details for a description of the
 computation of fold-changes}
 
 \item{featureSel}{logical, whether or not to perform a feature selection.
@@ -67,12 +67,13 @@ similarity between the signatures of pairs of samples.
 
 Before computing the signatures, two optional perprocessing steps are
 performed. In the first step fold-changes are compured from expression
-values. If the parameter \code{groupedNorm} is \code{TRUE}, the fold-changes
+values. If the parameter \code{groupedFoldChange} is \code{TRUE}, the
+fold-changes
 are computed in two steps: first the mean expression value for each feature
 in each group is computed. Then, the fold-changes for each feature are
 computed dividing the expression values for the mean of the group means.
 If the the parameter
-\code{groupedNorm} is \code{FALSE}, the fold-changes are
+\code{groupedFoldChange} is \code{FALSE}, the fold-changes are
 computed dividing the expression value of each feature for the mean
 expression value of that feature (regardless of groups).
 
@@ -136,7 +137,8 @@ nTop <- 2
 nBottom <- 3
 
 # run scudo
-res <- scudo(exprData, grps, nTop, nBottom, norm = FALSE, featureSel = FALSE)
+res <- scudo(exprData, grps, nTop, nBottom, foldChange = FALSE,
+    featureSel = FALSE)
 show(res)
 
 # examine top signatures and top consensus signatures

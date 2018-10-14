@@ -227,22 +227,22 @@ test_that("scudoClassify raises correct errors", {
     expect_error(scudoClassify(trainExpData, testExpData,
                                N, nTop, nBottom, gr1, alpha = c(0.5, 0.7)))
 
-    # Test norm ----------------------------------------------------------------
+    # Test foldChange ----------------------------------------------------------
 
     expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, norm = logical(0)))
+                               N, nTop, nBottom, gr1, foldChange = logical(0)))
 
     expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, norm = "ABC"))
+                               N, nTop, nBottom, gr1, foldChange = "ABC"))
 
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, norm = c(TRUE, FALSE)))
+    expect_error(scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
+        gr1, foldChange = c(TRUE, FALSE)))
 
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, norm = matrix(TRUE)))
+    expect_error(scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
+        gr1, foldChange = matrix(TRUE)))
 
-    expect_error(scudoClassify(trainExpData, testExpData,
-                               N, nTop, nBottom, gr1, norm = list(TRUE)))
+    expect_error(scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
+        gr1, foldChange = list(TRUE)))
 
     # Test featureSel ----------------------------------------------------------
 

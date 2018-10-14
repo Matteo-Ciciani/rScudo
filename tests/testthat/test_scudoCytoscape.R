@@ -15,8 +15,4 @@ test_that("scudoCytoscape raises errors when it should", {
     scudoNet <- scudoNetwork(res, 0.2)
     expect_s3_class(scudoNet, "igraph")
 
-    # test errors in title -----------------------------------------------------
-
-    # test errors in collection ------------------------------------------------
-
 })

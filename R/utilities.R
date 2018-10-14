@@ -4,8 +4,7 @@ NULL
 # .inputCheck ------------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
-                        norm, groupedNorm, featureSel, parametric, pAdj,
-                        distFun) {
+    foldChange, groupedFoldChange, featureSel, parametric, pAdj, distFun) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -70,14 +69,12 @@ NULL
 
     # check other parameters
 
-    .checkParams(alpha, norm, groupedNorm, featureSel,
+    .checkParams(alpha, foldChange, groupedFoldChange, featureSel,
         parametric, pAdj, distFun)
 }
 
-.checkParams <- function(alpha, norm, groupedNorm, featureSel,
+.checkParams <- function(alpha, foldChange, groupedFoldChange, featureSel,
     parametric, pAdj, distFun) {
-
-    # checks on alpha, norm, featureSel, groupedNorm, parametric, pAdj ---------
 
     stopifnot(is.numeric(alpha),
         length(alpha) == 1,
@@ -93,17 +90,17 @@ NULL
         stop("alpha cannot be NA.")
     }
 
-    stopifnot(is.logical(norm),
+    stopifnot(is.logical(foldChange),
         is.logical(featureSel),
-        is.logical(groupedNorm),
+        is.logical(groupedFoldChange),
         is.logical(parametric),
-        is.vector(norm),
+        is.vector(foldChange),
         is.vector(featureSel),
-        is.vector(groupedNorm),
+        is.vector(groupedFoldChange),
         is.vector(parametric),
-        length(norm) == 1,
+        length(foldChange) == 1,
         length(featureSel) == 1,
-        length(groupedNorm) == 1,
+        length(groupedFoldChange) == 1,
         length(parametric) == 1,
         is.character(pAdj),
         is.vector(pAdj),
@@ -185,9 +182,9 @@ NULL
     expressionData
 }
 
-# .normalization ---------------------------------------------------------------
+# .computeFC -------------------------------------------------------------------
 
-.normalization <- function(ExpressionData, groups) {
+.computeFC <- function(ExpressionData, groups) {
 
     if (is.null(groups)) {
         virtControl <- rowMeans(ExpressionData)
@@ -204,11 +201,11 @@ NULL
         (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)
 
     if (logC) {
-        normExData <- ExpressionData / virtControl
+        foldChangeExData <- ExpressionData / virtControl
     } else {
-        normExData <- ExpressionData - virtControl
+        foldChangeExData <- ExpressionData - virtControl
     }
-    normExData
+    foldChangeExData
 }
 
 # compute distance matrix ------------------------------------------------------
@@ -349,12 +346,12 @@ NULL
     pars <- list(nTop = nTop, nBottom = nBottom)
 
     if (...length() == 2) {
-        pars$norm <- ..1
-        pars$groupedNorm <- ..2
+        pars$foldChange <- ..1
+        pars$groupedFoldChange <- ..2
     } else {
         pars$alpha <- ..1
-        pars$norm <- ..2
-        pars$groupedNorm <- ..3
+        pars$foldChange <- ..2
+        pars$groupedFoldChange <- ..3
         pars$featureSel <- ..4
         pars$parametric <- ..5
         pars$pAdj <- ..6

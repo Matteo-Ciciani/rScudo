@@ -27,10 +27,12 @@ setMethod("show", "scudoResults", function(object) {
         "\n")
     cat("downSignatures length  : ", paste(params(object)$nBottom),
         "\n")
-    cat("Normalization          : ", paste0(ifelse(params(object)$norm,
-        "", "not "), "performed"), "\n")
-    if (params(object)$norm) cat("    groupedNorm        : ", paste0(ifelse(
-        params(object)$groupedNorm, "", "not "), "performed"), "\n")
+    cat("Fold-changes           : ", paste0(ifelse(params(object)$foldChange,
+        "", "not "), "computed"), "\n")
+    if (params(object)$foldChange) {
+        cat("    grouped fold-changes     : ", paste0(ifelse(params(
+            object)$groupedFoldChange, "", "not "), "computed"), "\n")
+    }
 
     if (length(params(object)) == 8 && params(object)$featureSel) {
         cat("Feature selection      :  performed\n")

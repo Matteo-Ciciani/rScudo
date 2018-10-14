@@ -20,7 +20,7 @@ NULL
 #'   same colnames as distMatrix, representing the down-regualted
 #'   features in each sample.
 #' @slot groupsAnnotation Object of class factor. It represents the groups
-#'   used for the normalization and the feature selection.
+#'   used for the computeFC and the feature selection.
 #' @slot consensusUpSignatures Object of class data.frame. It contains the
 #'   consensus signatures of up-regulated features for each group.
 #' @slot consensusDownSignatures Object of class data.frame. It contains
@@ -43,7 +43,7 @@ NULL
 #'     features in each sample.}
 #'     \item{\code{groupsAnnotation}}{\code{signature(object = "scudoResults")}:
 #'     a method for obtaining the groups used for
-#'     normalization and feature selection.}
+#'     computeFC and feature selection.}
 #'     \item{\code{consensusUpSignatures}}{\code{signature(object =
 #'     "scudoResults")}: a method for obtaining the consensus signatures of
 #'     up-regualted features in each group.}

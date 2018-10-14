@@ -5,7 +5,8 @@
 \title{Performs SCUDO analysis on test dataset}
 \usage{
 scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
-    nBottom = NULL, norm = TRUE, groupedNorm = FALSE, distFun = NULL)
+    nBottom = NULL, foldChange = TRUE, groupedFoldChange = FALSE,
+    distFun = NULL)
 }
 \arguments{
 \item{trainScudoRes}{an object of class \code{ScudoResult} used as
@@ -23,11 +24,11 @@ each sample and a row for each feature}
 \item{nBottom}{number of down-regulated features to include in the
 signatures}
 
-\item{norm}{logical, whether or not to compute fold-changes from expression
-data}
+\item{foldChange}{logical, whether or not to compute fold-changes from
+expression data}
 
-\item{groupedNorm}{logical, whether or not to take into account the groups
-when computing fold-changes. See Details for a description of the
+\item{groupedFoldChange}{logical, whether or not to take into account the
+groups when computing fold-changes. See Details for a description of the
 computation of fold-changes}
 
 \item{distFun}{the function used to compute the distance between two
@@ -64,12 +65,12 @@ nTop <- 2
 nBottom <- 3
 
 # run scudo
-res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, norm = FALSE,
+res <- scudo(exprDataTrain, grpsTrain, nTop, nBottom, foldChange = FALSE,
     featureSel = FALSE)
 show(res)
 
 # run scudoTest
-testRes <- scudoTest(res, exprDataTest, norm = FALSE)
+testRes <- scudoTest(res, exprDataTest, foldChange = FALSE)
 show(testRes)
 
 }
