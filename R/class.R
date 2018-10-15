@@ -33,28 +33,28 @@ NULL
 #'
 #' @section Methods:
 #' \describe{
-#'     \item{\code{distMatrix}}{\code{signature(object = "scudoResults")}:
-#'     a method for obtaining the distance matrix.}
-#'     \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
-#'     method for obtaining the signature of up-regualted features in each
-#'     sample.}
-#'     \item{\code{downSignatures}}{\code{signature(object =
-#'     "scudoResults")}: a method for obtaining the signature of down-regulated
-#'     features in each sample.}
-#'     \item{\code{groupsAnnotation}}{\code{signature(object = "scudoResults")}:
-#'     a method for obtaining the groups used for
-#'     computeFC and feature selection.}
-#'     \item{\code{consensusUpSignatures}}{\code{signature(object =
-#'     "scudoResults")}: a method for obtaining the consensus signatures of
-#'     up-regualted features in each group.}
-#'     \item{\code{consensusDownSignatures}}{\code{signature(object =
-#'     "scudoResults")}: a method for obtaining the consensus signatures of
-#'     down-regulated features in each group.}
-#'     \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}:
-#'     a method for obtaining the names of the features seleted. If no feature
-#'     selection was performed, the names of every feature are returned.}
-#'     \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
-#'     for obtaining the parameters that were used to generate the result.}
+#' \item{\code{distMatrix}}{\code{signature(object = "scudoResults")}:
+#' a method for obtaining the distance matrix.}
+#' \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
+#' method for obtaining the signature of up-regualted features in each
+#' sample.}
+#' \item{\code{downSignatures}}{\code{signature(object =
+#' "scudoResults")}: a method for obtaining the signature of down-regulated
+#' features in each sample.}
+#' \item{\code{groupsAnnotation}}{\code{signature(object = "scudoResults")}:
+#' a method for obtaining the groups used for
+#' computeFC and feature selection.}
+#' \item{\code{consensusUpSignatures}}{\code{signature(object =
+#' "scudoResults")}: a method for obtaining the consensus signatures of
+#' up-regualted features in each group.}
+#' \item{\code{consensusDownSignatures}}{\code{signature(object =
+#' "scudoResults")}: a method for obtaining the consensus signatures of
+#' down-regulated features in each group.}
+#' \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}:
+#' a method for obtaining the names of the features seleted. If no feature
+#' selection was performed, the names of every feature are returned.}
+#' \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
+#' for obtaining the parameters that were used to generate the result.}
 #' }
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}

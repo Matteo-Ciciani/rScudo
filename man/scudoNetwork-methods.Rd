@@ -42,19 +42,18 @@ the distances larger than this quantile are mapped to 0, all the distances
 smaller than this quantile are mapped to 1 (with the exception of the
 distances of any node from itself, which are equal to 0).
 
-Distances are set
-as attributes of the edges of the graph, and can be retrieved using \code{
-igraph::E(igraphObject)$distance}, where \code{igraphObject} is the result
+Distances are set as attributes of the edges of the graph. Use \code{
+igraph::E(igraphObject)$distance} to retrieve them, where \code{igraphObject} is the result
 of \code{scudoNetwork}.
 
 The \code{color} parameter controls the color of the nodes. It must be a
 vector of hexadecimal RGB color codes (like "#FFFFFF"), with lenth equal to
 the number of samples in \code{object}. By default, a different color is
 assigned to each group. If no group is specified in \code{object}, all nodes
-are set to the same color. A vector of node colors can be accessed with
-\code{ igraph::V(igraphObject)$color}. The group label of each node can also
-be accessed with \code{igraph::V(igraphObject)$group} (it returns NULL if no
-group is specified in \code{object}).
+are set to the same color. A vector of node colors can be accessed
+with \code{ igraph::V(igraphObject)$color}. Use
+\code{igraph::V(igraphObject)$group} to access the group label of each node
+(it returns NULL if no group is specified in \code{object}).
 }
 \examples{
 # generate dummy dataset and run scudo

@@ -43,9 +43,9 @@ log-transformed}
 \item{parametric}{logical, whether to use a parametric or a non-parametric
 test for the feature selection}
 
-\item{pAdj}{method to use to adjust the p-values in the feature selection
-step. See \code{\link[stats]{p.adjust.methods}} for a list of adjustment
-methods}
+\item{pAdj}{pAdj method to use to adjust the p-values in the feature
+selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
+adjustment methods}
 
 \item{distFun}{the function used to compute the distance between two
 samples. See Details for the specification of this function}

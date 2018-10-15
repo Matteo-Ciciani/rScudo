@@ -56,7 +56,7 @@ NULL
 #' log-transformed
 #'
 #' @param distFun the function used to compute the distance between two
-#' samples. See See \code{\link{scudoTrain}} function Details for the
+#' samples. See \code{\link{scudoTrain}} function Details for the
 #' specification of this function
 #'
 #' @return Object of class \code{\linkS4class{scudoResults}}.
