@@ -8,19 +8,25 @@ NULL
 #' A function to perform the SCUDO analysis on test data, given an object of
 #' class \code{scudoResults} used as training model.
 #'
-#' This function creates an object of class \code{\linkS4class{scudoResults}}
+#' Given an object of class \code{\linkS4class{scudoResults}} and a set of
+#' expression profiles with unknown classification, \code{scudoTest} performs an
+#' analysis similar to \code{\link{scudoTrain}}, computing a list of signatures
+#' composed of genes over- and under-expressed in each sample, consensus
+#' signatures for each group and a distance matrix that quantifies the
+#' similarity between the signatures of pairs of samples.
 #'
-#' Only the features selected in the trainig step are considered for the
-#' analysis.
+#' \code{scudoTest} differs from \code{scudoTrain} in the feature selection
+#' step: only the features present in the \code{scudoResults} object taken as
+#' input are considered for the follwing steps. The computation of fold-changes,
+#' the identification of gene signatures and the computation of the distance
+#' matrix are performed as described in the Details of \code{\link{scudoTrain}}.
 #'
-#' Fold-change computation and SCUDO analysis is performed in the same way as
-#' explained in \code{\link{scudoTrain}} function details. In this case, groups
-#' can also not being specified, as well as nTop and nBottom. If the latter are
-#' not specified, same values as the ones in \code{scudoResult} object are used.
+#' If the classification of samples in the testing dataset is provided, it is
+#' only used for annotation purposes.
 #'
 #' @usage scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
 #'     nBottom = NULL, foldChange = TRUE, groupedFoldChange = FALSE,
-#'     distFun = NULL)
+#'     logTransformed = NULL, distFun = NULL)
 #'
 #' @param trainScudoRes an object of class \code{ScudoResult} used as
 #' training model
@@ -32,10 +38,11 @@ NULL
 #' @param testGroups factor containing group labels for each sample in
 #' \code{testExpData}
 #'
-#' @param nTop number of up-regulated features to include in the signatures
+#' @param nTop number of up-regulated features to include in the signatures. If
+#' NULL, it defaults to the value present in \code{trainScudoRes}
 #'
 #' @param nBottom number of down-regulated features to include in the
-#' signatures
+#' signatures. If NULL, it defaults to the value present in \code{trainScudoRes}
 #'
 #' @param foldChange logical, whether or not to compute fold-changes from
 #' expression data
@@ -44,6 +51,10 @@ NULL
 #' groups when computing fold-changes. See Details for a description of the
 #' computation of fold-changes
 #'
+#' @param logTransformed logical or NULL. It indicates whether the data is
+#' log-transformed. If NULL, an attempt is made to guess if the data is
+#' log-transformed
+#'
 #' @param distFun the function used to compute the distance between two
 #' samples. See See \code{\link{scudoTrain}} function Details for the
 #' specification of this function
@@ -51,7 +62,7 @@ NULL
 #' @return Object of class \code{\linkS4class{scudoResults}}.
 #'
 #' @seealso \code{\link{scudoTrain}}, \code{\link{scudoNetwork}},
-#' \code{\linkS4class{scudoResults}}
+#' \code{\linkS4class{scudoResults}}, \code{\link{scudoClassify}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
 #'

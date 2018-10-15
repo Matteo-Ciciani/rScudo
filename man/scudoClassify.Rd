@@ -6,8 +6,8 @@
 \usage{
 scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
-    alpha = 0.1, foldChange = TRUE, featureSel = TRUE, parametric = FALSE,
-    pAdj = "none", distFun = NULL)
+    alpha = 0.1, foldChange = TRUE, featureSel = TRUE, logTransformed = NULL,
+    parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{trainExpData}{either an \code{\link[Biobase]{ExpressionSet}},
@@ -55,6 +55,10 @@ expression data}
 Feature selection is performed using one of four tests: Student's t-test,
 ANOVA, Wilcoxon-Mann-Withney test, or Kruskal-Wallis test. The test
 used depends on the number of groups and the \code{parametric} argument}
+
+\item{logTransformed}{logical or NULL. It indicates whether the data is
+log-transformed. If NULL, an attempt is made to guess if the data is
+log-transformed}
 
 \item{parametric}{logical, whether to use a parametric or a non-parametric
 test for the feature selection}

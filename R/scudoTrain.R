@@ -94,7 +94,7 @@ NULL
 #'
 #' @usage scudoTrain(expressionData, groups, nTop, nBottom, alpha = 0.1,
 #'     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
-#'     parametric = FALSE, pAdj = "none", distFun = NULL)
+#'     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL)
 #
 #' @param expressionData either an \code{\link[Biobase]{ExpressionSet}},
 #' a data.frame or a matrix of gene expression data, with a column for

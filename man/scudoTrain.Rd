@@ -6,7 +6,7 @@
 \usage{
 scudoTrain(expressionData, groups, nTop, nBottom, alpha = 0.1,
     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
-    parametric = FALSE, pAdj = "none", distFun = NULL)
+    logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
 \item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}},

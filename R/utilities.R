@@ -203,7 +203,7 @@ NULL
 
     if (is.null(logTransformed)) {
         qx <- as.numeric(stats::quantile(ExpressionData,
-            c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
+            c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm = TRUE))
         logTransformed <- !((qx[5] > 100) || (qx[6]-qx[1] > 50 && qx[2] > 0) ||
             (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2))
     }
