@@ -209,7 +209,6 @@ NULL
     }
 
 
-
     if (logTransformed) {
         foldChangeExData <- ExpressionData - virtControl
     } else {

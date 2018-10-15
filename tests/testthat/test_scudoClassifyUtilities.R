@@ -117,5 +117,13 @@ test_that(".visitEdges works", {
     res5 <- c(sum(w[1:3]), sum(w[4:5]))/sum(w)
     names(res5) <- levels(g)
     expect_equal(scores5, res5)
+
+    sr6 <- scudoTrain(expData[, c(8, 1:7, 9)], g, 4, 4, alpha = 0.5, foldChange = FALSE,
+        featureSel = FALSE)
+    net6 <- scudoNetwork(sr6, 0.2)
+    scores6 <- .visitEdges(net6, 2, levels(g), FALSE, 1)
+    res6 <- c(2, 4) / 6
+    names(res6) <- levels(g)
+    expect_equal(scores6, res6)
 })
 

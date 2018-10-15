@@ -136,29 +136,33 @@ NULL
     bfsRes <- igraph::bfs(net, root, unreachable = FALSE, dist = TRUE)
     toVisit <- rep(FALSE, length(igraph::V(net)))
     toVisit[bfsRes$dist <= maxDist - 1] <- TRUE
-    visited <- rep(FALSE, length(igraph::V(net)))
+    finished <- rep(FALSE, length(igraph::V(net)))
     groupScores <- rep(0, length(groups))
     names(groupScores) <- groups
 
     while (any(toVisit)) {
         u <- igraph::V(net)[toVisit][1]
-        visited[as.integer(u)] <- TRUE
         toVisit[as.integer(u)] <- FALSE
         firstNeighbors <- igraph::neighborhood(net, nodes = u, mindist = 1)[[1]]
         firstNeighbors <- firstNeighbors[!(firstNeighbors %in%
-            igraph::V(net)[visited])]
+            igraph::V(net)[finished])]
         neighborsGroups <- as.factor(firstNeighbors$group)
         if (weighted) {
             neighborsScores <- .getScores(net, u, firstNeighbors)
         } else {
             neighborsScores <- rep(1, length(neighborsGroups))
         }
-        coeff <- beta ^ bfsRes$dist[u]
-        neighborsScores <- coeff * neighborsScores
+        coeff1 <- rep(1, length(firstNeighbors))
+        coeff1[bfsRes$dist[firstNeighbors] == bfsRes$dist[u]] <- 0.5
+        coeff2 <- beta ^ bfsRes$dist[u]
+        neighborsScores <- coeff1 * coeff2 * neighborsScores
         newScores <- vapply(split(neighborsScores, neighborsGroups), sum,
                             numeric(1))
         groupScores[as.character(levels(neighborsGroups))] <- groupScores[
             as.character(levels(neighborsGroups))] + newScores
+        if (any(toVisit) && min(bfsRes$dist[toVisit]) >  bfsRes$dist[u]) {
+            finished[bfsRes$dist == bfsRes$dist[u]] <- TRUE
+        }
     }
 
     groupScores <- groupScores / sum(groupScores)
@@ -175,5 +179,3 @@ NULL
         (length(trainGroups) + 1):(dim(dMatrix)[2])]
     scores
 }
-
-
