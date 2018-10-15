@@ -28,7 +28,19 @@ NULL
 #' neighbors of S in the network are explored, up to a distance controlled by
 #' the parameter \code{masDist}. If the \code{weighted} parameter is
 #' \code{FALSE}, the classification scores for each group are computed as the
-#' total number of edges
+#' number of edges connecting S or one of it's neighbor to a node of that group.
+#' The scores are than rescaled dividing them for their sum, in order to obtain
+#' values between 0 and 1. If the \code{weighted} parameter is \code{TRUE}, the
+#' classification scores for each group are computed as the sum of the
+#' similarity scores associated to edges connecting S or one of it's neighbor to
+#' node of that group. The scores are than rescaled dividing them for their sum,
+#' in order to obtain values between 0 and 1. The parameter \code{beta} can be
+#' used to downweight the contribution to the classification scores of edges
+#' connecting nodes distant form S, both in the weighed and unweighted cases.
+#'
+#' The predicted group for each sample is the one with the largest
+#' classification scores. Both predictions and classification score are
+#' returned.
 #
 #' The optimization of the parameters is left to the user in the current verion
 #' and should be performed optimizing the separation of samples belonging to

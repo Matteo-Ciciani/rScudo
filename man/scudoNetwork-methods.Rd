@@ -43,8 +43,8 @@ smaller than this quantile are mapped to 1 (with the exception of the
 distances of any node from itself, which are equal to 0).
 
 Distances are set as attributes of the edges of the graph. Use \code{
-igraph::E(igraphObject)$distance} to retrieve them, where \code{igraphObject} is the result
-of \code{scudoNetwork}.
+igraph::E(igraphObject)$distance} to retrieve them, where
+\code{igraphObject} is the result of \code{scudoNetwork}.
 
 The \code{color} parameter controls the color of the nodes. It must be a
 vector of hexadecimal RGB color codes (like "#FFFFFF"), with lenth equal to
