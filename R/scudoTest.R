@@ -78,7 +78,7 @@ NULL
 #' @export
 scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
     nTop = NULL, nBottom = NULL, foldChange = TRUE,
-    groupedFoldChange = FALSE, distFun = NULL) {
+    groupedFoldChange = FALSE, logTransformed = NULL, distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
 
@@ -102,8 +102,8 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     # use placeholder for alpha, featureSel, pAdj
     .inputCheck(testExpData, testG, nTop, nBottom, alpha = 0.5,
-        foldChange, groupedFoldChange, featureSel = FALSE, parametric = FALSE,
-        pAdj = "none", distFun = NULL)
+        foldChange, groupedFoldChange, featureSel = FALSE, logTransformed,
+        parametric = FALSE, pAdj = "none", distFun = NULL)
 
     nTest <- length(levels(testGroups))
     nTrain <- length(levels(groupsAnnotation(trainScudoRes)))
@@ -119,7 +119,9 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
     testGroups <- testGroups[, drop = TRUE]
     foldChangeGroups <- if(groupedFoldChange) testGroups else NULL
 
-    if (foldChange) testExpData <- .computeFC(testExpData, foldChangeGroups)
+    if (foldChange) {
+        testExpData <- .computeFC(testExpData, foldChangeGroups, logTransformed)
+    }
 
     # Test Feature Selection ---------------------------------------------------
 

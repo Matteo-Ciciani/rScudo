@@ -2,8 +2,8 @@
 NULL
 
 .classifyInputCheck <- function(trainExpData, testExpData, N, nTop, nBottom,
-    trainGroups, neighbors, weighted, complete,
-    beta, alpha, foldChange, featureSel, parametric, pAdj, distFun) {
+    trainGroups, neighbors, weighted, complete, beta, alpha, foldChange,
+    featureSel, logTransformed,  parametric, pAdj, distFun) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -105,7 +105,7 @@ NULL
 
     # check other parameters, use placeholder for groupedFoldChange ------------
 
-    .checkParams(alpha, foldChange, TRUE, featureSel,
+    .checkParams(alpha, foldChange, TRUE, featureSel, logTransformed,
         parametric, pAdj, distFun)
 
 }

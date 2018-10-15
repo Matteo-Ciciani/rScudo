@@ -82,7 +82,7 @@ test_that(".performScudo works", {
 })
 
 test_that(".computeFC works correctly", {
-    df <- data.frame(a = rep(1, 5), # appears to be log transformed
+    df <- data.frame(a = rep(1, 5),
                      b = rep(3, 5),
                      c = rep(5, 5),
                      d = 1:5,
@@ -93,5 +93,5 @@ test_that(".computeFC works correctly", {
     virtContr <- (3 + 6:10) / 2
     correctRes <- df - virtContr
 
-    expect_equal(.computeFC(df, groups), correctRes)
+    expect_equal(.computeFC(df, groups, NULL), correctRes)
 })

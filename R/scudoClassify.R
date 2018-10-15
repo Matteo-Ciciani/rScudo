@@ -95,8 +95,8 @@ NULL
 #' @export
 scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
-    alpha = 0.1, foldChange = TRUE, featureSel = TRUE, parametric = FALSE,
-    pAdj = "none", distFun = NULL) {
+    alpha = 0.1, foldChange = TRUE, featureSel = TRUE, logTransformed = NULL,
+    parametric = FALSE, pAdj = "none", distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
 
@@ -115,16 +115,16 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     }
 
     .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
-        trainGroups, maxDist, weighted, complete, beta,
-        alpha, foldChange, featureSel, parametric, pAdj, distFun)
+        trainGroups, maxDist, weighted, complete, beta, alpha, foldChange,
+        featureSel, logTransformed, parametric, pAdj, distFun)
 
     # computeFC ------------------------------------------------------------
 
     trainGroups <- trainGroups[, drop = TRUE]
 
     if (foldChange) {
-        trainExpData <- .computeFC(trainExpData, NULL)
-        testExpData <- .computeFC(testExpData, NULL)
+        trainExpData <- .computeFC(trainExpData, NULL, logTransformed)
+        testExpData <- .computeFC(testExpData, NULL, logTransformed)
     }
 
     # Feature Selection --------------------------------------------------------

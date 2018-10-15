@@ -4,7 +4,8 @@ NULL
 # .inputCheck ------------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
-    foldChange, groupedFoldChange, featureSel, parametric, pAdj, distFun) {
+    foldChange, groupedFoldChange, featureSel, logTransformed, parametric, pAdj,
+    distFun) {
 
     # checks on expressionData -------------------------------------------------
 
@@ -70,11 +71,11 @@ NULL
     # check other parameters
 
     .checkParams(alpha, foldChange, groupedFoldChange, featureSel,
-        parametric, pAdj, distFun)
+        logTransformed, parametric, pAdj, distFun)
 }
 
 .checkParams <- function(alpha, foldChange, groupedFoldChange, featureSel,
-    parametric, pAdj, distFun) {
+    logTransformed, parametric, pAdj, distFun) {
 
     stopifnot(is.numeric(alpha),
         length(alpha) == 1,
@@ -88,6 +89,12 @@ NULL
 
     if (is.na(alpha)) {
         stop("alpha cannot be NA.")
+    }
+
+    if (!is.null(logTransformed)) {
+        stopifnot(is.logical(logTransformed),
+            is.vector(logTransformed),
+            length(logTransformed) == 1)
     }
 
     stopifnot(is.logical(foldChange),
@@ -184,7 +191,7 @@ NULL
 
 # .computeFC -------------------------------------------------------------------
 
-.computeFC <- function(ExpressionData, groups) {
+.computeFC <- function(ExpressionData, groups, logTransformed) {
 
     if (is.null(groups)) {
         virtControl <- rowMeans(ExpressionData)
@@ -194,16 +201,19 @@ NULL
             rep(0.0, dim(ExpressionData)[1])))
     }
 
-    qx <- as.numeric(stats::quantile(ExpressionData,
-        c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
-    logC <- (qx[5] > 100) || #checking if not log transfromed
-        (qx[6]-qx[1] > 50 && qx[2] > 0) ||
-        (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)
+    if (is.null(logTransformed)) {
+        qx <- as.numeric(stats::quantile(ExpressionData,
+            c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
+        logTransformed <- !((qx[5] > 100) || (qx[6]-qx[1] > 50 && qx[2] > 0) ||
+            (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2))
+    }
 
-    if (logC) {
-        foldChangeExData <- ExpressionData / virtControl
-    } else {
+
+
+    if (logTransformed) {
         foldChangeExData <- ExpressionData - virtControl
+    } else {
+        foldChangeExData <- ExpressionData / virtControl
     }
     foldChangeExData
 }
