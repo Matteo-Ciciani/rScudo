@@ -21,7 +21,8 @@ NULL
 #'
 #' @seealso \code{\link{scudoNetwork}}, \code{\link[RCy3]{RCy3}}
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
+#' \email{cantorethomas@@gmail.com}
 #'
 #' @examples
 #' # generate dummy dataset

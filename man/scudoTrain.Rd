@@ -169,5 +169,6 @@ distMatrix(res)
 \code{\linkS4class{scudoResults}}
 }
 \author{
-Matteo Ciciani \email{matteo.ciciani@gmail.com}
+Matteo Ciciani \email{matteo.ciciani@gmail.com}, Thomas Cantore
+\email{cantorethomas@gmail.com}
 }

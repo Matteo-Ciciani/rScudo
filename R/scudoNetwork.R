@@ -47,7 +47,8 @@ NULL
 #' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
 #' \code{\link[igraph:igraph-package]{igraph}}
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
+#' \email{cantorethomas@@gmail.com}
 #'
 #' @examples
 #' # generate dummy dataset and run scudo

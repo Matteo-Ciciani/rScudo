@@ -120,7 +120,8 @@ NULL
 #'
 #' @seealso \code{\link{scudoTrain}}
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
+#' \email{cantorethomas@@gmail.com}
 #'
 #' @examples
 #' expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,

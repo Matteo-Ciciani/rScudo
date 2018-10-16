@@ -142,7 +142,8 @@ NULL
 #' @seealso \code{\link{scudoTest}}, \code{\link{scudoNetwork}},
 #' \code{\linkS4class{scudoResults}}
 #'
-#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}
+#' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
+#' \email{cantorethomas@@gmail.com}
 #'
 #' @examples
 #' # generate dummy dataset

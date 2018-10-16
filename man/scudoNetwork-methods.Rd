@@ -89,5 +89,6 @@ scudoPlot(net)
 \code{\link[igraph:igraph-package]{igraph}}
 }
 \author{
-Matteo Ciciani \email{matteo.ciciani@gmail.com}
+Matteo Ciciani \email{matteo.ciciani@gmail.com}, Thomas Cantore
+\email{cantorethomas@gmail.com}
 }
