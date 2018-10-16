@@ -21,7 +21,7 @@ NULL
 #' smaller than this quantile are mapped to 1 (with the exception of the
 #' distances of any node from itself, which are equal to 0).
 #'
-#' Distances are set as attributes of the edges of the graph. Use \code{
+#' Distances are set as attributes of the edges. Use \code{
 #' igraph::E(igraphObject)$distance} to retrieve them, where
 #' \code{igraphObject} is the result of \code{scudoNetwork}.
 #'
