@@ -6,7 +6,7 @@ NULL
 #' Performs SCUDO analysis
 #'
 #' SCUDO (Signature-based ClUstering for DiagnOstic purposes) is a rank-based
-#' method for the analysis of gene expression profiles This function
+#' method for the analysis of gene expression profiles. This function
 #' computes gene signatures for each sample and consensus signatures for each
 #' group specified. A distance matrix is also computed, that can be used by the
 #' function \code{\link{scudoNetwork}} to generate a graph in which each node is
@@ -72,7 +72,7 @@ NULL
 #' ES: \deqn{d(A,B)=(ES(A,B)+ES(B,A))/2}
 #' Finally, a rounded value of the minimum non-zero distance is subtracted from
 #' all values; the purpose of this transformation is to expand the dynamic range
-#' and increase the relative differ ence between distance values.
+#' and increase the relative difference between distance values.
 #'
 #' The ES employed by default is also known as the Kolmogorov-Smirnov
 #' running sum and is analogous to the ES used in the unweighted early

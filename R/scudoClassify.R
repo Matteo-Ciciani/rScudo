@@ -27,7 +27,7 @@ NULL
 #' the parameter \code{N} as a threshold for edge selection (see Details of
 #' \code{\link{scudoNetwork}} for a more complete description). Then the
 #' neighbors of S in the network are explored, up to a distance controlled by
-#' the parameter \code{masDist}. If the \code{weighted} parameter is
+#' the parameter \code{maxDist}. If the \code{weighted} parameter is
 #' \code{FALSE}, the classification scores for each group are computed as the
 #' number of edges connecting S or one of its neighbors to a node of that group.
 #' The scores are than rescaled dividing them by their sum, in order to obtain
@@ -44,7 +44,7 @@ NULL
 #' classification score. Both predictions and classification scores are
 #' returned.
 #
-#' The optimization of the parameters is left to the user in the current verion
+#' The optimization of the parameters is left to the user in the current version
 #' and should be performed optimizing the separation of samples belonging to
 #' different groups using \code{\link{scudoTrain}} and
 #' \code{\link{scudoNetwork}}.
@@ -73,7 +73,7 @@ NULL
 #' @param trainGroups factor containing group labels for each sample in
 #' \code{trainExpData}
 #'
-#' @param maxDist intger. Only nodes with a distance from a testing node less or
+#' @param maxDist integer. Only nodes with a distance from a testing node less or
 #' equal to \code{maxDist} are used to perform the classification.
 #'
 #' @param weighted logical, whether to consider the distances associated to the
