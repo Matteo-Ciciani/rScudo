@@ -35,32 +35,32 @@ manually create instances of this class (see Examples below).
 \section{Slots}{
 
 \describe{
-\item{\code{distMatrix}}{Object of class matrix. A symmetric matrix with
-non-negative numeric elements.}
+\item{\code{distMatrix}}{a symmetric matrix with
+non-negative numeric elements}
 
-\item{\code{upSignatures}}{Object of class data.frame. A data.frame with the
+\item{\code{upSignatures}}{a data.frame with the
 same colnames as distMatrix, representing the up-regualted features in each
-sample.}
+sample}
 
-\item{\code{downSignatures}}{Object of class data.frame. A data.frame with the
+\item{\code{downSignatures}}{a data.frame with the
 same colnames as distMatrix, representing the down-regualted
-features in each sample.}
+features in each sample}
 
-\item{\code{groupsAnnotation}}{Object of class factor. It represents the groups
-used for the computeFC and the feature selection.}
+\item{\code{groupsAnnotation}}{a factor that represents the groups
+used for the computeFC and the feature selection}
 
-\item{\code{consensusUpSignatures}}{Object of class data.frame. It contains the
-consensus signatures of up-regulated features for each group.}
+\item{\code{consensusUpSignatures}}{a data.frame that contains the
+consensus signatures of up-regulated features for each group}
 
-\item{\code{consensusDownSignatures}}{Object of class data.frame. It contains
-the consensus signatures of dowm-regulated features for each group.}
+\item{\code{consensusDownSignatures}}{a data.frame that contains
+the consensus signatures of dowm-regulated features for each group}
 
-\item{\code{selectedFeatures}}{Object of class character. A vector of selected
+\item{\code{selectedFeatures}}{a character vector of selected
 features. If the feature selection was not performed, it contains every
-feature present in the input of the scudo functions.}
+feature present in the input of the scudo functions}
 
-\item{\code{params}}{Object of class list. A list of the parameters used to run
-the function that created the instance of the class.}
+\item{\code{params}}{a list of the parameters used to run
+the function that created the instance of the class}
 }}
 
 \section{Methods}{

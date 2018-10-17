@@ -47,7 +47,8 @@ igraph::E(igraphObject)$distance} to retrieve them, where
 \code{igraphObject} is the result of \code{scudoNetwork}.
 
 The \code{color} parameter controls the color of the nodes. It must be a
-vector of hexadecimal RGB color codes (like "#FFFFFF"), with lenth equal to
+vector of hexadecimal RGB color codes (like \code{"#FFFFFF"}), with length
+equal to
 the number of samples in \code{object}. By default, a different color is
 assigned to each group. If no group is specified in \code{object}, all nodes
 are set to the same color. A vector of node colors can be accessed
