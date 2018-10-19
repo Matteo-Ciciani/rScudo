@@ -95,13 +95,13 @@ ConsUpSig[1:5, ]
 The object `ScudoRes` can be used to generate a network of samples, as an `r CRANpkg("igraph")`object, using the function `ScudoNetwork`.
 
 ```{r}
-netTrain <- scudoNetwork(ScudoTrain, N = 0.3)
+netTrain <- scudoNetwork(ScudoTrain, N = 0.2)
 ```
 
 The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
 
 ```{r}
-scudoPlot(netTrain)
+scudoPlot(netTrain, vertex.label = NA)
 ```
 
 This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
@@ -131,7 +131,7 @@ ScudoTest
 We can plot the resulting network and we can attempt to identify communities.
 
 ```{r}
-netTest <- scudoNetwork(ScudoTest, N = 0.3)
+netTest <- scudoNetwork(ScudoTest, N = 0.2)
 plot(netTest)
 ```
 
@@ -142,12 +142,29 @@ clusterTest <- igraph::cluster_fast_greedy(netTest)
 plot(clusterTest, netTest)
 ```
 
+Cluster with kmeans on the weighted agjacency matrix
+
+```{r}
+igraph::E(netTest)$weight <- 2 - igraph::E(netTest)$distance
+adj <- igraph::get.adjacency(netTest, attr = "weight")
+km <- kmeans(adj, 2)
+km$cluster == as.integer(bt[-inTrain])
+```
+
+Use community clustering forcing 2 communities:
+
+```{r}
+spr <- igraph::cluster_spinglass(netTest, spins = 2)
+plot(spr, netTest)
+```
+
+
+
 The same analysis could be performed in Cytoscape.
 
 ```{r,eval=FALSE}
 scudoCytoscape(netTest)
 ```
-
 
 # References
 

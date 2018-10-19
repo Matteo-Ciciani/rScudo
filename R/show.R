@@ -30,8 +30,8 @@ setMethod("show", "scudoResults", function(object) {
     cat("Fold-changes           : ", paste0(ifelse(params(object)$foldChange,
         "", "not "), "computed"), "\n")
     if (params(object)$foldChange) {
-        cat("    grouped fold-changes     : ", paste0(ifelse(params(
-            object)$groupedFoldChange, "", "not "), "computed"), "\n")
+        cat("    grouped            : ", ifelse(params(
+            object)$groupedFoldChange, "Yes", "No "), "\n")
     }
 
     if (length(params(object)) == 8 && params(object)$featureSel) {
