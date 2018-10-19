@@ -8,7 +8,7 @@ NULL
 #' samples and edges quantify the similarity between the nodes.
 #'
 #' This function uses the distance matrix in the
-#' \code{\linkS4class{scudoResults}} object to generates an
+#' \code{\linkS4class{scudoResults}} object to generate an
 #' \code{\link[igraph:igraph-package]{igraph}} object, representing a graph
 #' where nodes are samples and edges quantify the similarity between the
 #' signatures of pairs of nodes.
