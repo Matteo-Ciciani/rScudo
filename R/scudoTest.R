@@ -6,9 +6,9 @@ NULL
 #' Performs SCUDO analysis on test dataset
 #'
 #' A function to perform the SCUDO analysis on test data, given an object of
-#' class \code{scudoResults} used as training model.
+#' class \code{ScudoResults} used as training model.
 #'
-#' Given an object of class \code{\linkS4class{scudoResults}} and a set of
+#' Given an object of class \code{\linkS4class{ScudoResults}} and a set of
 #' expression profiles with unknown classification, \code{scudoTest} performs an
 #' analysis similar to \code{\link{scudoTrain}}, computing a list of signatures
 #' composed of genes over- and under-expressed in each sample, consensus
@@ -16,7 +16,7 @@ NULL
 #' similarity between the signatures of pairs of samples.
 #'
 #' \code{scudoTest} differs from \code{scudoTrain} in the feature selection
-#' step: only the features present in the \code{scudoResults} object taken as
+#' step: only the features present in the \code{ScudoResults} object taken as
 #' input are considered for the follwing steps. The computation of fold-changes,
 #' the identification of gene signatures and the computation of the distance
 #' matrix are performed as described in the Details of \code{\link{scudoTrain}}.
@@ -59,10 +59,10 @@ NULL
 #' samples. See \code{\link{scudoTrain}} function Details for the
 #' specification of this function
 #'
-#' @return Object of class \code{\linkS4class{scudoResults}}.
+#' @return Object of class \code{\linkS4class{ScudoResults}}.
 #'
 #' @seealso \code{\link{scudoTrain}}, \code{\link{scudoNetwork}},
-#' \code{\linkS4class{scudoResults}}, \code{\link{scudoClassify}}
+#' \code{\linkS4class{ScudoResults}}, \code{\link{scudoClassify}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
 #' \email{cantorethomas@@gmail.com}
@@ -101,11 +101,11 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
         testExpData <- as.data.frame(testExpData)
     }
 
-    if (is(trainScudoRes, "scudoResults")) {
+    if (is(trainScudoRes, "ScudoResults")) {
         if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop
         if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
     } else {
-        stop("trainScudoRes must be an object of class scudoResults. Current",
+        stop("trainScudoRes must be an object of class ScudoResults. Current",
             " class is ", class(trainScudoRes))
     }
 

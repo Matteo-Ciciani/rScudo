@@ -2,94 +2,94 @@
 #' @include class.R
 NULL
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("distMatrix", function(object) standardGeneric("distMatrix"))
 
-#' @rdname scudoResults-class
-#' @aliases distMatrix,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases distMatrix,ScudoResults-method
 #' @usage NULL
-setMethod("distMatrix", signature = "scudoResults", definition =
+setMethod("distMatrix", signature = "ScudoResults", definition =
     function(object) object@distMatrix)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("upSignatures", function(object) standardGeneric("upSignatures"))
 
-#' @rdname scudoResults-class
-#' @aliases upSignatures,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases upSignatures,ScudoResults-method
 #' @usage NULL
-setMethod("upSignatures", signature = "scudoResults", definition =
+setMethod("upSignatures", signature = "ScudoResults", definition =
     function(object) object@upSignatures)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("downSignatures", function(object) standardGeneric("downSignatures"))
 
-#' @rdname scudoResults-class
-#' @aliases downSignatures,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases downSignatures,ScudoResults-method
 #' @usage NULL
-setMethod("downSignatures", signature = "scudoResults", definition =
+setMethod("downSignatures", signature = "ScudoResults", definition =
     function(object) object@downSignatures)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("groupsAnnotation", function(object) standardGeneric(
     "groupsAnnotation"))
 
-#' @rdname scudoResults-class
-#' @aliases groupsAnnotation,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases groupsAnnotation,ScudoResults-method
 #' @usage NULL
-setMethod("groupsAnnotation", signature = "scudoResults", definition =
+setMethod("groupsAnnotation", signature = "ScudoResults", definition =
     function(object) object@groupsAnnotation)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("consensusUpSignatures",
     function(object) standardGeneric("consensusUpSignatures"))
 
-#' @rdname scudoResults-class
-#' @aliases consensusUpSignatures,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases consensusUpSignatures,ScudoResults-method
 #' @usage NULL
-setMethod("consensusUpSignatures", signature = "scudoResults", definition =
+setMethod("consensusUpSignatures", signature = "ScudoResults", definition =
     function(object) object@consensusUpSignatures)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("consensusDownSignatures",
     function(object) standardGeneric("consensusDownSignatures"))
 
-#' @rdname scudoResults-class
-#' @aliases consensusDownSignatures,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases consensusDownSignatures,ScudoResults-method
 #' @usage NULL
-setMethod("consensusDownSignatures", signature = "scudoResults", definition =
+setMethod("consensusDownSignatures", signature = "ScudoResults", definition =
     function(object) object@consensusDownSignatures)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("selectedFeatures",
     function(object) standardGeneric("selectedFeatures"))
 
-#' @rdname scudoResults-class
-#' @aliases selectedFeatures,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases selectedFeatures,ScudoResults-method
 #' @usage NULL
-setMethod("selectedFeatures", signature = "scudoResults", definition =
+setMethod("selectedFeatures", signature = "ScudoResults", definition =
     function(object) object@selectedFeatures)
 
-#' @rdname scudoResults-class
+#' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
 setGeneric("params", function(object) standardGeneric("params"))
 
-#' @rdname scudoResults-class
-#' @aliases params,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases params,ScudoResults-method
 #' @usage NULL
-setMethod("params", signature = "scudoResults", definition =
+setMethod("params", signature = "ScudoResults", definition =
     function(object) object@params)

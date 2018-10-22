@@ -51,7 +51,7 @@ adjustment methods}
 samples. See Details for the specification of this function}
 }
 \value{
-Object of class \code{\linkS4class{scudoResults}}.
+Object of class \code{\linkS4class{ScudoResults}}.
 }
 \description{
 SCUDO (Signature-based ClUstering for DiagnOstic purposes) is a rank-based
@@ -166,7 +166,7 @@ distMatrix(res)
 }
 \seealso{
 \code{\link{scudoTest}}, \code{\link{scudoNetwork}},
-\code{\linkS4class{scudoResults}}
+\code{\linkS4class{ScudoResults}}
 }
 \author{
 Matteo Ciciani \email{matteo.ciciani@gmail.com}, Thomas Cantore

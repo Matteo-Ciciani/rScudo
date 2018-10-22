@@ -10,7 +10,7 @@ test_that("scudoCytoscape raises errors when it should", {
 
     groups <- factor(c("h","h","d","d"))
     res <- scudoTrain(exData, groups, 1, 3, 0.1)
-    expect_s4_class(res, "scudoResults")
+    expect_s4_class(res, "ScudoResults")
 
     scudoNet <- scudoNetwork(res, 0.2)
     expect_s3_class(scudoNet, "igraph")

@@ -329,7 +329,7 @@ NULL
             nTop, nBottom)
     }
 
-    # create scudoResults object to return
+    # create ScudoResults object to return
     UpSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[seq_len(nTop), ]
     DwnSig <- as.data.frame(sigMatrix, stringsAsFactors = FALSE)[
         seq(nTop + 1, nrow(sigMatrix)), ]
@@ -368,7 +368,7 @@ NULL
 
     if (is.null(groups)) groups <- factor()
 
-    scudoResults(distMatrix = distances,
+    ScudoResults(distMatrix = distances,
         upSignatures = UpSig,
         downSignatures = DwnSig,
         groupsAnnotation = groups,

@@ -45,7 +45,7 @@ test_that(".performScudo works", {
 
     res <- .performScudo(exprData, grps, nTop, nBottom, NULL, p, FALSE, FALSE,
                          FALSE, FALSE, "none")
-    expect_s4_class(res, "scudoResults")
+    expect_s4_class(res, "ScudoResults")
 
     d_ad <- 1 - ((-6/8 + 2/3)/2 + (-6/8 + 2/3)/2)/2
     d_cd <- 1 - ((-1 + 5/7)/2 + (6/8 - 2/3)/2)/2

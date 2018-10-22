@@ -10,7 +10,7 @@ test_that("scudoNetwork throws errors when it should", {
 
     groups <- factor(c("h","h","d","d"))
     res <- scudoTrain(exData, groups, 1, 3, 0.1)
-    expect_s4_class(res, "scudoResults")
+    expect_s4_class(res, "ScudoResults")
 
     expect_s3_class(scudoNetwork(res, 0.2), "igraph")
     expect_s3_class(scudoNetwork(res, 0.2, colors = c("#11111111", "#111111",

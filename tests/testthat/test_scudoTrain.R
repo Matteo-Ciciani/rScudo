@@ -17,7 +17,7 @@ test_that("scudoTrain raises errors on wrong inputs", {
     gr6 <- factor(c(1, 1, 2, 2)) # integers should be ok
     gr7 <- factor(c(1, 1, 1, 1))
 
-    expect_s4_class(scudoTrain(exData, gr1, 1, 3, 0.1), "scudoResults")
+    expect_s4_class(scudoTrain(exData, gr1, 1, 3, 0.1), "ScudoResults")
 
     # Tests on expressionData errors -------------------------------------------
 
@@ -42,7 +42,7 @@ test_that("scudoTrain raises errors on wrong inputs", {
 
     expect_error(scudoTrain(exData, gr5, 1, 3, 0.1))
 
-    expect_s4_class(scudoTrain(exData, gr6, 1, 3, 0.1), "scudoResults")
+    expect_s4_class(scudoTrain(exData, gr6, 1, 3, 0.1), "ScudoResults")
 
     expect_warning(scudoTrain(exData, gr7, 1, 3, 0.1))
 

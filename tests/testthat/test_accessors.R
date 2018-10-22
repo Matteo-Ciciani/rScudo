@@ -18,7 +18,7 @@ test_that("Accessors work correctly", {
     Feats <- letters[1:20]
     Pars <- list() # to update
 
-    ScudoRes <- scudoResults(distMatrix = m,
+    ScudoRes <- ScudoResults(distMatrix = m,
                              upSignatures = SigUp,
                              downSignatures = SigDown,
                              groupsAnnotation = groups,

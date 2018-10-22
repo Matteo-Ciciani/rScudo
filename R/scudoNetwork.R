@@ -1,14 +1,14 @@
 #' @include class.R scudoTrain.R accessors.R utilities.R
 NULL
 
-#' Create graph from a scudoResults object
+#' Create graph from a ScudoResults object
 #'
 #' A function to create an \code{\link[igraph:igraph-package]{igraph}} object
-#' from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
+#' from a \code{\linkS4class{ScudoResults}} object. In the graph, nodes are
 #' samples and edges quantify the similarity between the nodes.
 #'
 #' This function uses the distance matrix in the
-#' \code{\linkS4class{scudoResults}} object to generate an
+#' \code{\linkS4class{ScudoResults}} object to generate an
 #' \code{\link[igraph:igraph-package]{igraph}} object, representing a graph
 #' where nodes are samples and edges quantify the similarity between the
 #' signatures of pairs of nodes.
@@ -35,7 +35,7 @@ NULL
 #' \code{igraph::V(igraphObject)$group} to access the group label of each node
 #' (it returns NULL if no group is specified in \code{object}).
 #'
-#' @param object a \code{\linkS4class{scudoResults}} object
+#' @param object a \code{\linkS4class{ScudoResults}} object
 #' @param N a number between 0 and 1, representing the fraction of the
 #' signature-to-signature distances that will be used to draw the graph
 #' @param colors a character vector of hexadecimal RGB color codes used to color
@@ -45,7 +45,7 @@ NULL
 #'
 #' @return An object of class \code{\link[igraph:igraph-package]{igraph}}.
 #'
-#' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
+#' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{ScudoResults}},
 #' \code{\link[igraph:igraph-package]{igraph}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
@@ -85,9 +85,9 @@ setGeneric("scudoNetwork", function(object, N, colors = character())
     standardGeneric("scudoNetwork"))
 
 #' @rdname scudoNetwork-methods
-#' @aliases scudoNetwork,scudoResults-method
+#' @aliases scudoNetwork,ScudoResults-method
 #' @usage NULL
-setMethod("scudoNetwork", signature = "scudoResults", definition =
+setMethod("scudoNetwork", signature = "ScudoResults", definition =
     function(object, N, colors) {
 
         # input checks

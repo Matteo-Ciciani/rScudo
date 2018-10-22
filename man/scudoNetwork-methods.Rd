@@ -3,13 +3,13 @@
 \docType{methods}
 \name{scudoNetwork}
 \alias{scudoNetwork}
-\alias{scudoNetwork,scudoResults-method}
-\title{Create graph from a scudoResults object}
+\alias{scudoNetwork,ScudoResults-method}
+\title{Create graph from a ScudoResults object}
 \usage{
 scudoNetwork(object, N, colors = character())
 }
 \arguments{
-\item{object}{a \code{\linkS4class{scudoResults}} object}
+\item{object}{a \code{\linkS4class{ScudoResults}} object}
 
 \item{N}{a number between 0 and 1, representing the fraction of the
 signature-to-signature distances that will be used to draw the graph}
@@ -24,12 +24,12 @@ An object of class \code{\link[igraph:igraph-package]{igraph}}.
 }
 \description{
 A function to create an \code{\link[igraph:igraph-package]{igraph}} object
-from a \code{\linkS4class{scudoResults}} object. In the graph, nodes are
+from a \code{\linkS4class{ScudoResults}} object. In the graph, nodes are
 samples and edges quantify the similarity between the nodes.
 }
 \details{
 This function uses the distance matrix in the
-\code{\linkS4class{scudoResults}} object to generate an
+\code{\linkS4class{ScudoResults}} object to generate an
 \code{\link[igraph:igraph-package]{igraph}} object, representing a graph
 where nodes are samples and edges quantify the similarity between the
 signatures of pairs of nodes.
@@ -86,7 +86,7 @@ scudoPlot(net)
 
 }
 \seealso{
-\code{\link{scudoCytoscape}}, \code{\linkS4class{scudoResults}},
+\code{\link{scudoCytoscape}}, \code{\linkS4class{ScudoResults}},
 \code{\link[igraph:igraph-package]{igraph}}
 }
 \author{

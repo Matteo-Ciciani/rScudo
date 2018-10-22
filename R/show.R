@@ -4,11 +4,11 @@ NULL
 
 # Show -------------------------------------------------------------------------
 
-#' @rdname scudoResults-class
-#' @aliases show,scudoResults-method
+#' @rdname ScudoResults-class
+#' @aliases show,ScudoResults-method
 #' @usage NULL
-setMethod("show", "scudoResults", function(object) {
-    cat("Object of class scudoResults\n")
+setMethod("show", "ScudoResults", function(object) {
+    cat("Object of class ScudoResults\n")
     cat("Result of", ifelse(length(params(object)) == 4,
         "scudoTest", "scudo"), "\n\n")
     cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),

@@ -1,7 +1,7 @@
 #' @import methods
 NULL
 
-#' Class scudoResults
+#' Class ScudoResults
 #'
 #' This is an S4 class that represents the output of the functions
 #' \code{\link{scudoTrain}} and \code{\link{scudoTest}}.
@@ -33,27 +33,27 @@ NULL
 #'
 #' @section Methods:
 #' \describe{
-#' \item{\code{distMatrix}}{\code{signature(object = "scudoResults")}:
+#' \item{\code{distMatrix}}{\code{signature(object = "ScudoResults")}:
 #' a method for obtaining the distance matrix.}
-#' \item{\code{upSignatures}}{\code{signature(object = "scudoResults")}: a
+#' \item{\code{upSignatures}}{\code{signature(object = "ScudoResults")}: a
 #' method for obtaining the signature of up-regualted features in each
 #' sample.}
 #' \item{\code{downSignatures}}{\code{signature(object =
-#' "scudoResults")}: a method for obtaining the signature of down-regulated
+#' "ScudoResults")}: a method for obtaining the signature of down-regulated
 #' features in each sample.}
-#' \item{\code{groupsAnnotation}}{\code{signature(object = "scudoResults")}:
+#' \item{\code{groupsAnnotation}}{\code{signature(object = "ScudoResults")}:
 #' a method for obtaining the groups used for
 #' computeFC and feature selection.}
 #' \item{\code{consensusUpSignatures}}{\code{signature(object =
-#' "scudoResults")}: a method for obtaining the consensus signatures of
+#' "ScudoResults")}: a method for obtaining the consensus signatures of
 #' up-regualted features in each group.}
 #' \item{\code{consensusDownSignatures}}{\code{signature(object =
-#' "scudoResults")}: a method for obtaining the consensus signatures of
+#' "ScudoResults")}: a method for obtaining the consensus signatures of
 #' down-regulated features in each group.}
-#' \item{\code{selectedFeatures}}{\code{signature(object = "scudoResults")}:
+#' \item{\code{selectedFeatures}}{\code{signature(object = "ScudoResults")}:
 #' a method for obtaining the names of the features seleted. If no feature
 #' selection was performed, the names of every feature are returned.}
-#' \item{\code{params}}{\code{signature(object = "scudoResults")}: a method
+#' \item{\code{params}}{\code{signature(object = "ScudoResults")}: a method
 #' for obtaining the parameters that were used to generate the result.}
 #' }
 #'
@@ -62,7 +62,7 @@ NULL
 #'
 #' @examples
 #'
-#' # manually generate instance of scudoResults class
+#' # manually generate instance of ScudoResults class
 #' m <- matrix(1, ncol = 4, nrow = 4)
 #' diag(m) <- 0
 #' rownames(m) <- colnames(m) <- letters[1:4]
@@ -79,7 +79,7 @@ NULL
 #' Feats <- letters[1:20]
 #' Pars <- list()
 #'
-#' scudoR <- scudoResults(distMatrix = m,
+#' scudoR <- ScudoResults(distMatrix = m,
 #'     upSignatures = SigUp,
 #'     downSignatures = SigDown,
 #'     groupsAnnotation = groups,
@@ -88,12 +88,12 @@ NULL
 #'     selectedFeatures = Feats,
 #'     params = Pars)
 #'
-#' @name scudoResults-class
-#' @rdname scudoResults-class
+#' @name ScudoResults-class
+#' @rdname ScudoResults-class
 #'
-#' @export scudoResults
-#' @exportClass scudoResults
-scudoResults <- setClass("scudoResults",
+#' @export ScudoResults
+#' @exportClass ScudoResults
+ScudoResults <- setClass("ScudoResults",
     slots = list(
         distMatrix = "matrix",
         upSignatures = "data.frame",
@@ -104,7 +104,7 @@ scudoResults <- setClass("scudoResults",
         selectedFeatures = "character",
         params = "list"))
 
-setValidity("scudoResults", function(object) {
+setValidity("ScudoResults", function(object) {
     valid <- TRUE
     msg <- NULL
 

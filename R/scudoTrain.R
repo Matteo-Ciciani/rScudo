@@ -137,10 +137,10 @@ NULL
 #' @param distFun the function used to compute the distance between two
 #' samples. See Details for the specification of this function
 #'
-#' @return Object of class \code{\linkS4class{scudoResults}}.
+#' @return Object of class \code{\linkS4class{ScudoResults}}.
 #'
 #' @seealso \code{\link{scudoTest}}, \code{\link{scudoNetwork}},
-#' \code{\linkS4class{scudoResults}}
+#' \code{\linkS4class{ScudoResults}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
 #' \email{cantorethomas@@gmail.com}

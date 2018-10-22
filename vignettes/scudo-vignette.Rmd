@@ -1,5 +1,5 @@
 ---
-title: "SCUDO: Signature-based Clustering for Diagnostic Purposes"
+title: "An introduction to rscudo"
 date: "`r Sys.Date()`"
 author:
 - name: Matteo Ciciani
@@ -7,8 +7,8 @@ author:
 - name: Thomas Cantore
   affiliation: *aff
 output:
-    BiocStyle::html_document:
-        toc_float: true
+    BiocStyle::pdf_document:
+        #toc_float: true
 vignette: >
   %\VignetteIndexEntry{SCUDO: Signature-based Clustering for Diagnostic Purposes}
   %\VignetteEngine{knitr::rmarkdown}
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# An introduction to the method
+# Introduction
 
 SCUDO is a method for the analysis of gene expression profiles for diagnostic and classification purposes. The method is based on the idea of a sample-specific gene signatures. The expected result is the emergence of a partitioning of the set of samples in separate clusters (propely, communities) on the basis of signature similarity.
 
@@ -69,7 +69,8 @@ summary(bt)
 We can divide this dataset in a training set and a testing set. We also convert them to data.farmes. Rigth now the input to our function has to be a data.frame, but we will soon add matrices and ExpressionSets.
 
 ```{r}
-inTrain <- c(1:47, 96:112)
+set.seed(1)
+inTrain <- c(sample(1:95, 47), sample(96:128, 16))
 train <- as.data.frame(expData[, inTrain])
 test <- as.data.frame(expData[, -inTrain])
 ```
@@ -154,7 +155,7 @@ km$cluster == as.integer(bt[-inTrain])
 Use community clustering forcing 2 communities:
 
 ```{r}
-spr <- igraph::cluster_spinglass(netTest, spins = 2)
+spr <- igraph::cluster_spinglass(netTest, weights = NULL, spins = 2)
 plot(spr, netTest)
 ```
 
@@ -164,6 +165,39 @@ The same analysis could be performed in Cytoscape.
 
 ```{r,eval=FALSE}
 scudoCytoscape(netTest)
+```
+
+# Multigroup analysis
+
+```{r}
+mol <- phenoData$mol.biol[bt == "B", drop = TRUE][-48]
+expDataB <- expData[, bt == "B"][, -48]
+
+ScudoTrain2 <- scudoTrain(expDataB, groups = mol, nTop = 200, nBottom = 200, alpha = 0.05)
+ScudoTrain2
+```
+
+```{r}
+netTrain2 <- scudoNetwork(ScudoTrain2, 0.08)
+scudoPlot(netTrain2, vertex.label = NA)
+```
+
+Clustering
+
+
+```{r}
+spr2 <- igraph::cluster_spinglass(netTrain2, weights = NULL, spins = 4)
+plot(spr2, netTrain2)
+```
+
+
+Compare with pca
+
+```{r}
+feats <- selectedFeatures(ScudoTrain2)
+expSel <- expDataB[feats, ]
+pcaRes <- prcomp(t(expSel))
+pairs(pcaRes$x[, 1:5], col = rainbow(4)[as.integer(mol)])
 ```
 
 # References

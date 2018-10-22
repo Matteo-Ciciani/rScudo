@@ -2,8 +2,8 @@ context("Class validity")
 library(scudo)
 
 test_that("Class can be instantiated", {
-    sres <- scudoResults()
-    expect_s4_class(sres, "scudoResults")
+    sres <- ScudoResults()
+    expect_s4_class(sres, "ScudoResults")
 })
 
 test_that("Validity check works", {
@@ -23,18 +23,18 @@ test_that("Validity check works", {
     Feats <- letters[1:20]
     Pars <- list() # to update
 
-    expect_s4_class(scudoResults(distMatrix = m,
+    expect_s4_class(ScudoResults(distMatrix = m,
                                  upSignatures = SigUp,
                                  downSignatures = SigDown,
                                  groupsAnnotation = groups,
                                  consensusUpSignatures = ConsUp,
                                  consensusDownSignatures = ConsDown,
                                  selectedFeatures = Feats,
-                                 params = Pars), "scudoResults")
+                                 params = Pars), "ScudoResults")
 
     # tests are in the same order they are performed in setValidity
     # test errors in distMatrix ------------------------------------------------
-    expect_error(scudoResults(distMatrix = m[1:3,],
+    expect_error(ScudoResults(distMatrix = m[1:3,],
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -44,7 +44,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     m[2] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -54,7 +54,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     m[2] <- NaN
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -64,7 +64,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     m[2] <- "1"
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -77,7 +77,7 @@ test_that("Validity check works", {
     diag(m) <- 0
     rownames(m) <- colnames(m) <- letters[1:4]
     m[1, 2] <- m[2, 1] <- -1
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -88,7 +88,7 @@ test_that("Validity check works", {
 
     m[1, 2] <- m[2, 1] <- 1
     m[2] <- 5
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -99,7 +99,7 @@ test_that("Validity check works", {
 
     m[2] <- 1
     m[1] <- 1
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -110,7 +110,7 @@ test_that("Validity check works", {
 
     m[1] <- 0
     rownames(m) <- colnames(m) <- NULL
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -121,7 +121,7 @@ test_that("Validity check works", {
 
     rownames(m) <- letters[1:4]
     colnames(m) <- letters[5:8]
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -134,7 +134,7 @@ test_that("Validity check works", {
 
     # test errors in upSignatures ----------------------------------------------
     SigUp[1,1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -144,7 +144,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     SigUp[1,1] <- "a"
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp[,1:3],
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -154,7 +154,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     colnames(SigUp) <- letters[5:8]
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -165,7 +165,7 @@ test_that("Validity check works", {
 
     colnames(SigUp) <- letters[1:4]
     SigUp$a <- 1:5
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -178,7 +178,7 @@ test_that("Validity check works", {
 
     # test errors in downSignatures --------------------------------------------
     SigDown[1,1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -188,7 +188,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     SigDown[1,1] <- "a"
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown[,1:3],
                               groupsAnnotation = groups,
@@ -198,7 +198,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     colnames(SigDown) <- letters[5:8]
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -209,7 +209,7 @@ test_that("Validity check works", {
 
     colnames(SigDown) <- letters[1:4]
     SigDown$a <- 1:10
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -222,7 +222,7 @@ test_that("Validity check works", {
 
     # test errors in groups ----------------------------------------------------
     groups[1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -232,7 +232,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     groups[1] <- "G1"
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups[1:3],
@@ -243,7 +243,7 @@ test_that("Validity check works", {
 
     # test errors in consensusUpSignatures -------------------------------------
     ConsUp[1, 1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -253,7 +253,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     ConsUp[1, 1] <- "a"
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -263,7 +263,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     ConsUp$G1 <- 1:5
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -274,7 +274,7 @@ test_that("Validity check works", {
 
     ConsUp$G1 = letters[11:15]
     colnames(ConsUp) <- c("G1", "G3")
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -286,7 +286,7 @@ test_that("Validity check works", {
 
     # test errors in consensusDownSignatures -----------------------------------
     ConsDown[1, 1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -296,7 +296,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     ConsDown[1, 1] <- letters[16]
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -306,7 +306,7 @@ test_that("Validity check works", {
                               params = Pars))
 
     ConsDown$G2 <- 1:10
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -317,7 +317,7 @@ test_that("Validity check works", {
 
     ConsDown$G2 <- letters[1:10]
     colnames(ConsDown) <- c("G1", "G3")
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
@@ -329,7 +329,7 @@ test_that("Validity check works", {
 
     # test errors in Features --------------------------------------------------
     Feats[1] <- NA
-    expect_error(scudoResults(distMatrix = m,
+    expect_error(ScudoResults(distMatrix = m,
                               upSignatures = SigUp,
                               downSignatures = SigDown,
                               groupsAnnotation = groups,
