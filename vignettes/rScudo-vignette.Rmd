@@ -1,215 +1,183 @@
 ---
-title: "An introduction to rscudo"
+title: "An introduction to rScudo"
 date: "`r Sys.Date()`"
 author:
-- name: Matteo Ciciani
-  affiliation: &aff CIBIO, Univ. of Trento, Trento, Italy
-- name: Thomas Cantore
-  affiliation: *aff
+-   name: Matteo Ciciani
+    affiliation: &aff CIBIO, Univ. of Trento, Trento, Italy
+    email: matteo.ciciani@gmail.com
+-   name: Thomas Cantore
+    affiliation: *aff
 output:
     BiocStyle::pdf_document:
         #toc_float: true
 vignette: >
-  %\VignetteIndexEntry{SCUDO: Signature-based Clustering for Diagnostic Purposes}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-abstract: This package implements in R the SCUDO pipeline proposed in Lauria (2013) and Lauria, Moyseos, Priami (2015).
+    %\VignetteIndexEntry{SCUDO: Signature-based Clustering for Diagnostic
+        Purposes}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
 # Introduction
 
-SCUDO is a method for the analysis of gene expression profiles for diagnostic and classification purposes. The method is based on the idea of a sample-specific gene signatures. The expected result is the emergence of a partitioning of the set of samples in separate clusters (propely, communities) on the basis of signature similarity.
+This package implements in R the SCUDO pipeline proposed in Lauria (2013) and
+Lauria, Moyseos, Priami (2015).
 
-First, normalization and feature selection are optionally performed. Feature selection is carried out through a Wilcoxon rank sum test or through a Kruskal-Wallis rank sum test depending on the number of groups considered.
+SCUDO is a method for the analysis of gene expression profiles for diagnostic
+and classification purposes. The method is based on the idea of a
+sample-specific gene signatures. The expected result is the emergence of a
+partitioning of the set of samples in separate clusters (propely, communities)
+on the basis of signature similarity.
 
-The subsequent operations include single sample gene ranking and the extraction of signatures form up-regulated and down-regulated genes. The sizes of the signatures are customizable. An all-to-all distance matrix is then computed using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance between two samples is computed as the mean of the enrichment scores (ES) of the signature of each sample in the expression profile of the other sample. Consensus signtures are then computed, both for up- and down-regulated genes and for each group. This provides a list of interesting genes of each group.
+First, normalization and feature selection are optionally performed. Feature
+selection is carried out through a Wilcoxon rank sum test or through a
+Kruskal-Wallis rank sum test depending on the number of groups considered.
 
-Finally, a user-defined threshold N is used to generate a network of samples. The distance matrix is treated as an adjacency matrix, but only the distances that fall below the N^th^ percentile of distances are used to draw arcs in the network. The network can be displayed in R or using Cytoscape. 
+The subsequent operations include single sample gene ranking and the extraction
+of signatures form up-regulated and down-regulated genes. The sizes of the
+signatures are customizable. An all-to-all distance matrix is then computed
+using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance
+between two samples is computed as the mean of the enrichment scores (ES) of the
+signature of each sample in the expression profile of the other sample.
+Consensus signtures are then computed, both for up- and down-regulated genes and
+for each group. This provides a list of interesting genes of each group.
 
-# Worked Example
+Finally, a user-defined threshold N is used to generate a network of samples.
+The distance matrix is treated as an adjacency matrix, but only the distances
+that fall below the N^th^ percentile of distances are used to draw arcs in the
+network. The network can be displayed in R or using Cytoscape.
 
-Example using the `r Biocpkg("ALL")` package, containing data of T- and B-cell Acute Lymphocytic Leukemia.
+# Example workflow of rScudo
 
-## Load required packages and explore data
+## Data preparation
+
+In this example we will use the `r Biocpkg("ALL")` dataset, containing gene
+expression data from T- and B-cells acute lymphocytic leukemia patients. In this
+first part, we are interested in distinguishing B-cells and T-cells samples,
+based on gene expression profiles. We begin by loading relevant libraries and
+subsetting the dataset, dividing it in a training and a testing set.
 
 ```{r, message=FALSE}
-library(scudo)
+library(rScudo)
+library(igraph)
 library(ALL)
 data(ALL)
-```
 
-We can extract the expression data and the samples annotation.
-
-```{r}
-expData <- exprs(ALL)
-dim(expData)
-phenoData <- pData(ALL)
-```
-
-`expData` contains mRNA expression measurements for 128 samples and 12625 features. The factor `phenoData$BT` classifies the samples as B- or T-cell lymphocytic leukemia:
-
-```{r}
-summary(phenoData$BT)
-```
-
-We can see that there are different classes of B- and T-cell leukemia. For now we can simplify this, keeping only the distinction between B- and T-cells.
-
-```{r}
-bt <- as.factor(stringr::str_extract(phenoData$BT, "^."))
+bt <- as.factor(stringr::str_extract(pData(ALL)$BT, "^."))
 summary(bt)
-```
 
-We can divide this dataset in a training set and a testing set. We also convert them to data.farmes. Rigth now the input to our function has to be a data.frame, but we will soon add matrices and ExpressionSets.
-
-```{r}
 set.seed(1)
 inTrain <- c(sample(1:95, 47), sample(96:128, 16))
-train <- as.data.frame(expData[, inTrain])
-test <- as.data.frame(expData[, -inTrain])
+trainData <- ALL[, inTrain]
+testData <- ALL[, -inTrain]
 ```
 
+## Analysis of the training set
 
-
-## Analyze training set
+We start by analyzing the training set. We first run `scudoTrain`, which returns
+an object of class `ScudoResults`.
 
 ```{r}
-ScudoTrain <- scudoTrain(train, groups = bt[inTrain], nTop = 100, nBottom = 100, alpha = 0.1)
-ScudoTrain
+trainRes <- scudoTrain(trainData, groups = bt[inTrain], nTop = 100,
+    nBottom = 100, alpha = 0.1)
+trainRes
 ```
 
-From this object we can extract the signatures for each sample and the consensus signatures for each group.
+From this object we can extract the signatures for each sample and the consensus
+signatures for each group.
 
 ```{r}
-UpSig <- upSignatures(ScudoTrain)
-UpSig[1:5,1:5]
-ConsUpSig <- consensusUpSignatures(ScudoTrain)
-ConsUpSig[1:5, ]
+upSignatures(trainRes)[1:5,1:5]
+consensusUpSignatures(trainRes)[1:5, ]
 ```
 
-The object `ScudoRes` can be used to generate a network of samples, as an `r CRANpkg("igraph")`object, using the function `ScudoNetwork`.
+The object `trainRes` can be used to generate a network of samples, using the
+function `ScudoNetwork`. This function returns an `r CRANpkg("igraph")` object.
+The parameter `N` controls the percentage of edges to keep in the network. We
+can plot this network using the function `scudoPlot`.
 
 ```{r}
-netTrain <- scudoNetwork(ScudoTrain, N = 0.2)
+trainNet <- scudoNetwork(trainRes, N = 0.2)
+scudoPlot(trainNet, vertex.label = NA)
 ```
 
-The parameter `N` controls the percentage of edges to keep in the network. We can plot this network using the usual `plot` function.
-
-```{r}
-scudoPlot(netTrain, vertex.label = NA)
-```
-
-This plot is useful to have a quick look at the network, but is rather ugly. We can render the network in Cytoscape, using the function `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
+You can also render the network in Cytoscape, using the function
+`ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
 
 ```{r, eval=FALSE}
 scudoCytoscape(netTrain)
 ```
 
-## Community clustering
+Since we obtained a very good separation of the two groups, we proceed to
+analyze the testing set.
 
-We can use a community clustering algorithm to identify clusters of samples. In the following example we use the function `cluster_fast_greedy` to perform a greedy clustering of our network. In Cytoscape we can perform a similar analysis using the GLay clustering function from the clusterMaker app.
+## Analysis of the testing set
 
-```{r,warning=FALSE}
-clusterTrain <- igraph::cluster_fast_greedy(netTrain)
-plot(clusterTrain, netTrain)
-```
-
-## Analyse testing set
-
-We can use a `ScudoResults` object and the function `scudoTest` to analyze the testing set. The feature selection is not performed in the testing set. Instead, only the features selected in the training are used in the analysis of the testing set.
+We can use a `ScudoResults` object and the function `scudoTest` to analyze the
+testing set. The feature selection is not performed in the testing set. Instead,
+only the features selected in the training are used in the analysis of the
+testing set.
 
 ```{r}
-ScudoTest <- scudoTest(ScudoTrain, test, bt[-inTrain], nTop = 100, nBottom = 100)
-ScudoTest
+testRes <- scudoTest(trainRes, testData, bt[-inTrain], nTop = 100,
+    nBottom = 100)
+testRes
 ```
 
-We can plot the resulting network and we can attempt to identify communities.
+We can generate a network of samples and plot it.
 
 ```{r}
-netTest <- scudoNetwork(ScudoTest, N = 0.2)
-plot(netTest)
+testNet <- scudoNetwork(testRes, N = 0.2)
+scudoPlot(testNet, vertex.label = NA)
 ```
 
-The groups are already well partitioned. We can nonetheless perform the community clustering.
-
-```{r,warning=FALSE}
-clusterTest <- igraph::cluster_fast_greedy(netTest)
-plot(clusterTest, netTest)
-```
-
-Cluster with kmeans on the weighted agjacency matrix
+We can use a community clustering algorithm to identify clusters of samples. In
+the following example we use the function `cluster_spinglass` to perform a
+greedy clustering of our network. In Cytoscape we can perform a similar analysis
+using the clustering functions from the clusterMaker app.
 
 ```{r}
-igraph::E(netTest)$weight <- 2 - igraph::E(netTest)$distance
-adj <- igraph::get.adjacency(netTest, attr = "weight")
-km <- kmeans(adj, 2)
-km$cluster == as.integer(bt[-inTrain])
+testClust <- cluster_spinglass(testNet, spins = 2)
+plot(testClust, testNet, vertex.label = NA)
 ```
 
-Use community clustering forcing 2 communities:
+### Supervised classification
+
+`scudoClassify` performs supervised classification of sample in a testing set
+using a model built from samples in a training set. It uses a method based on
+neighbors in the graph to assign a class label to each sample in the testing
+set. We suggest to use the same `N`, `nTop`, `nBottom` and `alpha` that were
+used in the trainig step.
 
 ```{r}
-spr <- igraph::cluster_spinglass(netTest, weights = NULL, spins = 2)
-plot(spr, netTest)
+classRes <- scudoClassify(trainData, testData, N = 0.2, nTop = 100,
+    nBottom = 100, trainGroups = bt[inTrain], alpha = 0.1)
+classRes$predicted
 ```
 
-
-
-The same analysis could be performed in Cytoscape.
-
-```{r,eval=FALSE}
-scudoCytoscape(netTest)
-```
-
-# Multigroup analysis
+Classification performances can be explored using the `confusionMatrix` function
+from `r CRANpkg("caret")`.
 
 ```{r}
-mol <- phenoData$mol.biol[bt == "B", drop = TRUE][-48]
-expDataB <- expData[, bt == "B"][, -48]
-
-ScudoTrain2 <- scudoTrain(expDataB, groups = mol, nTop = 200, nBottom = 200, alpha = 0.05)
-ScudoTrain2
+caret::confusionMatrix(classRes$predicted, bt[-inTrain])
 ```
 
-```{r}
-netTrain2 <- scudoNetwork(ScudoTrain2, 0.08)
-scudoPlot(netTrain2, vertex.label = NA)
-```
-
-Clustering
-
-
-```{r}
-spr2 <- igraph::cluster_spinglass(netTrain2, weights = NULL, spins = 4)
-plot(spr2, netTrain2)
-```
-
-
-Compare with pca
-
-```{r}
-feats <- selectedFeatures(ScudoTrain2)
-expSel <- expDataB[feats, ]
-pcaRes <- prcomp(t(expSel))
-pairs(pcaRes$x[, 1:5], col = rainbow(4)[as.integer(mol)])
-```
-
-# Do the good ol'thing
+## Example of multigroup analysis
 
 ```{r}
 bcell <- grep("^B", as.character(ALL$BT))
-moltyp <- which(as.character(ALL$mol.biol) %in%
-c("NEG", "BCR/ABL"))
-bcrneg <- ALL[, intersect(bcell, moltyp)]
+moltyp <- which(as.character(ALL$BT) %in%
+c("B1", "B2", "B3"))
+bcrneg <- ALL[, moltyp]
 bcrneg$mol.biol <- factor(bcrneg$mol.biol)
 
-res <- scudoTrain(bcrneg, bcrneg$mol.biol, 50, 50, 0.01)
+res <- scudoTrain(bcrneg, factor(bcrneg$BT), 50, 50, 0.01)
 ```
 
 ```{r}
@@ -217,12 +185,19 @@ net <- scudoNetwork(res, 0.15)
 scudoPlot(net, vertex.label = NA)
 ```
 
+# Methods in brief
 
+# Session info
 
+```{r}
+sessionInfo()
+```
 
 # References
 
-Mario Lauria. Rank-based transcriptional signatures. Systems Biomedicine. 2013; 1(4):228-239.
+Mario Lauria. Rank-based transcriptional signatures. Systems Biomedicine. 2013;
+1(4):228-239.
 
-Mario Lauria, Petros Moyseos and Corrado Priami. SCUDO: a tool for signature-based clustering of expression profiles. Nucleic Acids Research. 2015; 43(W1):W188-92.
-
+Mario Lauria, Petros Moyseos and Corrado Priami. SCUDO: a tool for
+signature-based clustering of expression profiles. Nucleic Acids Research. 2015;
+43(W1):W188-92.

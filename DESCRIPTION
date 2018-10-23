@@ -43,5 +43,6 @@ Suggests: testthat,
     knitr,
     rmarkdown,
     ALL,
-    RCy3
+    RCy3,
+    caret
 VignetteBuilder: knitr

@@ -10,7 +10,7 @@ NULL
 setMethod("show", "ScudoResults", function(object) {
     cat("Object of class ScudoResults\n")
     cat("Result of", ifelse(length(params(object)) == 4,
-        "scudoTest", "scudo"), "\n\n")
+        "scudoTest", "scudoTrain"), "\n\n")
     cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),
         "\n")
 

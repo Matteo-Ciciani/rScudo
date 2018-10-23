@@ -73,8 +73,8 @@ NULL
 #' @param trainGroups factor containing group labels for each sample in
 #' \code{trainExpData}
 #'
-#' @param maxDist integer. Only nodes with a distance from a testing node less or
-#' equal to \code{maxDist} are used to perform the classification.
+#' @param maxDist integer. Only nodes with a distance from a testing node less
+#' or equal to \code{maxDist} are used to perform the classification.
 #'
 #' @param weighted logical, whether to consider the distances associated to the
 #' edges to compute the scores for the classification. For a description of the
@@ -230,7 +230,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     # predict and return -------------------------------------------------------
 
-    predicted <- colnames(scores)[apply(scores, 1, which.max)]
+    predicted <- factor(colnames(scores)[apply(scores, 1, which.max)])
     names(predicted) <- rownames(scores)
 
     list(predicted = predicted, scores = scores)
