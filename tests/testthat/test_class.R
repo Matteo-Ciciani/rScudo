@@ -1,5 +1,5 @@
 context("Class validity")
-library(scudo)
+library(rScudo)
 
 test_that("Class can be instantiated", {
     sres <- ScudoResults()

@@ -1,5 +1,5 @@
 context("Test scudoCytoscape")
-library(scudo)
+library(rScudo)
 
 test_that("scudoCytoscape raises errors when it should", {
     exData <- data.frame(a = rep(1,10),

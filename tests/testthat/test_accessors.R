@@ -1,5 +1,5 @@
 context("Check accessors")
-library(scudo)
+library(rScudo)
 
 test_that("Accessors work correctly", {
     m <- matrix(1, ncol = 4, nrow = 4)

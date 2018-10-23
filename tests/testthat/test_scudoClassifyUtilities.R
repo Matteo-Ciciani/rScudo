@@ -1,5 +1,5 @@
 context("Test scudoClassifyUtilities")
-library(scudo)
+library(rScudo)
 
 test_that(".computeTestNetwork works", {
     expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,

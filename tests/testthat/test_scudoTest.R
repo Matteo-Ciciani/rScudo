@@ -1,5 +1,5 @@
 context("Test scudoTest")
-library(scudo)
+library(rScudo)
 
 test_that("scudoTest selects right features", {
 

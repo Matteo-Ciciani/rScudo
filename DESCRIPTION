@@ -1,4 +1,4 @@
-Package: scudo
+Package: rScudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
 Version: 0.6.2

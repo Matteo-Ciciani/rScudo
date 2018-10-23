@@ -1,5 +1,5 @@
 context("Test utilities")
-library(scudo)
+library(rScudo)
 
 test_that(".computeES works", {
 

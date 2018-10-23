@@ -1,5 +1,5 @@
 context("Test scudoNetwork")
-library(scudo)
+library(rScudo)
 
 test_that("scudoNetwork throws errors when it should", {
     exData <- data.frame(a = rep(1,10),

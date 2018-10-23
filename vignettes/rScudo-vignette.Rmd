@@ -200,6 +200,26 @@ pcaRes <- prcomp(t(expSel))
 pairs(pcaRes$x[, 1:5], col = rainbow(4)[as.integer(mol)])
 ```
 
+# Do the good ol'thing
+
+```{r}
+bcell <- grep("^B", as.character(ALL$BT))
+moltyp <- which(as.character(ALL$mol.biol) %in%
+c("NEG", "BCR/ABL"))
+bcrneg <- ALL[, intersect(bcell, moltyp)]
+bcrneg$mol.biol <- factor(bcrneg$mol.biol)
+
+res <- scudoTrain(bcrneg, bcrneg$mol.biol, 50, 50, 0.01)
+```
+
+```{r}
+net <- scudoNetwork(res, 0.15)
+scudoPlot(net, vertex.label = NA)
+```
+
+
+
+
 # References
 
 Mario Lauria. Rank-based transcriptional signatures. Systems Biomedicine. 2013; 1(4):228-239.

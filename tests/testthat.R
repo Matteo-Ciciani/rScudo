@@ -1,4 +1,4 @@
 library(testthat)
-library(scudo)
+library(rScudo)
 
-test_check("scudo")
+test_check("rScudo")

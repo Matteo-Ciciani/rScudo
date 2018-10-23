@@ -1,5 +1,5 @@
 context("Test scudoClassify")
-library(scudo)
+library(rScudo)
 
 test_that("scudoClassify raises correct errors", {
 

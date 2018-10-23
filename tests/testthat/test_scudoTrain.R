@@ -1,5 +1,5 @@
 context("Test scudo")
-library(scudo)
+library(rScudo)
 
 test_that("scudoTrain raises errors on wrong inputs", {
 
