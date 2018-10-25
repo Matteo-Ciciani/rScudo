@@ -29,8 +29,8 @@ signatures}
 \item{trainGroups}{factor containing group labels for each sample in
 \code{trainExpData}}
 
-\item{maxDist}{integer. Only nodes with a distance from a testing node less or
-equal to \code{maxDist} are used to perform the classification.}
+\item{maxDist}{integer. Only nodes with a distance from a testing node less
+or equal to \code{maxDist} are used to perform the classification.}
 
 \item{weighted}{logical, whether to consider the distances associated to the
 edges to compute the scores for the classification. For a description of the

@@ -21,6 +21,7 @@ BugReports: https://github.com/Matteo-Ciciani/scudo/issues
 Collate:
     'class.R'
     'accessors.R'
+    'packageDoc.R'
     'utilities.R'
     'scudoClassifyUtilities.R'
     'scudoClassify.R'
