@@ -10,10 +10,10 @@
 #' samples in a testing set.
 #'
 #' @seealso \code{\link{scudoTrain}}, \code{\link{scudoNetwork}},
-#'   \code{\link{scudoClassify}}
+#' \code{\link{scudoClassify}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
-#'   \email{cantorethomas@@gmail.com}
+#' \email{cantorethomas@@gmail.com}
 #'
 #' @examples
 #' example("scudoTrain")

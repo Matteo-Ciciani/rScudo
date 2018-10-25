@@ -11,8 +11,7 @@ output:
     BiocStyle::pdf_document:
         #toc_float: true
 vignette: >
-    %\VignetteIndexEntry{SCUDO: Signature-based Clustering for Diagnostic
-        Purposes}
+    %\VignetteIndexEntry{Signature-based Clustering for Diagnostic Purposes}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
