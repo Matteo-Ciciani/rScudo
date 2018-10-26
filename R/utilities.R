@@ -396,3 +396,22 @@ NULL
         & lower.tri(dMatrix)]
     result
 }
+
+.addColors <-function(result, object, colors) {
+    if (length(groupsAnnotation(object)) == 0) {
+        igraph::V(result)$color <- rep("#FFFFFF", dim(distMatrix(object))[1])
+    } else {
+        igraph::V(result)$group <- as.character(groupsAnnotation(object))
+
+        if (length(colors) == 0) {
+            pal <- grDevices::rainbow(length(levels(groupsAnnotation(object))))
+            pal <- stringr::str_extract(pal, "^#[0-9a-fA-F]{6}")
+            igraph::V(result)$color <- pal[as.integer(groupsAnnotation(object))]
+        } else {
+            igraph::V(result)$color <- stringr::str_extract(colors,
+                "^#[0-9a-fA-F]{6}")
+        }
+    }
+
+    result
+}
