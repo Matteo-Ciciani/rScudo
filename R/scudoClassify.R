@@ -42,7 +42,10 @@ NULL
 #'
 #' The predicted group for each sample is the one with the largest
 #' classification score. Both predictions and classification scores are
-#' returned.
+#' returned. Note that if the argument \code{complete} is \code{FALSE}, the
+#' classification socres for a sample may be all zero, which happens when the
+#' correspoonding node is isolated in the network of samples. In this case the
+#' predicted group is \code{NA}.
 #
 #' The optimization of the parameters is left to the user in the current version
 #' and should be performed optimizing the separation of samples belonging to
@@ -114,9 +117,9 @@ NULL
 #' @param distFun the function used to compute the distance between two
 #' samples. See Details for the specification of this function
 #'
-#' @return A \code{list} containing the predictions for each sample in
-#' \code{testExpData} and the classification scores used to generate the
-#' predictions.
+#' @return A \code{list} containing a factor with the predicticted class for
+#' each sample in \code{testExpData} and a data.frame of the classification
+#' scores used to generate the predictions.
 #'
 #' @seealso \code{\link{scudoTrain}}
 #'
@@ -230,8 +233,25 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     # predict and return -------------------------------------------------------
 
-    predicted <- factor(colnames(scores)[apply(scores, 1, which.max)])
-    names(predicted) <- rownames(scores)
+    maxIndexes <- apply(scores, 1, which.max)
 
+    # handle NaNs
+    classLength <- vapply(maxIndexes, length, integer(1))
+    if (any(classLength == 0)) {
+        predicted <- rep(NA, length(classLength))
+        predicted[classLength > 0] <- unlist(maxIndexes[classLength > 0])
+    } else {
+        predicted <- colnames(scores)[maxIndexes]
+    }
+    scores[is.nan(scores)] <- 0
+
+    names(predicted) <- rownames(scores)
+    predicted <- factor(predicted, levels = levels(trainGroups))
+
+    if (any(is.na(predicted))) {
+        nas <- sum(is.na(predicted))
+        warning("Group prediction for ", nas, " samples generated NAs.",
+            " Increasing the value of N may fix this")
+    }
     list(predicted = predicted, scores = scores)
 }

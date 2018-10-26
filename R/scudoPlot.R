@@ -39,9 +39,11 @@
 #' @export
 scudoPlot <- function(net, x = "bottomright", y = NULL, ...) {
     igraph::plot.igraph(net, ...)
-    df <- unique(data.frame(igraph::V(net)$color, igraph::V(net)$group,
-        stringsAsFactors = FALSE))
-    graphics::legend(x, y, legend = df[, 2],
-        col = df[, 1], pch=c(15,15),
-        pt.cex=2)
+    if (!is.null(igraph::V(net)$group)) {
+        df <- unique(data.frame(igraph::V(net)$color, igraph::V(net)$group,
+            stringsAsFactors = FALSE))
+        graphics::legend(x, y, legend = df[, 2],
+            col = df[, 1], pch=c(15,15),
+            pt.cex=2)
+    }
 }

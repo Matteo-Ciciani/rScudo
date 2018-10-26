@@ -71,9 +71,9 @@ adjustment methods}
 samples. See Details for the specification of this function}
 }
 \value{
-A \code{list} containing the predictions for each sample in
-\code{testExpData} and the classification scores used to generate the
-predictions.
+A \code{list} containing a factor with the predicticted class for
+each sample in \code{testExpData} and a data.frame of the classification
+scores used to generate the predictions.
 }
 \description{
 Performs supervised classification of samples in a testing set using a
@@ -116,7 +116,10 @@ cases.
 
 The predicted group for each sample is the one with the largest
 classification score. Both predictions and classification scores are
-returned.
+returned. Note that if the argument \code{complete} is \code{FALSE}, the
+classification socres for a sample may be all zero, which happens when the
+correspoonding node is isolated in the network of samples. In this case the
+predicted group is \code{NA}.
 The optimization of the parameters is left to the user in the current version
 and should be performed optimizing the separation of samples belonging to
 different groups using \code{\link{scudoTrain}} and
