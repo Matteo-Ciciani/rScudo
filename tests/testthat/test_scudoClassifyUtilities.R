@@ -127,3 +127,24 @@ test_that(".visitEdges works", {
     expect_equal(scores6, res6)
 })
 
+test_that(".computeCompleteScores works", {
+    expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,
+        e = c(1:4, 10:5), f = c(7:10, 6:1),
+        g = c(8:4, 1:3, 10, 9), h = c(6:10, 5:1),
+        i = c(5:1, 6:10))
+    rownames(expData) <- letters[1:10]
+    g <- factor(c(1,1,1,2,2,2,1,1,2))
+
+    dm <- .defaultDist(expData, 4, 4)
+    dm2 <- dm[1:5, 6:9]
+
+    res <- rbind(apply(dm2[1:3, ], 2, sum) / 3, apply(dm2[4:5, ], 2, sum) / 2)
+    res <- apply(res, 2, function(x) x/sum(x))
+    res <- t(res)
+    colnames(res) <- c(1, 2)
+
+    res2 <- .computeCompleteScores(dm, 5, 4, g[1:5])
+    expect_equal(res, res2)
+
+})
+

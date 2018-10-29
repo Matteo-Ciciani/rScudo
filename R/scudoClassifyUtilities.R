@@ -179,3 +179,16 @@ NULL
         (length(trainGroups) + 1):(dim(dMatrix)[2])]
     scores
 }
+
+.computeCompleteScores <- function(distMat, nTrain, nTest, trainGroups) {
+    distMat <- distMat[seq_len(nTrain), seq(nTrain + 1, nTrain + nTest)]
+
+    # get sums for each new sample
+    scores <- stats::aggregate(distMat, by = list(trainGroups),
+        FUN = sum)
+    scores <- scores[, -1] / table(trainGroups)
+    scores <- t(apply(scores, 2, function(x) x/sum(x)))
+    colnames(scores) <- levels(trainGroups)
+
+    scores
+}

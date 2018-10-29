@@ -216,16 +216,8 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     # Compute scores -----------------------------------------------------------
 
     if (complete) {
-        distMat <- distMat[seq_len(dim(trainExpData)[1]),
-            seq((dim(trainExpData)[2] + 1),
-            (dim(trainExpData)[2] + dim(testExpData)[2]))]
-
-        # get sums for each new sample
-        scores <- stats::aggregate(distMat, by = list(trainGroups),
-            FUN = sum)
-        scores <- scores[, -1] / table(trainGroups)
-        scores <- t(apply(scores, 2, function(x) x/sum(x)))
-        colnames(scores) <- levels(trainGroups)
+        scores <- .computeCompleteScores(distMat, dim(trainExpData)[2],
+            dim(testExpData)[2], trainGroups)
     } else {
         scores <- .computeScores(distMat, N, trainGroups, maxDist, weighted,
             beta)

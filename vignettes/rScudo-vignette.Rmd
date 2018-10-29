@@ -170,19 +170,34 @@ caret::confusionMatrix(classRes$predicted, bt[-inTrain])
 ## Example of multigroup analysis
 
 ```{r}
-bcell <- grep("^B", as.character(ALL$BT))
-moltyp <- which(as.character(ALL$BT) %in%
-c("B1", "B2", "B3"))
-bcrneg <- ALL[, moltyp]
-bcrneg$mol.biol <- factor(bcrneg$mol.biol)
+typeB <- which(as.character(ALL$BT) %in% c("B1", "B2", "B3"))
+ALLB <- ALL[, typeB]
+type <- ALLB$BT[, drop = TRUE]
+table(type)
 
-res <- scudoTrain(bcrneg, factor(bcrneg$BT), 50, 50, 0.01)
+molBiol <- factor(ALLB$mol.biol)
+
+inTrain <- as.vector(caret::createDataPartition(type, p = 0.6, list = FALSE))
 ```
 
 ```{r}
-net <- scudoNetwork(res, 0.15)
+res <- scudoTrain(ALLB[, inTrain], type[inTrain], 50, 50, 0.01)
+net <- scudoNetwork(res, 0.2)
 scudoPlot(net, vertex.label = NA)
 ```
+
+```{r}
+resTest <- scudoTest(res, ALLB[, -inTrain], type[-inTrain])
+netTest <- scudoNetwork(resTest, 0.2)
+scudoPlot(netTest, vertex.label = NA)
+```
+
+```{r}
+classRes <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.99, 50, 50,
+    type[inTrain], alpha = 0.01)
+caret::confusionMatrix(classRes$predicted, type[-inTrain])
+```
+
 
 # Methods in brief
 
