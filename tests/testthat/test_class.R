@@ -30,7 +30,7 @@ test_that("Validity check works", {
                                  consensusUpSignatures = ConsUp,
                                  consensusDownSignatures = ConsDown,
                                  selectedFeatures = Feats,
-                                 params = Pars), "ScudoResults")
+                                 scudoParams = Pars), "ScudoResults")
 
     # tests are in the same order they are performed in setValidity
     # test errors in distMatrix ------------------------------------------------
@@ -41,7 +41,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[2] <- NA
     expect_error(ScudoResults(distMatrix = m,
@@ -51,7 +51,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[2] <- NaN
     expect_error(ScudoResults(distMatrix = m,
@@ -61,7 +61,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[2] <- "1"
     expect_error(ScudoResults(distMatrix = m,
@@ -71,7 +71,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m <- matrix(1, ncol = 4, nrow = 4)
     diag(m) <- 0
@@ -84,7 +84,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[1, 2] <- m[2, 1] <- 1
     m[2] <- 5
@@ -95,7 +95,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[2] <- 1
     m[1] <- 1
@@ -106,7 +106,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     m[1] <- 0
     rownames(m) <- colnames(m) <- NULL
@@ -117,7 +117,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     rownames(m) <- letters[1:4]
     colnames(m) <- letters[5:8]
@@ -128,7 +128,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     colnames(m) <- letters[1:4]
 
@@ -141,7 +141,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     SigUp[1,1] <- "a"
     expect_error(ScudoResults(distMatrix = m,
@@ -151,7 +151,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     colnames(SigUp) <- letters[5:8]
     expect_error(ScudoResults(distMatrix = m,
@@ -161,7 +161,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     colnames(SigUp) <- letters[1:4]
     SigUp$a <- 1:5
@@ -172,7 +172,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     SigUp$a <- letters[1:5]
 
@@ -185,7 +185,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     SigDown[1,1] <- "a"
     expect_error(ScudoResults(distMatrix = m,
@@ -195,7 +195,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     colnames(SigDown) <- letters[5:8]
     expect_error(ScudoResults(distMatrix = m,
@@ -205,7 +205,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     colnames(SigDown) <- letters[1:4]
     SigDown$a <- 1:10
@@ -216,7 +216,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     SigDown$a <- letters[1:10]
 
@@ -229,7 +229,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     groups[1] <- "G1"
     expect_error(ScudoResults(distMatrix = m,
@@ -239,7 +239,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     # test errors in consensusUpSignatures -------------------------------------
     ConsUp[1, 1] <- NA
@@ -250,7 +250,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsUp[1, 1] <- "a"
     expect_error(ScudoResults(distMatrix = m,
@@ -260,7 +260,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp[1:2, ],
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsUp$G1 <- 1:5
     expect_error(ScudoResults(distMatrix = m,
@@ -270,7 +270,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsUp$G1 = letters[11:15]
     colnames(ConsUp) <- c("G1", "G3")
@@ -281,7 +281,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
     colnames(ConsUp) <- c("G1", "G2")
 
     # test errors in consensusDownSignatures -----------------------------------
@@ -293,7 +293,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsDown[1, 1] <- letters[16]
     expect_error(ScudoResults(distMatrix = m,
@@ -303,7 +303,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown[1:2, ],
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsDown$G2 <- 1:10
     expect_error(ScudoResults(distMatrix = m,
@@ -313,7 +313,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
     ConsDown$G2 <- letters[1:10]
     colnames(ConsDown) <- c("G1", "G3")
@@ -324,7 +324,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
     colnames(ConsDown) <- c("G1", "G2")
 
     # test errors in Features --------------------------------------------------
@@ -336,7 +336,7 @@ test_that("Validity check works", {
                               consensusUpSignatures = ConsUp,
                               consensusDownSignatures = ConsDown,
                               selectedFeatures = Feats,
-                              params = Pars))
+                              scudoParams = Pars))
 
-    # tests for params ---------------------------------------------------------
+    # tests for scudoParams ---------------------------------------------------------
 })

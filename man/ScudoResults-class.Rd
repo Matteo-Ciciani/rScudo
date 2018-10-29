@@ -18,8 +18,8 @@
 \alias{consensusDownSignatures,ScudoResults-method}
 \alias{selectedFeatures}
 \alias{selectedFeatures,ScudoResults-method}
-\alias{params}
-\alias{params,ScudoResults-method}
+\alias{scudoParams}
+\alias{scudoParams,ScudoResults-method}
 \alias{show,ScudoResults-method}
 \title{Class ScudoResults}
 \description{
@@ -59,7 +59,7 @@ the consensus signatures of dowm-regulated features for each group}
 features. If the feature selection was not performed, it contains every
 feature present in the input of the scudo functions}
 
-\item{\code{params}}{a list of the parameters used to run
+\item{\code{scudoParams}}{a list of the parameters used to run
 the function that created the instance of the class}
 }}
 
@@ -86,7 +86,7 @@ down-regulated features in each group.}
 \item{\code{selectedFeatures}}{\code{signature(object = "ScudoResults")}:
 a method for obtaining the names of the features seleted. If no feature
 selection was performed, the names of every feature are returned.}
-\item{\code{params}}{\code{signature(object = "ScudoResults")}: a method
+\item{\code{scudoParams}}{\code{signature(object = "ScudoResults")}: a method
 for obtaining the parameters that were used to generate the result.}
 }
 }
@@ -117,7 +117,7 @@ scudoR <- ScudoResults(distMatrix = m,
     consensusUpSignatures = ConsUp,
     consensusDownSignatures = ConsDown,
     selectedFeatures = Feats,
-    params = Pars)
+    scudoParams = Pars)
 
 }
 \author{

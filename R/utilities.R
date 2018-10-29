@@ -375,7 +375,7 @@ NULL
         consensusUpSignatures = ConsUpSig,
         consensusDownSignatures = ConsDwnSig,
         selectedFeatures = rownames(expressionData),
-        params = pars
+        scudoParams = pars
     )
 }
 

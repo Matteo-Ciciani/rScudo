@@ -9,7 +9,7 @@ NULL
 #' @usage NULL
 setMethod("show", "ScudoResults", function(object) {
     cat("Object of class ScudoResults\n")
-    cat("Result of", ifelse(length(params(object)) == 4,
+    cat("Result of", ifelse(length(scudoParams(object)) == 4,
         "scudoTest", "scudoTrain"), "\n\n")
     cat("Number of samples      : ", paste(dim(distMatrix(object))[1]),
         "\n")
@@ -23,20 +23,20 @@ setMethod("show", "ScudoResults", function(object) {
         cat("No groups specified\n")
     }
 
-    cat("upSignatures length    : ", paste(params(object)$nTop),
+    cat("upSignatures length    : ", paste(scudoParams(object)$nTop),
         "\n")
-    cat("downSignatures length  : ", paste(params(object)$nBottom),
+    cat("downSignatures length  : ", paste(scudoParams(object)$nBottom),
         "\n")
-    cat("Fold-changes           : ", paste0(ifelse(params(object)$foldChange,
-        "", "not "), "computed"), "\n")
-    if (params(object)$foldChange) {
-        cat("    grouped            : ", ifelse(params(
+    cat("Fold-changes           : ", paste0(ifelse(
+        scudoParams(object)$foldChange, "", "not "), "computed"), "\n")
+    if (scudoParams(object)$foldChange) {
+        cat("    grouped            : ", ifelse(scudoParams(
             object)$groupedFoldChange, "Yes", "No "), "\n")
     }
 
-    if (length(params(object)) == 8 && params(object)$featureSel) {
+    if (length(scudoParams(object)) == 8 && scudoParams(object)$featureSel) {
         cat("Feature selection      :  performed\n")
-        if (params(object)$parametric) {
+        if (scudoParams(object)$parametric) {
             if (ngroups == 2) {
                 cat("    Test               :  Student's t-test\n")
             } else {
@@ -49,11 +49,11 @@ setMethod("show", "ScudoResults", function(object) {
                 cat("    Test               :  Kruskal-Wallis rank sum test\n")
             }
         }
-        cat("    p-value cutoff     : ", paste(params(object)$alpha), "\n")
-        cat("    p.adjust method    : ", paste(params(object)$pAdj), "\n")
+        cat("    p-value cutoff     : ", paste(scudoParams(object)$alpha), "\n")
+        cat("    p.adjust method    : ", paste(scudoParams(object)$pAdj), "\n")
         cat("    Selected features  : ", paste(length(selectedFeatures(
             object))))
-    } else  if (length(params(object)) == 8) {
+    } else  if (length(scudoParams(object)) == 8) {
         cat("Feature selection      :  not performed\n")
     }
 

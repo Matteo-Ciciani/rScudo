@@ -28,7 +28,7 @@ NULL
 #' @slot selectedFeatures a character vector of selected
 #'   features. If the feature selection was not performed, it contains every
 #'   feature present in the input of the scudo functions
-#' @slot params a list of the parameters used to run
+#' @slot scudoParams a list of the parameters used to run
 #'   the function that created the instance of the class
 #'
 #' @section Methods:
@@ -53,7 +53,7 @@ NULL
 #' \item{\code{selectedFeatures}}{\code{signature(object = "ScudoResults")}:
 #' a method for obtaining the names of the features seleted. If no feature
 #' selection was performed, the names of every feature are returned.}
-#' \item{\code{params}}{\code{signature(object = "ScudoResults")}: a method
+#' \item{\code{scudoParams}}{\code{signature(object = "ScudoResults")}: a method
 #' for obtaining the parameters that were used to generate the result.}
 #' }
 #'
@@ -86,7 +86,7 @@ NULL
 #'     consensusUpSignatures = ConsUp,
 #'     consensusDownSignatures = ConsDown,
 #'     selectedFeatures = Feats,
-#'     params = Pars)
+#'     scudoParams = Pars)
 #'
 #' @name ScudoResults-class
 #' @rdname ScudoResults-class
@@ -102,7 +102,7 @@ ScudoResults <- setClass("ScudoResults",
         consensusUpSignatures = "data.frame",
         consensusDownSignatures = "data.frame",
         selectedFeatures = "character",
-        params = "list"))
+        scudoParams = "list"))
 
 setValidity("ScudoResults", function(object) {
     valid <- TRUE
@@ -262,7 +262,7 @@ setValidity("ScudoResults", function(object) {
         msg <- c(msg, "selectedFeatures contains NAs")
     }
 
-    # validity of params -------------------------------------------------------
+    # validity of scudoParams --------------------------------------------------
 
     if (valid) TRUE else msg
 })

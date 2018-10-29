@@ -76,7 +76,7 @@ test_that(".performScudo works", {
 
     expect_identical(groupsAnnotation(res), grps)
     expect_identical(selectedFeatures(res), letters[11:20])
-    expect_identical(params(res), list(nTop = nTop, nBottom = nBottom,
+    expect_identical(scudoParams(res), list(nTop = nTop, nBottom = nBottom,
         alpha = p, foldChange = FALSE, groupedFoldChange = FALSE,
         featureSel = FALSE, parametric = FALSE, pAdj = "none"))
 })

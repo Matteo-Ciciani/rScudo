@@ -86,10 +86,10 @@ setMethod("selectedFeatures", signature = "ScudoResults", definition =
 #' @rdname ScudoResults-class
 #' @usage NULL
 #' @export
-setGeneric("params", function(object) standardGeneric("params"))
+setGeneric("scudoParams", function(object) standardGeneric("scudoParams"))
 
 #' @rdname ScudoResults-class
-#' @aliases params,ScudoResults-method
+#' @aliases scudoParams,ScudoResults-method
 #' @usage NULL
-setMethod("params", signature = "ScudoResults", definition =
-    function(object) object@params)
+setMethod("scudoParams", signature = "ScudoResults", definition =
+    function(object) object@scudoParams)

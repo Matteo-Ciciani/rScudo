@@ -102,8 +102,8 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
     }
 
     if (is(trainScudoRes, "ScudoResults")) {
-        if (is.null(nTop)) nTop <- params(trainScudoRes)$nTop
-        if (is.null(nBottom)) nBottom <- params(trainScudoRes)$nBottom
+        if (is.null(nTop)) nTop <- scudoParams(trainScudoRes)$nTop
+        if (is.null(nBottom)) nBottom <- scudoParams(trainScudoRes)$nBottom
     } else {
         stop("trainScudoRes must be an object of class ScudoResults. Current",
             " class is ", class(trainScudoRes))

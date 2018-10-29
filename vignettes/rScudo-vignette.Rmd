@@ -29,28 +29,49 @@ This package implements in R the SCUDO pipeline proposed in Lauria (2013) and
 Lauria, Moyseos, Priami (2015).
 
 SCUDO is a method for the analysis of gene expression profiles for diagnostic
-and classification purposes. The method is based on the idea of a
+and classification purposes. The method is based on the idea of
 sample-specific gene signatures. The expected result is the emergence of a
 partitioning of the set of samples in separate clusters (propely, communities)
 on the basis of signature similarity.
 
-First, normalization and feature selection are optionally performed. Feature
-selection is carried out through a Wilcoxon rank sum test or through a
-Kruskal-Wallis rank sum test depending on the number of groups considered.
+# Methods in brief
 
-The subsequent operations include single sample gene ranking and the extraction
-of signatures form up-regulated and down-regulated genes. The sizes of the
-signatures are customizable. An all-to-all distance matrix is then computed
-using a metric similar to the Gene Set Enrichment Analysis (GSEA): the distance
-between two samples is computed as the mean of the enrichment scores (ES) of the
-signature of each sample in the expression profile of the other sample.
-Consensus signtures are then computed, both for up- and down-regulated genes and
-for each group. This provides a list of interesting genes of each group.
+Starting from gene expression data, the function `scudoTrain` performs the basic
+SCUDO pipeline and can be used to generate an object of class `scudoResults`,
+which contains sample specific gene signatures and consensus gene signatures for
+each group specified. The pipeline impemented by this function can be sumarized
+in 4 steps:
 
-Finally, a user-defined threshold N is used to generate a network of samples.
+1. First, fold-changes are computed for each gene. Then, a feature selection
+step is performed. The user can specify whether to use a parametric or a non
+parametric test. The test used also depends on the number of groups present in
+the dataset. This step can be optionally skipped.
+
+2. The subsequent operations include single sample gene ranking and the
+extraction of signatures formed by up-regulated and down-regulated genes. The
+length of the signatures are customizable. Consensus signtures are then
+computed, both for up- and down-regulated genes and for each group. The
+computation of consensus signatures is performed aggregating the ranks of the
+genes in each sample and ranking again the genes.
+
+3. An all-to-all distance matrix is then computed using a distance similar to
+the Gene Set Enrichment Analysis (GSEA): the distance between two samples is
+computed as the mean of the enrichment scores (ES) of the signature of each
+sample in the expression profile of the other sample. The distance function used
+is customizable.
+
+4. Finally, a user-defined threshold N is used to generate a network of samples.
 The distance matrix is treated as an adjacency matrix, but only the distances
-that fall below the N^th^ percentile of distances are used to draw arcs in the
-network. The network can be displayed in R or using Cytoscape.
+that fall below the N^th^ quantile of distances are used to draw edges in the
+network. This is performed by the function `scudoNetwork`.The network can then
+be displayed in R or using Cytoscape.
+
+After the identification of a list of genes that can be used to partition the
+samples in separated communities, the same procedure can be applied to a testig
+dataset: the function `scudoTest` performs steps 2 t
+
+Alteranatively, a supervised classification procedure can be applied. Explain
+`scudoClassify`.
 
 # Example workflow of rScudo
 
@@ -197,9 +218,6 @@ classRes <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.99, 50, 50,
     type[inTrain], alpha = 0.01)
 caret::confusionMatrix(classRes$predicted, type[-inTrain])
 ```
-
-
-# Methods in brief
 
 # Session info
 

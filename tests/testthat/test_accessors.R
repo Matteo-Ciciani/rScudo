@@ -25,7 +25,7 @@ test_that("Accessors work correctly", {
                              consensusUpSignatures = ConsUp,
                              consensusDownSignatures = ConsDown,
                              selectedFeatures = Feats,
-                             params = Pars)
+                             scudoParams = Pars)
 
     expect_identical(distMatrix(ScudoRes), m)
     expect_identical(upSignatures(ScudoRes), SigUp)
@@ -34,6 +34,6 @@ test_that("Accessors work correctly", {
     expect_identical(consensusUpSignatures(ScudoRes), ConsUp)
     expect_identical(consensusDownSignatures(ScudoRes), ConsDown)
     expect_identical(selectedFeatures(ScudoRes), Feats)
-    #expect_identical(params(ScudoRes), Pars)
+    #expect_identical(scudoParams(ScudoRes), Pars)
 
 })
