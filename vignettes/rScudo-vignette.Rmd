@@ -68,10 +68,13 @@ be displayed in R or using Cytoscape.
 
 After the identification of a list of genes that can be used to partition the
 samples in separated communities, the same procedure can be applied to a testig
-dataset: the function `scudoTest` performs steps 2 t
+dataset. The function `scudoTest` performs steps 2 and 3 on a testing dataset,
+taking into account only the genes selected in the training dataset.
 
-Alteranatively, a supervised classification procedure can be applied. Explain
-`scudoClassify`.
+Alteranatively, a supervised classification procedure can be applied, using the
+function `scudoClassify`. This function takes as input a training set,
+containing samples with known classification, and a testing set of samples with
+unknown classification. For each sample in the testing set, the function computes a network formed by all the samples in the training set and a single sample from the training set. Then a classification score is generated for each testing sample, using an approach
 
 # Example workflow of rScudo
 

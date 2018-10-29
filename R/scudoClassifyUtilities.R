@@ -181,7 +181,7 @@ NULL
 }
 
 .computeCompleteScores <- function(distMat, nTrain, nTest, trainGroups) {
-    distMat <- distMat[seq_len(nTrain), seq(nTrain + 1, nTrain + nTest)]
+    distMat <- 2 - distMat[seq_len(nTrain), seq(nTrain + 1, nTrain + nTest)]
 
     # get sums for each new sample
     scores <- stats::aggregate(distMat, by = list(trainGroups),

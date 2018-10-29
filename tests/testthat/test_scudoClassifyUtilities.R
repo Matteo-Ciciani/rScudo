@@ -136,7 +136,7 @@ test_that(".computeCompleteScores works", {
     g <- factor(c(1,1,1,2,2,2,1,1,2))
 
     dm <- .defaultDist(expData, 4, 4)
-    dm2 <- dm[1:5, 6:9]
+    dm2 <- 2 - dm[1:5, 6:9]
 
     res <- rbind(apply(dm2[1:3, ], 2, sum) / 3, apply(dm2[4:5, ], 2, sum) / 2)
     res <- apply(res, 2, function(x) x/sum(x))
