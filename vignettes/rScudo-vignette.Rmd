@@ -36,11 +36,9 @@ on the basis of signature similarity.
 
 # Methods in brief
 
-Starting from gene expression data, the function `scudoTrain` performs the basic
-SCUDO pipeline and can be used to generate an object of class `scudoResults`,
-which contains sample specific gene signatures and consensus gene signatures for
-each group specified. The pipeline impemented by this function can be sumarized
-in 4 steps:
+Starting from gene expression data, the functions `scudoTrain` and
+`scudoNetwork` performs the basic SCUDO pipeline, which can be summarized in 4
+steps:
 
 1. First, fold-changes are computed for each gene. Then, a feature selection
 step is performed. The user can specify whether to use a parametric or a non
@@ -66,15 +64,24 @@ that fall below the N^th^ quantile of distances are used to draw edges in the
 network. This is performed by the function `scudoNetwork`.The network can then
 be displayed in R or using Cytoscape.
 
+The function `scudoTrain` returns an object of class `scudoResults`, which
+contains sample specific gene signatures and consensus gene signatures for each
+group specified and the sample distance matrix.
+
 After the identification of a list of genes that can be used to partition the
 samples in separated communities, the same procedure can be applied to a testig
 dataset. The function `scudoTest` performs steps 2 and 3 on a testing dataset,
-taking into account only the genes selected in the training dataset.
+taking into account only the genes selected in the training phase.
 
 Alteranatively, a supervised classification procedure can be applied, using the
 function `scudoClassify`. This function takes as input a training set,
 containing samples with known classification, and a testing set of samples with
-unknown classification. For each sample in the testing set, the function computes a network formed by all the samples in the training set and a single sample from the training set. Then a classification score is generated for each testing sample, using an approach
+unknown classification. For each sample in the testing set, the function
+computes a network formed by all the samples in the training set and a single
+sample from the training set. Then, classification scores are computed for each
+sample in the testing set looking at the neighbors of that sample in the
+network. See the documentation of the function for a detailed description of the
+computation of the classification scores.
 
 # Example workflow of rScudo
 
