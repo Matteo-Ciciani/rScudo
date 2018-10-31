@@ -28,16 +28,16 @@ knitr::opts_chunk$set(
 This package implements in R the SCUDO pipeline proposed in Lauria (2013) and
 Lauria, Moyseos, Priami (2015).
 
-SCUDO is a method for the analysis of gene expression profiles for diagnostic
-and classification purposes. The method is based on the idea of
-sample-specific gene signatures. The expected result is the emergence of a
-partitioning of the set of samples in separate clusters (propely, communities)
-on the basis of signature similarity.
+SCUDO (Signature-based Clustering for Diagnostic Purposes) is a method for the
+analysis of gene expression profiles for diagnostic and classification purposes.
+The method is based on the idea of sample-specific gene signatures. The expected
+result is the emergence of a partitioning of the set of samples in separate
+clusters (propely, communities) on the basis of signature similarity.
 
-# Methods in brief
+# Method in brief
 
 Starting from gene expression data, the functions `scudoTrain` and
-`scudoNetwork` performs the basic SCUDO pipeline, which can be summarized in 4
+`scudoNetwork` perform the basic SCUDO pipeline, which can be summarized in 4
 steps:
 
 1. First, fold-changes are computed for each gene. Then, a feature selection
@@ -73,37 +73,37 @@ samples in separated communities, the same procedure can be applied to a testig
 dataset. The function `scudoTest` performs steps 2 and 3 on a testing dataset,
 taking into account only the genes selected in the training phase.
 
-Alteranatively, a supervised classification procedure can be applied, using the
-function `scudoClassify`. This function takes as input a training set,
-containing samples with known classification, and a testing set of samples with
-unknown classification. For each sample in the testing set, the function
-computes a network formed by all the samples in the training set and a single
-sample from the training set. Then, classification scores are computed for each
-sample in the testing set looking at the neighbors of that sample in the
-network. See the documentation of the function for a detailed description of the
-computation of the classification scores.
+Alteranatively, the function `scudoClassify` can be used to perform supervised
+classification. This function takes as input a training set, containing samples
+with known classification, and a testing set of samples with unknown
+classification. For each sample in the testing set, the function computes a
+network formed by all the samples in the training set and a single sample from
+the training set. Then, classification scores are computed for each sample in
+the testing set looking at the neighbors of that sample in the network. See the
+documentation of the function for a detailed description of the computation of
+the classification scores.
 
 # Example workflow of rScudo
 
 ## Data preparation
 
 In this example we will use the `r Biocpkg("ALL")` dataset, containing gene
-expression data from T- and B-cells acute lymphocytic leukemia patients. In this
-first part, we are interested in distinguishing B-cells and T-cells samples,
-based on gene expression profiles. We begin by loading relevant libraries and
-subsetting the dataset, dividing it in a training and a testing set.
+expression data from T- and B-cells acute lymphoblastic leukemia patients. In
+this first part, we are interested in distinguishing B-cells and T-cells
+samples, based on gene expression profiles. We begin by loading relevant
+libraries and subsetting the dataset, dividing it in a training and a testing
+set, using the function `createDataPartition` from the package `r
+CRANpkg("caret")`.
 
 ```{r, message=FALSE}
 library(rScudo)
-library(igraph)
 library(ALL)
 data(ALL)
 
 bt <- as.factor(stringr::str_extract(pData(ALL)$BT, "^."))
-summary(bt)
 
-set.seed(1)
-inTrain <- c(sample(1:95, 47), sample(96:128, 16))
+set.seed(1111)
+inTrain <- caret::createDataPartition(bt, list = FALSE)
 trainData <- ALL[, inTrain]
 testData <- ALL[, -inTrain]
 ```
@@ -127,8 +127,8 @@ upSignatures(trainRes)[1:5,1:5]
 consensusUpSignatures(trainRes)[1:5, ]
 ```
 
-The object `trainRes` can be used to generate a network of samples, using the
-function `ScudoNetwork`. This function returns an `r CRANpkg("igraph")` object.
+The function `ScudoNetwork` can be used to generate a network of samples from
+the object `trainRes` . This function returns an `r CRANpkg("igraph")` object.
 The parameter `N` controls the percentage of edges to keep in the network. We
 can plot this network using the function `scudoPlot`.
 
@@ -141,7 +141,7 @@ You can also render the network in Cytoscape, using the function
 `ScudoCytoscape`. Note that Cytoscape has to be open when running the function.
 
 ```{r, eval=FALSE}
-scudoCytoscape(netTrain)
+scudoCytoscape(trainNet)
 ```
 
 Since we obtained a very good separation of the two groups, we proceed to
@@ -168,12 +168,12 @@ scudoPlot(testNet, vertex.label = NA)
 ```
 
 We can use a community clustering algorithm to identify clusters of samples. In
-the following example we use the function `cluster_spinglass` to perform a
-greedy clustering of our network. In Cytoscape we can perform a similar analysis
-using the clustering functions from the clusterMaker app.
+the following example we use the function `cluster_spinglass` from the package
+`r CRANpkg("igraph")` to perfor clustering of our network. In Cytoscape we can
+perform a similar analysis using clustering functions from the clusterMaker app.
 
 ```{r}
-testClust <- cluster_spinglass(testNet, spins = 2)
+testClust <- igraph::cluster_spinglass(testNet, spins = 2)
 plot(testClust, testNet, vertex.label = NA)
 ```
 
@@ -188,7 +188,6 @@ used in the trainig step.
 ```{r}
 classRes <- scudoClassify(trainData, testData, N = 0.2, nTop = 100,
     nBottom = 100, trainGroups = bt[inTrain], alpha = 0.1)
-classRes$predicted
 ```
 
 Classification performances can be explored using the `confusionMatrix` function
@@ -200,33 +199,32 @@ caret::confusionMatrix(classRes$predicted, bt[-inTrain])
 
 ## Example of multigroup analysis
 
+The analysis can also be performed on more than two groups. In this section, we
+try to predict the stage of B-cells ALL using gene expression data. We focus
+only on stages B1, B2 and B3, since they have an adeguate numerosity.
+
 ```{r}
-typeB <- which(as.character(ALL$BT) %in% c("B1", "B2", "B3"))
-ALLB <- ALL[, typeB]
-type <- ALLB$BT[, drop = TRUE]
-table(type)
-
-molBiol <- factor(ALLB$mol.biol)
-
-inTrain <- as.vector(caret::createDataPartition(type, p = 0.6, list = FALSE))
+BCells <- which(as.character(ALL$BT) %in% c("B1", "B2", "B3"))
+ALLB <- ALL[, BCells]
+stage <- ALLB$BT[, drop = TRUE]
+table(stage)
 ```
 
-```{r}
-res <- scudoTrain(ALLB[, inTrain], type[inTrain], 50, 50, 0.01)
-net <- scudoNetwork(res, 0.2)
-scudoPlot(net, vertex.label = NA)
-```
+We divide the dataset in a training and a testing set and we apply `scudoTrain`,
+identifying suitable parameter values. Then, we perform supervised
+classification of the samples in the testing set using the function
+`scudoClassify`.
 
 ```{r}
-resTest <- scudoTest(res, ALLB[, -inTrain], type[-inTrain])
-netTest <- scudoNetwork(resTest, 0.2)
-scudoPlot(netTest, vertex.label = NA)
-```
+inTrain <- as.vector(caret::createDataPartition(stage, p = 0.6, list = FALSE))
 
-```{r}
-classRes <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.99, 50, 50,
-    type[inTrain], alpha = 0.01)
-caret::confusionMatrix(classRes$predicted, type[-inTrain])
+stageRes <- scudoTrain(ALLB[, inTrain], stage[inTrain], 100, 100, 0.01)
+stageNet <- scudoNetwork(stageRes, 0.2)
+scudoPlot(stageNet, vertex.label = NA)
+
+classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.2, 100, 100,
+    stage[inTrain], alpha = 0.01)
+caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 ```
 
 # Session info
