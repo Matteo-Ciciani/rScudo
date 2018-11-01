@@ -169,7 +169,7 @@ scudoPlot(testNet, vertex.label = NA)
 
 We can use a community clustering algorithm to identify clusters of samples. In
 the following example we use the function `cluster_spinglass` from the package
-`r CRANpkg("igraph")` to perfor clustering of our network. In Cytoscape we can
+`r CRANpkg("igraph")` to perform clustering of our network. In Cytoscape we can
 perform a similar analysis using clustering functions from the clusterMaker app.
 
 ```{r}
@@ -183,7 +183,7 @@ plot(testClust, testNet, vertex.label = NA)
 using a model built from samples in a training set. It uses a method based on
 neighbors in the graph to assign a class label to each sample in the testing
 set. We suggest to use the same `N`, `nTop`, `nBottom` and `alpha` that were
-used in the trainig step.
+used in the training step.
 
 ```{r}
 classRes <- scudoClassify(trainData, testData, N = 0.2, nTop = 100,
@@ -201,7 +201,7 @@ caret::confusionMatrix(classRes$predicted, bt[-inTrain])
 
 The analysis can also be performed on more than two groups. In this section, we
 try to predict the stage of B-cells ALL using gene expression data. We focus
-only on stages B1, B2 and B3, since they have an adeguate numerosity.
+only on stages B1, B2 and B3, since they have an adequate numerosity.
 
 ```{r}
 BCells <- which(as.character(ALL$BT) %in% c("B1", "B2", "B3"))
