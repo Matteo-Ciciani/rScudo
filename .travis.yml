@@ -1,5 +1,5 @@
 language: r
-r: bioc-devel
+bioc_required: true
 sudo: false
 cache: packages
 warnings_are_errors: true
