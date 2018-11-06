@@ -52,3 +52,6 @@ Suggests: testthat,
     caret,
     e1071
 VignetteBuilder: knitr
+biocViews: GeneExpression, DifferentialExpression, BiomedicalInformatics,
+    Classification, Clustering, GraphAndNetwork, Network, Proteomics,
+    Transcriptomics, SystemsBiology, FeatureExtraction

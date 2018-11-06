@@ -16,10 +16,8 @@ expression profile of two sample is computed using a method similat to GSEA.
 The graph of samples can the be used to perform community clustering or to
 perform supervised classification of samples in a testing set.
 }
-\details{
-To learn more about \code{rScudo}, start with the vignette:
-}
 \examples{
+# To learn more about rScudo, start with the vignette:
 browseVignettes("rScudo")
 
 }
