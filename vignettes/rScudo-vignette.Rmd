@@ -250,7 +250,7 @@ pVals <- apply(trainDataNorm, 1, function(x) {
 trainDataNorm <- trainDataNorm[pVals <= 0.01, ]
 ```
 
-```{r}
+```{r, eval=FALSE}
 # preparing model list ---------------------------------------------------------
 
 rSC <- list(type = "Classification",
@@ -258,7 +258,7 @@ rSC <- list(type = "Classification",
     parameters = data.frame(parameter = c("nTop", "nBottom"), 
         class = rep("numeric", 2),
         label = c("Number Top Signatures", "Number Bottom Signatures")),
-    grid = function(x, y, len = NULL, search = "random") {
+    grid = function(x, y, len = NULL, search = "grid") {
         rngSigUp <- round(runif(len, min = 1, max = 150))
         rngSigDown <- round(runif(len, min = 1, max = 150))
         out <- data.frame(nTop = rngSigUp, nBottom = rngSigDown)
