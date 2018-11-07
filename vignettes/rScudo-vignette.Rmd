@@ -229,16 +229,15 @@ caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 
 ## Increasing performance through parameters tuning 
 
-Parameters such as `nTop` and `nBottom` can be optimally tuned through many 
-techniques such as cross validation.
-The `r CRANpkg("caret")` offers an efficient way to compute grid search for 
-optimal parameters tuning through cross validation. The package gives the opportunity to 
-[use your own model in `train` function](http://topepo.github.io/caret/using-your-own-model-in-train.html).\
-Here we report an example of script that could be used for such purpose, 
-in the multigroup analysis previously performed.
-Since feature selection represents a bottleneck in rScudo performance, 
-we compute it, together with foldChange before the cross-validation. 
-
+Parameters such as `nTop` and `nBottom` can be optimally tuned through many
+techniques such as cross validation. The `r CRANpkg("caret")` offers an
+efficient way to compute grid search for optimal parameters tuning through cross
+validation. The package gives the opportunity to [use your own model in `train`
+function](http://topepo.github.io/caret/using-your-own-model-in-train.html).\
+Here we report an example of script that could be used for such purpose, in the
+multigroup analysis previously performed. Since feature selection represents a
+bottleneck in rScudo performance, we compute it, together with foldChange before
+the cross-validation.
 
 ```{r, eval=FALSE}
 # fold change and feature selection --------------------------------------------
@@ -249,88 +248,79 @@ trainDataNorm <- trainDataNorm / virtControl
 pVals <- apply(trainDataNorm, 1, function(x) {
     stats::kruskal.test(x, stage[inTrain])$p.value})
 trainDataNorm <- trainDataNorm[pVals <= 0.01, ]
+```
 
+```{r, eval=FALSE}
 # preparing model list ---------------------------------------------------------
 
 rSC <- list(type = "Classification",
-            library = "rScudo",
-            parameters = data.frame(parameter = c("nTop", "nBottom"), 
-                                    class = rep("numeric", 2),
-                                    label = c("Number Top Signatures",
-                                              "Number Bottom Signatures")),
-            
-            grid = function(x, y, len = NULL, search = "random") {
-                rngSigUp <- round(runif(len, min = 1, max = 150))
-                rngSigDown <- round(runif(len, min = 1, max = 150))
-                out <- data.frame(nTop = rngSigUp, nBottom = rngSigDown)
-                out                  
-            },
-            fit = function(x, y, wts, param, lev, last, 
-                           weights, classProbs, ...) { 
-                out <- rScudo::scudoTrain(expressionData = t(x), 
-                                          groups = y, 
-                                          nTop = param$nTop, 
-                                          nBottom = param$nBottom,
-                                          featureSel = F,
-                                          foldChange = F,
-                                          ...)
-                out@params$trainData <- x
-                out@params$trainGroups <- y
-                out 
-            },
-            predict = function(modelFit, newdata, 
-                               preProc = NULL, submodels = NULL){
-                rScudo::scudoClassify(
-                    trainExpData = t(modelFit@params$trainData),
-                    testExpData = t(newdata), 
-                    trainGroups = modelFit@params$trainGroups,
-                    N = 0.25, 
-                    nTop = modelFit@params$nTop, 
-                    nBottom = modelFit@params$nBottom, 
-                    featureSel = F,
-                    foldChange = F)$predicted
-            },
-            prob = function(modelFit, newdata, 
-                            preProc = NULL, submodels = NULL){
-                rScudo::scudoClassify(
-                    trainExpData = t(modelFit@params$trainData),
-                    testExpData = t(newdata), 
-                    trainGroups = modelFit@params$trainGroups,
-                    N = 0.25, 
-                    nTop = modelFit@params$nTop, 
-                    nBottom = modelFit@params$nBottom, 
-                    featureSel = F,
-                    foldChange = F)$scores
-            })
+    library = "rScudo",
+    parameters = data.frame(parameter = c("nTop", "nBottom"), 
+        class = rep("numeric", 2),
+        label = c("Number Top Signatures", "Number Bottom Signatures")),
+    grid = function(x, y, len = NULL, search = "grid") {
+        rngSigUp <- round(runif(len, min = 1, max = 150))
+        rngSigDown <- round(runif(len, min = 1, max = 150))
+        out <- data.frame(nTop = rngSigUp, nBottom = rngSigDown)
+        out                  
+    },
+    fit = function(x, y, wts, param, lev, last, weights, classProbs, ...) { 
+        out <- rScudo::scudoTrain(expressionData = t(x), groups = y, 
+            nTop = param$nTop, nBottom = param$nBottom, featureSel = F,
+            foldChange = F, ...)
+        out@scudoParams$trainData <- x
+        out@scudoParams$trainGroups <- y
+        out 
+    },
+    predict = function(modelFit, newdata, reProc = NULL, submodels = NULL){
+        rScudo::scudoClassify(
+            trainExpData = t(modelFit@scudoParams$trainData),
+            testExpData = t(newdata), 
+            trainGroups = modelFit@scudoParams$trainGroups,
+            N = 0.25, 
+            nTop = modelFit@scudoParams$nTop, 
+            nBottom = modelFit@scudoParams$nBottom, 
+            featureSel = F,
+            foldChange = F)$predicted
+    },
+    prob = function(modelFit, newdata, preProc = NULL, submodels = NULL){
+        rScudo::scudoClassify(
+            trainExpData = t(modelFit@scudoParams$trainData),
+            testExpData = t(newdata), 
+            trainGroups = modelFit@scudoParams$trainGroups,
+            N = 0.25, 
+            nTop = modelFit@scudoParams$nTop, 
+            nBottom = modelFit@scudoParams$nBottom, 
+            featureSel = F,
+            foldChange = F)$scores
+    }
+)
 
-# Running parameter tuning ----------------------------------------------------- 
+# Running parameter tuning -----------------------------------------------------
 
-cl <- parallel::makePSOCKcluster(2)
-doParallel::registerDoParallel(cl)
-fitControl <- trainControl(method = "boot",
-                           number = 5,
-                           summaryFunction = multiClassSummary)
-mod <- train(x = t(trainDataNorm), 
-             y = stage[inTrain],
-             method = rSC, 
-             tuneLength = 50, 
-             trControl = fitControl)
+#cl <- parallel::makePSOCKcluster(2)
+#doParallel::registerDoParallel(cl)
+fitControl <- caret::trainControl(method = "boot", number = 5,
+    summaryFunction = caret::multiClassSummary)
+mod <- caret::train(x = t(trainDataNorm), y = stage[inTrain], method = rSC,
+    tuneLength = 5, trControl = fitControl)
 
-stopCluster(cl) # warnings 
+#stopCluster(cl) # warnings 
 
 ```
 
 In this case on 50 randomly chosen values in a range between 1 and 150, possibly
 optimal values suggested for nTop and nBottom are respectively: 69 and 48\
-Running scudoClassify on testData from the multigroup example 
+Running scudoClassify on testData from the multigroup example.
 
 ```{r}
 classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.25, 39, 64,
     stage[inTrain], alpha = 0.01)
 caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 ```
- The overall performance increases as it is possible to see from the confusion 
- matrix. 
+
+The overall performance increases as it is possible to see from the confusion 
+matrix. 
  
 # Session info
 
