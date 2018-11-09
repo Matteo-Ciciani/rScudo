@@ -32,6 +32,7 @@ Collate:
     'scudoTrain.R'
     'scudoCytoscape.R'
     'scudoNetwork.R'
+    'scudoOptimize_tmp.R'
     'scudoPlot.R'
     'scudoTest.R'
     'show.R'
@@ -50,7 +51,8 @@ Suggests: testthat,
     ALL,
     RCy3,
     caret,
-    e1071
+    e1071,
+    doParallel
 VignetteBuilder: knitr
 biocViews: GeneExpression, DifferentialExpression, BiomedicalInformatics,
     Classification, Clustering, GraphAndNetwork, Network, Proteomics,

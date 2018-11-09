@@ -296,16 +296,26 @@ rSC <- list(type = "Classification",
     }
 )
 
+```
+
+```{r}
 # Running parameter tuning -----------------------------------------------------
 
-#cl <- parallel::makePSOCKcluster(2)
-#doParallel::registerDoParallel(cl)
-fitControl <- caret::trainControl(method = "boot", number = 5,
-    summaryFunction = caret::multiClassSummary)
-mod <- caret::train(x = t(trainDataNorm), y = stage[inTrain], method = rSC,
-    tuneLength = 5, trControl = fitControl)
+library(doParallel)
+cl <- makePSOCKcluster(7)
+registerDoParallel(cl)
 
-#stopCluster(cl) # warnings 
+rSC <- scudoModel(nTop = (1:5)*20, nBottom = (1:5)*20, N = (1:5)*0.1,
+    maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1)
+
+fitControl <- caret::trainControl(method = "cv", number = 5,
+    summaryFunction = caret::multiClassSummary)
+Sys.time()
+mod <- caret::train(x = t(trainDataNorm), y = stage[inTrain], method = rSC,
+    trControl = fitControl)
+Sys.time()
+
+stopCluster(cl) # warnings 
 
 ```
 
@@ -314,7 +324,7 @@ optimal values suggested for nTop and nBottom are respectively: 69 and 48\
 Running scudoClassify on testData from the multigroup example.
 
 ```{r}
-classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.25, 39, 64,
+classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.5, 20, 40,
     stage[inTrain], alpha = 0.01)
 caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 ```

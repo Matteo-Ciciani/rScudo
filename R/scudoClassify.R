@@ -230,11 +230,12 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     classLength <- vapply(maxIndexes, length, integer(1))
     if (any(classLength == 0)) {
         predicted <- rep(NA, length(classLength))
-        predicted[classLength > 0] <- unlist(maxIndexes[classLength > 0])
+        predicted[classLength > 0] <- colnames(scores)[unlist(maxIndexes[
+            classLength > 0])]
     } else {
         predicted <- colnames(scores)[maxIndexes]
     }
-    scores[is.nan(scores)] <- 0
+    scores[is.nan(scores)] <- 1/dim(scores)[2]
 
     names(predicted) <- rownames(scores)
     predicted <- factor(predicted, levels = levels(trainGroups))
