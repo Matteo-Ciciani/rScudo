@@ -1,7 +1,7 @@
 Package: rScudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
-Version: 0.6.2
+Version: 0.7.0
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com",
     role = c("aut", "cre")), person("Thomas", "Cantore",
     email = "cantorethomas@gmail.com", role = "aut"), person("Enrica",
@@ -31,8 +31,8 @@ Collate:
     'scudoClassify.R'
     'scudoTrain.R'
     'scudoCytoscape.R'
+    'scudoModel.R'
     'scudoNetwork.R'
-    'scudoOptimize_tmp.R'
     'scudoPlot.R'
     'scudoTest.R'
     'show.R'

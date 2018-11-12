@@ -29,8 +29,8 @@ signatures}
 \item{trainGroups}{factor containing group labels for each sample in
 \code{trainExpData}}
 
-\item{maxDist}{integer. Only nodes with a distance from a testing node less
-or equal to \code{maxDist} are used to perform the classification.}
+\item{maxDist}{an integer. Only nodes with a distance from a testing node
+less or equal to \code{maxDist} are used to perform the classification}
 
 \item{weighted}{logical, whether to consider the distances associated to the
 edges to compute the scores for the classification. For a description of the
@@ -38,8 +38,8 @@ classification method, see Details below}
 
 \item{complete}{logical, whether to consider all the nodes in the training
 set to perform the classification. If TRUE, the arguments \code{N},
-\code{maxDist} and \code{weighted} are ignored. For a description of the
-classification method, see Details below}
+\code{maxDist}, \code{weighted} and \code{beta} are ignored. For a
+description of the classification method, see Details below}
 
 \item{beta}{a coefficient used to down-weight the influence of distant nodes
 on the classification outcome. For a description of the
@@ -68,7 +68,8 @@ selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
 adjustment methods}
 
 \item{distFun}{the function used to compute the distance between two
-samples. See Details for the specification of this function}
+samples. See Details of \code{\link{scudoTrain}} for the specification of
+this function}
 }
 \value{
 A \code{list} containing a factor with the predicticted class for
@@ -119,10 +120,9 @@ returned. Note that if the argument \code{complete} is \code{FALSE}, the
 classification socres for a sample may be all zero, which happens when the
 correspoonding node is isolated in the network of samples. In this case the
 predicted group is \code{NA}.
-The optimization of the parameters is left to the user in the current version
-and should be performed optimizing the separation of samples belonging to
-different groups using \code{\link{scudoTrain}} and
-\code{\link{scudoNetwork}}.
+The tuning of the parameters can be performed automatically using the
+\code{\link[caret]{train}} function form the package \code{caret} and the
+function \code{\link{scudoModel}}.
 }
 \examples{
 expData <- data.frame(a = 1:10, b = 2:11, c = 10:1, d = 11:2,
@@ -142,7 +142,7 @@ scores <- res$scores
 
 }
 \seealso{
-\code{\link{scudoTrain}}
+\code{\link{scudoTrain}}, \code{\link{scudoModel}}
 }
 \author{
 Matteo Ciciani \email{matteo.ciciani@gmail.com}, Thomas Cantore

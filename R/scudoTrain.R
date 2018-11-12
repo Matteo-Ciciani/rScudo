@@ -1,8 +1,6 @@
 #' @include class.R accessors.R utilities.R
 NULL
 
-# scudoTrain -------------------------------------------------------------------
-
 #' Performs SCUDO analysis
 #'
 #' SCUDO (Signature-based ClUstering for DiagnOstic purposes) is a rank-based

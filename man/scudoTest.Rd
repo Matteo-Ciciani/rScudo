@@ -37,8 +37,8 @@ log-transformed. If NULL, an attempt is made to guess if the data is
 log-transformed}
 
 \item{distFun}{the function used to compute the distance between two
-samples. See \code{\link{scudoTrain}} function Details for the
-specification of this function}
+samples. See Details of \code{\link{scudoTrain}} for the specification of
+this function}
 }
 \value{
 Object of class \code{\linkS4class{ScudoResults}}.

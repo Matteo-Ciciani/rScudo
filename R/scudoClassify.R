@@ -46,10 +46,9 @@ NULL
 #' correspoonding node is isolated in the network of samples. In this case the
 #' predicted group is \code{NA}.
 #
-#' The optimization of the parameters is left to the user in the current version
-#' and should be performed optimizing the separation of samples belonging to
-#' different groups using \code{\link{scudoTrain}} and
-#' \code{\link{scudoNetwork}}.
+#' The tuning of the parameters can be performed automatically using the
+#' \code{\link[caret]{train}} function form the package \code{caret} and the
+#' function \code{\link{scudoModel}}.
 #'
 #' @usage scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
 #'     trainGroups, maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1,
@@ -75,8 +74,8 @@ NULL
 #' @param trainGroups factor containing group labels for each sample in
 #' \code{trainExpData}
 #'
-#' @param maxDist integer. Only nodes with a distance from a testing node less
-#' or equal to \code{maxDist} are used to perform the classification.
+#' @param maxDist an integer. Only nodes with a distance from a testing node
+#' less or equal to \code{maxDist} are used to perform the classification
 #'
 #' @param weighted logical, whether to consider the distances associated to the
 #' edges to compute the scores for the classification. For a description of the
@@ -84,8 +83,8 @@ NULL
 #'
 #' @param complete logical, whether to consider all the nodes in the training
 #' set to perform the classification. If TRUE, the arguments \code{N},
-#' \code{maxDist} and \code{weighted} are ignored. For a description of the
-#' classification method, see Details below
+#' \code{maxDist}, \code{weighted} and \code{beta} are ignored. For a
+#' description of the classification method, see Details below
 #'
 #' @param beta a coefficient used to down-weight the influence of distant nodes
 #' on the classification outcome. For a description of the
@@ -114,13 +113,14 @@ NULL
 #' adjustment methods
 #'
 #' @param distFun the function used to compute the distance between two
-#' samples. See Details for the specification of this function
+#' samples. See Details of \code{\link{scudoTrain}} for the specification of
+#' this function
 #'
 #' @return A \code{list} containing a factor with the predicticted class for
 #' each sample in \code{testExpData} and a data.frame of the classification
 #' scores used to generate the predictions.
 #'
-#' @seealso \code{\link{scudoTrain}}
+#' @seealso \code{\link{scudoTrain}}, \code{\link{scudoModel}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
 #' \email{cantorethomas@@gmail.com}

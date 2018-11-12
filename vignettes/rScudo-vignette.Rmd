@@ -229,76 +229,26 @@ caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 
 ## Increasing performance through parameters tuning 
 
-Parameters such as `nTop` and `nBottom` can be optimally tuned through many
-techniques such as cross validation. The `r CRANpkg("caret")` offers an
-efficient way to compute grid search for optimal parameters tuning through cross
-validation. The package gives the opportunity to [use your own model in `train`
-function](http://topepo.github.io/caret/using-your-own-model-in-train.html).\
-Here we report an example of script that could be used for such purpose, in the
-multigroup analysis previously performed. Since feature selection represents a
-bottleneck in rScudo performance, we compute it, together with foldChange before
-the cross-validation.
-
-```{r, eval=FALSE}
-# fold change and feature selection --------------------------------------------
-
-trainDataNorm <- exprs(ALLB[, inTrain])
-virtControl <- rowMeans(trainDataNorm)
-trainDataNorm <- trainDataNorm / virtControl
-pVals <- apply(trainDataNorm, 1, function(x) {
-    stats::kruskal.test(x, stage[inTrain])$p.value})
-trainDataNorm <- trainDataNorm[pVals <= 0.01, ]
-```
-
-```{r, eval=FALSE}
-# preparing model list ---------------------------------------------------------
-
-rSC <- list(type = "Classification",
-    library = "rScudo",
-    parameters = data.frame(parameter = c("nTop", "nBottom"), 
-        class = rep("numeric", 2),
-        label = c("Number Top Signatures", "Number Bottom Signatures")),
-    grid = function(x, y, len = NULL, search = "grid") {
-        rngSigUp <- round(runif(len, min = 1, max = 150))
-        rngSigDown <- round(runif(len, min = 1, max = 150))
-        out <- data.frame(nTop = rngSigUp, nBottom = rngSigDown)
-        out                  
-    },
-    fit = function(x, y, wts, param, lev, last, weights, classProbs, ...) { 
-        out <- rScudo::scudoTrain(expressionData = t(x), groups = y, 
-            nTop = param$nTop, nBottom = param$nBottom, featureSel = F,
-            foldChange = F, ...)
-        out@scudoParams$trainData <- x
-        out@scudoParams$trainGroups <- y
-        out 
-    },
-    predict = function(modelFit, newdata, reProc = NULL, submodels = NULL){
-        rScudo::scudoClassify(
-            trainExpData = t(modelFit@scudoParams$trainData),
-            testExpData = t(newdata), 
-            trainGroups = modelFit@scudoParams$trainGroups,
-            N = 0.25, 
-            nTop = modelFit@scudoParams$nTop, 
-            nBottom = modelFit@scudoParams$nBottom, 
-            featureSel = F,
-            foldChange = F)$predicted
-    },
-    prob = function(modelFit, newdata, preProc = NULL, submodels = NULL){
-        rScudo::scudoClassify(
-            trainExpData = t(modelFit@scudoParams$trainData),
-            testExpData = t(newdata), 
-            trainGroups = modelFit@scudoParams$trainGroups,
-            N = 0.25, 
-            nTop = modelFit@scudoParams$nTop, 
-            nBottom = modelFit@scudoParams$nBottom, 
-            featureSel = F,
-            foldChange = F)$scores
-    }
-)
-
-```
+Parameters such as `nTop` and `nBottom` can be tuned through using techniques
+such as cross validation. The package `r CRANpkg("caret")` offers a framework to
+perform grid search for parameters tuning. Here we report an example of script
+that could be used for such purpose, in the multigroup analysis previously
+performed. Since feature selection represents a bottleneck in rScudo
+performance, we perform it, together with foldChange before the
+cross-validation. Notice that we also transpose the dataset, since functions in
+`caret` expect features on columns and samples on rows.
 
 ```{r}
+trainData <- exprs(ALLB[, inTrain])
+virtControl <- rowMeans(trainData)
+trainDataNorm <- trainData / virtControl
+pVals <- apply(trainDataNorm, 1, function(x) {
+    stats::kruskal.test(x, stage[inTrain])$p.value})
+trainDataNorm <- t(trainDataNorm[pVals <= 0.01, ])
+```
+
+
+```{r, eval=FALSE}
 # Running parameter tuning -----------------------------------------------------
 
 library(doParallel)
@@ -311,7 +261,7 @@ rSC <- scudoModel(nTop = (1:5)*20, nBottom = (1:5)*20, N = (1:5)*0.1,
 fitControl <- caret::trainControl(method = "cv", number = 5,
     summaryFunction = caret::multiClassSummary)
 Sys.time()
-mod <- caret::train(x = t(trainDataNorm), y = stage[inTrain], method = rSC,
+mod <- caret::train(x = trainDataNorm, y = stage[inTrain], method = rSC,
     trControl = fitControl)
 Sys.time()
 
@@ -323,7 +273,7 @@ In this case on 50 randomly chosen values in a range between 1 and 150, possibly
 optimal values suggested for nTop and nBottom are respectively: 69 and 48\
 Running scudoClassify on testData from the multigroup example.
 
-```{r}
+```{r, eval=FALSE}
 classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.5, 20, 40,
     stage[inTrain], alpha = 0.01)
 caret::confusionMatrix(classStage$predicted, stage[-inTrain])
