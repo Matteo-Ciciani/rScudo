@@ -25,14 +25,38 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This package implements in R the SCUDO pipeline proposed in Lauria (2013) and
-Lauria, Moyseos, Priami (2015).
+This package implements in R the SCUDO rank-based signature identification
+method described in Lauria (2013) and Lauria, Moyseos, Priami (2015). SCUDO
+(Signature-based Clustering for Diagnostic Purposes) is a method for the
+analysis and classification of gene expression profiles for diagnostic and
+classification purposes. The `rScudo` package implements the very same algorithm
+that participated in the SBV IMPROVER Diagnostic Signature Challenge, an open
+international competition designed to assess and verify computational approaches
+for classifying clinical samples based on gene expression. SCUDO earned second
+place overall in the competition, and first in the Multiple Sclerosis
+sub-challenge, out of 54 submissions (Tarca, Lauria, Unger et al. 2013)
 
-SCUDO (Signature-based Clustering for Diagnostic Purposes) is a method for the
-analysis of gene expression profiles for diagnostic and classification purposes.
-The method is based on the idea of sample-specific gene signatures. The expected
-result is the emergence of a partitioning of the set of samples in separate
-clusters (propely, communities) on the basis of signature similarity.
+The method is based on the idea of the identification of sample-specific gene
+signatures and their subsequent analysis using a measure of
+signature-to-signature similarity. The computation of a similarity matrix is
+then used to draw a map of the signatures in the form of a graph, where each
+node corresponds to a sample and a connecting edge, if any, encodes the level of
+similarity between the connected nodes (short edge = high similarity; no edge =
+negligible similarity). The expected result is the emergence of a partitioning
+of the set of samples in separate and homogeneous clusters on the basis of
+signature similarity (clusters are also sometimes referred to as communities).
+
+The package has been designed with the double purpose of facilitating
+experimentation on different aspects of the SCUDO approach to classification,
+and enabling performance comparisons with other methods. Given the novelty
+of the method, a lot of work remain to be done in order to fully optimize it,
+and to fully characterize its classification performance. For this purpose the
+package includes features that allow the user to implement his/her own signature
+similarity function, and/or clustering and classification methods. It also adds
+functions to implement steps that were previously performed manually, such as
+determining optimal signature length and computing classification performance
+indices, in order to facilitate the application and the evaluation of the
+method.
 
 # Method in brief
 

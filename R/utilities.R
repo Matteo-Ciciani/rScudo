@@ -415,3 +415,71 @@ NULL
 
     result
 }
+
+.modelInputCheck <- function(nTop, nBottom, N, maxDist, weighted, complete,
+    beta, distFun) {
+    #check N, nTop and nBottom
+
+    stopifnot(is.numeric(N),
+        is.vector(N),
+        length(N) >= 1,
+        all(N > 0),
+        all(N <= 1.0)
+    )
+
+    stopifnot(is.numeric(nTop),
+        is.numeric(nBottom),
+        length(nTop) >= 1,
+        length(nBottom) >= 1,
+        is.vector(nTop),
+        is.vector(nBottom),
+        all(is.finite(nTop)),
+        all(is.finite(nBottom)),
+        all(nTop > 0),
+        all(nBottom > 0))
+
+    if (any(is.nan(nTop)) || any(is.nan(nBottom))) {
+        stop("nTop and nBottom cannot be NaN.")
+    }
+
+    if (any(is.na(nTop)) || any(is.na(nBottom))) {
+        stop("nTop and nBottom cannot be NA.")
+    }
+
+    if (any(nTop %% 1 != 0) || any(nBottom %% 1 != 0)) {
+        stop("nTop and nBottom must be integers.")
+    }
+
+    # checks on maxDist ------------------------------------------------------
+
+    stopifnot(is.numeric(maxDist),
+        is.vector(maxDist),
+        all(maxDist > 0),
+        length(maxDist) >= 1,
+        all(is.finite(maxDist)),
+        all(maxDist %% 1 == 0))
+
+    # check beta, weighted, complete -------------------------------------------
+
+    stopifnot(is.numeric(beta),
+        length(beta) >= 1,
+        is.vector(beta),
+        all(beta > 0))
+
+    stopifnot(is.logical(weighted),
+        is.logical(complete),
+        is.vector(weighted),
+        is.vector(complete),
+        length(weighted) >= 1,
+        length(complete) >= 1)
+
+    # check distFun
+
+    if (!is.null(distFun)){
+        stopifnot(is.function(distFun))
+        if (length(formals(distFun)) != 3) {
+            stop(paste('distFun should take as input three arguments:',
+                'expressionData, nTop, nBottom'))
+        }
+    }
+}

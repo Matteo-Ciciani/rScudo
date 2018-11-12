@@ -1,4 +1,4 @@
-#' @include scudoClassify.R
+#' @include scudoClassify.R utilities.R
 NULL
 
 #' Generate model for \code{caret::train}
@@ -74,67 +74,10 @@ scudoModel <- function(nTop, nBottom, N, maxDist = 1, weighted = TRUE,
     complete = FALSE, beta = 1, distFun = NULL) {
 
     # InputCheck ---------------------------------------------------------------
-        
-    stopifnot(is.numeric(N),
-        is.vector(N),
-        length(N) >= 1,
-        all(N > 0),
-        all(N <= 1.0),
-        is.atomic(N)
-    )
-        
-    stopifnot(is.numeric(nTop),
-        is.numeric(nBottom),
-        length(nTop) >= 1,
-        length(nBottom) >= 1,
-        is.vector(nTop),
-        is.vector(nBottom),
-        is.atomic(nTop), 
-        is.atomic(nBottom),
-        all(is.finite(nTop)),
-        all(is.finite(nBottom)),
-        all(nTop > 0),
-        all(nBottom > 0))
-        
-    if (any(is.nan(nTop)) || any(is.nan(nBottom))) {
-        stop("nTop and nBottom cannot be NaN.")
-    }
-    
-    if (any(is.na(nTop)) || any(is.na(nBottom))) {
-        stop("nTop and nBottom cannot be NA.")
-    }
-    
-    if (any(nTop%% 1 != 0) || any(nBottom%% 1 != 0)) {
-        stop("nTop and nBottom must be integers.")
-    }
-        
-    # checks on maxDist ------------------------------------------------------
-        
-    stopifnot(is.numeric(maxDist),
-        is.vector(maxDist),
-        is.atomic(maxDist),
-        all(maxDist > 0),
-        length(maxDist) >= 1,
-        all(is.finite(maxDist)),
-        all(maxDist%% 1 == 0))
-        
-    # check beta, weighted, complete -------------------------------------------
-        
-    stopifnot(is.numeric(beta),
-        length(beta) >= 1,
-        is.vector(beta),
-        is.atomic(beta),
-        all(beta > 0))
-        
-    stopifnot(is.logical(weighted),
-        is.logical(complete),
-        is.atomic(complete),
-        is.vector(weighted),
-        is.atomic(weighted),
-        is.vector(complete),
-        length(weighted) >= 1,
-        length(complete) >= 1)
-    
+
+    .modelInputCheck(nTop, nBottom, N, maxDist, weighted, complete, beta,
+        distFun)
+
     # Model construction -------------------------------------------------------
 
     parameters <- data.frame(
