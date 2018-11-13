@@ -14,8 +14,7 @@ author:
         - The Microsoft Research-University of Trento Centre for
             Computational and Systems Biology (COSBI), Rovereto, Italy
 output:
-    BiocStyle::pdf_document:
-        #toc_float: true
+    BiocStyle::pdf_document
 vignette: >
     %\VignetteIndexEntry{Signature-based Clustering for Diagnostic Purposes}
     %\VignetteEngine{knitr::rmarkdown}
