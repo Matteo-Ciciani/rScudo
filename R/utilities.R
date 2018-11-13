@@ -7,7 +7,7 @@ NULL
     foldChange, groupedFoldChange, featureSel, logTransformed, parametric, pAdj,
     distFun) {
 
-    # checks on expressionData -------------------------------------------------
+    # checks on expressionData
 
     stopifnot(is.data.frame(expressionData))
 
@@ -19,7 +19,7 @@ NULL
         stop(paste(deparse(substitute(expressionData)), "contains NAs."))
     }
 
-    # checks on groups ---------------------------------------------------------
+    # checks on groups
 
     stopifnot(is.factor(groups))
 
@@ -38,7 +38,7 @@ NULL
         stop("groups has length 0")
     }
 
-    # checks on nTop and nBottom -----------------------------------------------
+    # checks on nTop and nBottom
 
     stopifnot(is.numeric(nTop),
         is.numeric(nBottom),
@@ -119,7 +119,7 @@ NULL
             'Check stats::p.adjust documentation.'))
     }
 
-    # check on distFun ---------------------------------------------------------
+    # check on distFun
 
     if (!is.null(distFun)){
         stopifnot(is.function(distFun))
@@ -301,7 +301,7 @@ NULL
         length(ordNames)))]
 }
 
-# perform analysis -------------------------------------------------------------
+# performScudo -----------------------------------------------------------------
 
 .performScudo <- function(expressionData, groups, nTop, nBottom,
     distFun = NULL, ...) {
@@ -379,6 +379,8 @@ NULL
     )
 }
 
+# scudoNetwork utilities -------------------------------------------------------
+
 .makeNetwork <- function(dMatrix, N) {
     # compute adjacency matrix
     adjMatrix <- matrix(0, nrow = dim(dMatrix)[1], ncol = dim(dMatrix)[1])
@@ -416,8 +418,11 @@ NULL
     result
 }
 
+# scudoModel utilities ---------------------------------------------------------
+
 .modelInputCheck <- function(nTop, nBottom, N, maxDist, weighted, complete,
     beta, distFun) {
+
     #check N, nTop and nBottom
 
     stopifnot(is.numeric(N),
@@ -450,7 +455,7 @@ NULL
         stop("nTop and nBottom must be integers.")
     }
 
-    # checks on maxDist ------------------------------------------------------
+    # checks on maxDist
 
     stopifnot(is.numeric(maxDist),
         is.vector(maxDist),
@@ -459,7 +464,7 @@ NULL
         all(is.finite(maxDist)),
         all(maxDist %% 1 == 0))
 
-    # check beta, weighted, complete -------------------------------------------
+    # check beta, weighted, complete
 
     stopifnot(is.numeric(beta),
         length(beta) >= 1,

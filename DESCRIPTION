@@ -1,11 +1,12 @@
 Package: rScudo
 Type: Package
 Title: Signature-based Clustering for Diagnostic Purposes
-Version: 0.7.3
+Version: 0.7.4
 Authors@R: c(person("Matteo", "Ciciani", email = "matteo.ciciani@gmail.com",
     role = c("aut", "cre")), person("Thomas", "Cantore",
     email = "cantorethomas@gmail.com", role = "aut"), person("Enrica",
-    "Colasurdo", email = "enrica.colasurdo@gmail.com", role = "ctb"))
+    "Colasurdo", email = "enrica.colasurdo@gmail.com", role = "ctb"), person(
+    "Mario", "Lauria", email = "mario.lauria@unitn.it", role = c("ctb")))
 Description: SCUDO (Signature-based Clustering for Diagnostic Purposes) is a 
     rank-based method for the analysis of gene expression profiles for
     diagnostic and classification purposes. It is based on the identification of
