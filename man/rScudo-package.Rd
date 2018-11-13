@@ -13,7 +13,7 @@ sample. Starting from gene expression data, functions in this package
 identify sample-specific gene signatures and use them to build a graph of
 samples. In this graph samples are joined by edges if they have a similar
 expression profile, according to a pre-computed similarity matrix. The
-similarity between the expression profile of two sample is computed using a
+similarity between the expression profiles of two sample is computed using a
 method similar to GSEA. The graph of samples can the be used to perform
 community clustering or to perform supervised classification of samples in a
 testing set.

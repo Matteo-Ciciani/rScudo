@@ -36,15 +36,15 @@ for classifying clinical samples based on gene expression. SCUDO earned second
 place overall in the competition, and first in the Multiple Sclerosis
 sub-challenge, out of 54 submissions (Tarca, Lauria, Unger et al. 2013)
 
-The method is based on the idea of the identification of sample-specific gene
-signatures and their subsequent analysis using a measure of
-signature-to-signature similarity. The computation of a similarity matrix is
-then used to draw a map of the signatures in the form of a graph, where each
-node corresponds to a sample and a connecting edge, if any, encodes the level of
-similarity between the connected nodes (short edge = high similarity; no edge =
-negligible similarity). The expected result is the emergence of a partitioning
-of the set of samples in separate and homogeneous clusters on the basis of
-signature similarity (clusters are also sometimes referred to as communities).
+The method is based on the identification of sample-specific gene signatures and
+their subsequent analysis using a measure of signature-to-signature similarity.
+The computation of a similarity matrix is then used to draw a map of the
+signatures in the form of a graph, where each node corresponds to a sample and a
+connecting edge, if any, encodes the level of similarity between the connected
+nodes (short edge = high similarity; no edge = negligible similarity). The
+expected result is the emergence of a partitioning of the set of samples in
+separate and homogeneous clusters on the basis of signature similarity (clusters
+are also sometimes referred to as communities).
 
 The package has been designed with the double purpose of facilitating
 experimentation on different aspects of the SCUDO approach to classification,
@@ -116,8 +116,8 @@ expression data from T- and B-cells acute lymphoblastic leukemia patients. In
 this first part, we are interested in distinguishing B-cells and T-cells
 samples, based on gene expression profiles. We begin by loading relevant
 libraries and subsetting the dataset, dividing it in a training and a testing
-set, using the function `createDataPartition` from the package `r
-CRANpkg("caret")`.
+set, using the function `createDataPartition` from the package
+`r CRANpkg("caret")`.
 
 ```{r, message=FALSE}
 library(rScudo)
@@ -126,7 +126,7 @@ data(ALL)
 
 bt <- as.factor(stringr::str_extract(pData(ALL)$BT, "^."))
 
-set.seed(1111)
+set.seed(123)
 inTrain <- caret::createDataPartition(bt, list = FALSE)
 trainData <- ALL[, inTrain]
 testData <- ALL[, -inTrain]
@@ -157,7 +157,7 @@ The parameter `N` controls the percentage of edges to keep in the network. We
 can plot this network using the function `scudoPlot`.
 
 ```{r}
-trainNet <- scudoNetwork(trainRes, N = 0.2)
+trainNet <- scudoNetwork(trainRes, N = 0.25)
 scudoPlot(trainNet, vertex.label = NA)
 ```
 
@@ -187,7 +187,7 @@ testRes
 We can generate a network of samples and plot it.
 
 ```{r}
-testNet <- scudoNetwork(testRes, N = 0.2)
+testNet <- scudoNetwork(testRes, N = 0.25)
 scudoPlot(testNet, vertex.label = NA)
 ```
 
@@ -210,7 +210,7 @@ set. We suggest to use the same `N`, `nTop`, `nBottom` and `alpha` that were
 used in the training step.
 
 ```{r}
-classRes <- scudoClassify(trainData, testData, N = 0.2, nTop = 100,
+classRes <- scudoClassify(trainData, testData, N = 0.25, nTop = 100,
     nBottom = 100, trainGroups = bt[inTrain], alpha = 0.1)
 ```
 
@@ -251,16 +251,15 @@ classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.25, 100, 100,
 caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 ```
 
-## Increasing performance through parameters tuning 
+## Increasing performance through parameter tuning 
 
-Parameters such as `nTop` and `nBottom` can be tuned through using techniques
-such as cross validation. The package `r CRANpkg("caret")` offers a framework to
-perform grid search for parameters tuning. Here we report an example of script
-that could be used for such purpose, in the multigroup analysis previously
-performed. Since feature selection represents a bottleneck in rScudo
-performance, we perform it, together with foldChange before the
-cross-validation. Notice that we also transpose the dataset, since functions in
-`caret` expect features on columns and samples on rows.
+Parameters such as `nTop` and `nBottom` can be optimally tuned using techniques
+such as cross-validation. The package `r CRANpkg("caret")` offers a framework to
+perform grid search for parameters tuning. Here we report an example of
+cross-validation, in the case of the multigroup analysis previously performed.
+Since feature selection represents a performance bottleneck, we perform it
+before the cross-validation. Notice that we also transpose the dataset, since
+functions in `caret` expect features on columns and samples on rows.
 
 ```{r}
 trainData <- exprs(ALLB[, inTrain])
@@ -272,40 +271,31 @@ trainDataNorm <- t(trainDataNorm[pVals <= 0.01, ])
 ```
 
 
-```{r, eval=FALSE}
-# Running parameter tuning -----------------------------------------------------
 
-library(doParallel)
-cl <- makePSOCKcluster(7)
-registerDoParallel(cl)
+```{r}
+cl <- parallel::makePSOCKcluster(2)
+doParallel::registerDoParallel(cl)
 
-rSC <- scudoModel(nTop = (1:5)*20, nBottom = (1:5)*20, N = (1:5)*0.1,
-    maxDist = 1, weighted = TRUE, complete = FALSE, beta = 1)
-
-fitControl <- caret::trainControl(method = "cv", number = 5,
+model <- scudoModel(nTop = (2:6)*20, nBottom = (2:6)*20, N = 0.25)
+control <- caret::trainControl(method = "cv", number = 5,
     summaryFunction = caret::multiClassSummary)
-Sys.time()
-mod <- caret::train(x = trainDataNorm, y = stage[inTrain], method = rSC,
-    trControl = fitControl)
-Sys.time()
+cvRes <- caret::train(x = trainDataNorm, y = stage[inTrain], method = model,
+    trControl = control)
 
-stopCluster(cl) # warnings 
-
+parallel::stopCluster(cl)
 ```
 
-In this case on 50 randomly chosen values in a range between 1 and 150, possibly
-optimal values suggested for nTop and nBottom are respectively: 69 and 48\
-Running scudoClassify on testData from the multigroup example.
 
-```{r, eval=FALSE}
-classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.5, 20, 40,
-    stage[inTrain], alpha = 0.01)
+
+```{r, eval}
+classStage <- scudoClassify(ALLB[, inTrain], ALLB[, -inTrain], 0.25,
+    cvRes$bestTune$nTop, cvRes$bestTune$nBottom, stage[inTrain], alpha = 0.01)
 caret::confusionMatrix(classStage$predicted, stage[-inTrain])
 ```
 
 The overall performance increases as it is possible to see from the confusion 
 matrix. 
- 
+
 # Session info
 
 ```{r}
@@ -320,3 +310,9 @@ Mario Lauria. Rank-based transcriptional signatures. Systems Biomedicine. 2013;
 Mario Lauria, Petros Moyseos and Corrado Priami. SCUDO: a tool for
 signature-based clustering of expression profiles. Nucleic Acids Research. 2015;
 43(W1):W188-92.
+
+Tarca A.L., Lauria M., Unger M., Bilal E., Boue S., Kumar Dey K., Hoeng
+J., Koeppl H., Martin F., Meyer P., et al. IMPROVER DSC Collaborators.
+Strengths and limitations of microarray-based phenotype prediction:
+lessons learned from the IMPROVER Diagnostic Signature Challenge.
+Bioinformatics. 2013;29:2892–2899.
