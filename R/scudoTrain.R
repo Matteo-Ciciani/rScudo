@@ -94,9 +94,10 @@ NULL
 #'     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
 #'     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL)
 #
-#' @param expressionData either an \code{\link[Biobase]{ExpressionSet}},
-#' a data.frame or a matrix of gene expression data, with a column for
-#' each sample and a row for each feature
+#' @param expressionData either an
+#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' matrix of gene expression data, with a column for each sample and a row for
+#' each feature
 #'
 #' @param groups factor containing group labels for each sample in
 #' \code{expressionData}
@@ -129,8 +130,8 @@ NULL
 #' test for the feature selection
 #'
 #' @param pAdj pAdj method to use to adjust the p-values in the feature
-#' selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
-#' adjustment methods
+#'   selection step. See \code{\link[stats:p.adjust]{p.adjust.methods}} for a
+#'   list of adjustment methods
 #'
 #' @param distFun the function used to compute the distance between two
 #' samples. See Details for the specification of this function

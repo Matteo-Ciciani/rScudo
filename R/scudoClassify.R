@@ -55,13 +55,15 @@ NULL
 #'     alpha = 0.1, foldChange = TRUE, featureSel = TRUE, logTransformed = NULL,
 #'     parametric = FALSE, pAdj = "none", distFun = NULL)
 #'
-#' @param trainExpData either an \code{\link[Biobase]{ExpressionSet}},
-#' a data.frame or a matrix of gene expression data, with a column for
-#' each sample and a row for each feature, to be used as a training set
+#' @param trainExpData either an
+#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' matrix of gene expression data, with a column for each sample and a row for
+#' each feature, to be used as a training set
 #'
-#' @param testExpData either an \code{\link[Biobase]{ExpressionSet}},
-#' a data.frame or a matrix of gene expression data, with a column for
-#' each sample and a row for each feature, to be used as a testing set
+#' @param testExpData either an
+#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' matrix of gene expression data, with a column for each sample and a row for
+#' each feature, to be used as a testing set
 #'
 #' @param N a number between 0 and 1, representing the fraction of the
 #' signature-to-signature distances that will be used to draw the graph
@@ -109,8 +111,8 @@ NULL
 #' test for the feature selection
 #'
 #' @param pAdj pAdj method to use to adjust the p-values in the feature
-#' selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
-#' adjustment methods
+#' selection step. See \code{\link[stats:p.adjust]{p.adjust.methods}} for a list
+#' of adjustment methods
 #'
 #' @param distFun the function used to compute the distance between two
 #' samples. See Details of \code{\link{scudoTrain}} for the specification of

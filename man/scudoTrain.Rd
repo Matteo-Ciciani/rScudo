@@ -9,9 +9,10 @@ scudoTrain(expressionData, groups, nTop, nBottom, alpha = 0.1,
     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
-\item{expressionData}{either an \code{\link[Biobase]{ExpressionSet}},
-a data.frame or a matrix of gene expression data, with a column for
-each sample and a row for each feature}
+\item{expressionData}{either an
+\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+matrix of gene expression data, with a column for each sample and a row for
+each feature}
 
 \item{groups}{factor containing group labels for each sample in
 \code{expressionData}}
@@ -44,8 +45,8 @@ log-transformed}
 test for the feature selection}
 
 \item{pAdj}{pAdj method to use to adjust the p-values in the feature
-selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
-adjustment methods}
+selection step. See \code{\link[stats:p.adjust]{p.adjust.methods}} for a
+list of adjustment methods}
 
 \item{distFun}{the function used to compute the distance between two
 samples. See Details for the specification of this function}

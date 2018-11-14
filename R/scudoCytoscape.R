@@ -10,7 +10,7 @@ NULL
 #' @usage scudoCytoscape(graph, title = NULL, collection = "SCUDO",
 #'     base.url = NULL)
 #'
-#' @param graph object of class \code{\link[igraph:igraph-package]{igraph}},
+#' @param graph object of class \code{\link[igraph:aaa-igraph-package]{igraph}},
 #' like the result of \code{\link{scudoNetwork}}
 #' @param title the title of the network. If NULL it defaults to
 #'   \code{deparse(substitute(graph))}

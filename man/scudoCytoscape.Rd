@@ -8,7 +8,7 @@ scudoCytoscape(graph, title = NULL, collection = "SCUDO",
     base.url = NULL)
 }
 \arguments{
-\item{graph}{object of class \code{\link[igraph:igraph-package]{igraph}},
+\item{graph}{object of class \code{\link[igraph:aaa-igraph-package]{igraph}},
 like the result of \code{\link{scudoNetwork}}}
 
 \item{title}{the title of the network. If NULL it defaults to

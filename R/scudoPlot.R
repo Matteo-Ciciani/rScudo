@@ -4,8 +4,8 @@
 #' \code{\link[graphics]{legend}}. Can be used to plot the result of
 #' \code{\link{scudoNetwork}} with a color legend.
 #'
-#' @param net an \code{\link[igraph:igraph-package]{igraph}} object returned by
-#' \code{scudoNetwork}
+#' @param net an \code{\link[igraph:aaa-igraph-package]{igraph}} object returned
+#' by \code{scudoNetwork}
 #'
 #' @param x,y the x and y coordinates to be used to position the legend. They
 #' can be specified by keyword or in any way which is accepted by

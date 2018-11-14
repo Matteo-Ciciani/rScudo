@@ -7,8 +7,8 @@
 scudoPlot(net, x = "bottomright", y = NULL, ...)
 }
 \arguments{
-\item{net}{an \code{\link[igraph:igraph-package]{igraph}} object returned by
-\code{scudoNetwork}}
+\item{net}{an \code{\link[igraph:aaa-igraph-package]{igraph}} object returned
+by \code{scudoNetwork}}
 
 \item{x, y}{the x and y coordinates to be used to position the legend. They
 can be specified by keyword or in any way which is accepted by

@@ -3,13 +3,13 @@ NULL
 
 #' Create graph from a ScudoResults object
 #'
-#' A function to create an \code{\link[igraph:igraph-package]{igraph}} object
-#' from a \code{\linkS4class{ScudoResults}} object. In the graph, nodes are
-#' samples and edges quantify the similarity between the nodes.
+#' A function to create an \code{\link[igraph:aaa-igraph-package]{igraph}}
+#' object from a \code{\linkS4class{ScudoResults}} object. In the graph, nodes
+#' are samples and edges quantify the similarity between the nodes.
 #'
 #' This function uses the distance matrix in the
 #' \code{\linkS4class{ScudoResults}} object to generate an
-#' \code{\link[igraph:igraph-package]{igraph}} object, representing a graph
+#' \code{\link[igraph:aaa-igraph-package]{igraph}} object, representing a graph
 #' where nodes are samples and edges quantify the similarity between the
 #' signatures of pairs of nodes.
 #'
@@ -43,10 +43,10 @@ NULL
 #' samples. By default colors are chosen according to the groups in
 #' \code{object}
 #'
-#' @return An object of class \code{\link[igraph:igraph-package]{igraph}}.
+#' @return An object of class \code{\link[igraph:aaa-igraph-package]{igraph}}.
 #'
 #' @seealso \code{\link{scudoCytoscape}}, \code{\linkS4class{ScudoResults}},
-#' \code{\link[igraph:igraph-package]{igraph}}
+#' \code{\link[igraph:aaa-igraph-package]{igraph}}
 #'
 #' @author Matteo Ciciani \email{matteo.ciciani@@gmail.com}, Thomas Cantore
 #' \email{cantorethomas@@gmail.com}

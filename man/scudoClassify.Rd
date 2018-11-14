@@ -10,13 +10,15 @@ scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
     parametric = FALSE, pAdj = "none", distFun = NULL)
 }
 \arguments{
-\item{trainExpData}{either an \code{\link[Biobase]{ExpressionSet}},
-a data.frame or a matrix of gene expression data, with a column for
-each sample and a row for each feature, to be used as a training set}
+\item{trainExpData}{either an
+\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+matrix of gene expression data, with a column for each sample and a row for
+each feature, to be used as a training set}
 
-\item{testExpData}{either an \code{\link[Biobase]{ExpressionSet}},
-a data.frame or a matrix of gene expression data, with a column for
-each sample and a row for each feature, to be used as a testing set}
+\item{testExpData}{either an
+\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+matrix of gene expression data, with a column for each sample and a row for
+each feature, to be used as a testing set}
 
 \item{N}{a number between 0 and 1, representing the fraction of the
 signature-to-signature distances that will be used to draw the graph}
@@ -64,8 +66,8 @@ log-transformed}
 test for the feature selection}
 
 \item{pAdj}{pAdj method to use to adjust the p-values in the feature
-selection step. See \code{\link[stats]{p.adjust.methods}} for a list of
-adjustment methods}
+selection step. See \code{\link[stats:p.adjust]{p.adjust.methods}} for a list
+of adjustment methods}
 
 \item{distFun}{the function used to compute the distance between two
 samples. See Details of \code{\link{scudoTrain}} for the specification of
