@@ -56,12 +56,12 @@ NULL
 #'     parametric = FALSE, pAdj = "none", distFun = NULL)
 #'
 #' @param trainExpData either an
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
 #' matrix of gene expression data, with a column for each sample and a row for
 #' each feature, to be used as a training set
 #'
 #' @param testExpData either an
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
 #' matrix of gene expression data, with a column for each sample and a row for
 #' each feature, to be used as a testing set
 #'

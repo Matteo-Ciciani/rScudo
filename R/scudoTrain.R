@@ -95,7 +95,7 @@ NULL
 #'     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL)
 #
 #' @param expressionData either an
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}, a data.frame or a
+#' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
 #' matrix of gene expression data, with a column for each sample and a row for
 #' each feature
 #'
