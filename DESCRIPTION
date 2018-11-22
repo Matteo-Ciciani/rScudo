@@ -38,7 +38,7 @@ Collate:
     'scudoPlot.R'
     'scudoTest.R'
     'show.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Depends: R (>= 3.5.0)
 Imports: methods,
     stats,
