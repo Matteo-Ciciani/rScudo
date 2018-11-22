@@ -150,48 +150,49 @@ setValidity("ScudoResults", function(object) {
         msg <- c(msg, "colnames and rownames are different in distMatrix")
     }
 
-    # validity of upSignatures -------------------------------------------------
-    if (any(is.na(object@upSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, "upSignatures contains NAs")
+    # validity for Signatures --------------------------------------------------
+    
+    .checkSigValidity <- function(object) {
+        valid1 <- TRUE
+        msg1 <- NULL
+        sigs <- c("upSignatures", "downSignatures")
+        
+        if (any(check <- c(
+            any(is.na(object@upSignatures)), 
+            any(is.na(object@downSignatures))))) {
+            valid1 <- FALSE
+            msg1 <- c(msg1, paste0(sigs[check], " contains NAs")) 
+        }
+        if (any(check <- c(
+            !all(dim(object@upSignatures)[2] == dim(object@distMatrix)),
+            !all(dim(object@downSignatures)[2] == dim(object@distMatrix))))) {
+            valid1 <- FALSE
+            msg1 <- c(msg1, paste0(
+                "number of columns in ", sigs[check], " is different",
+                "from the dimension of distMatrix"))
+        }
+        if (any(check <- c(
+            !identical(colnames(object@distMatrix), 
+                colnames(object@upSignatures)), 
+            !identical(colnames(object@distMatrix), 
+                colnames(object@downSignatures))))) {
+            valid1 <- FALSE
+            msg1 <- c(msg1, paste0("colnames in ", sigs[check], 
+                " are different from colnames in distMatrix"))
+        }
+        if (any(check <- c(
+            !all(vapply(object@upSignatures, is.character, logical(1))),
+            !all(vapply(object@downSignatures, is.character, logical(1)))))) {
+            valid1 <- FALSE
+            msg1 <- c(msg1, paste0("colnames in ", sigs[check], 
+                " contains non-character values"))
+        }
+        msg <<- c(msg, msg1)
+        if (!valid1) valid <<- valid1
     }
-    if (!all(dim(object@upSignatures)[2] == dim(object@distMatrix))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("number of columns in upSignatures is different",
-            " from the dimension of distMatrix"))
-    }
-    if (!identical(colnames(object@distMatrix),
-        colnames(object@upSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames in upSignatures are different from",
-            " colnames in distMatrix"))
-    }
-    if (!all(vapply(object@upSignatures, is.character, logical(1)))) {
-        valid <- FALSE
-        msg <- c(msg, "upSignatures contains non-character values")
-    }
-
-    # validity of downSignatures -----------------------------------------------
-    if (any(is.na(object@downSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, "downSignatures contains NAs")
-    }
-    if (!all(dim(object@downSignatures)[2] == dim(object@distMatrix))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("number of columns in downSignatures is different",
-            " from the dimension of distMatrix"))
-    }
-    if (!identical(colnames(object@distMatrix),
-        colnames(object@downSignatures))) {
-        valid <- FALSE
-        msg <- c(msg, paste0("colnames in downSignatures are different from",
-            " colnames in distMatrix"))
-    }
-    if (!all(vapply(object@downSignatures, is.character, logical(1)))) {
-        valid <- FALSE
-        msg <- c(msg, "downSignatures contains non-character values")
-    }
-
+    
+    .checkSigValidity(object)
+    
     # validity of groupsAnnotation ---------------------------------------------
     if (any(is.na(object@groupsAnnotation))) {
         valid <- FALSE
