@@ -170,19 +170,7 @@ scudoTrain <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL) {
 
-    if (is(expressionData, "ExpressionSet")) {
-        expressionData <- as.data.frame(Biobase::exprs(expressionData))
-    }
-    if (is(expressionData, "matrix")) {
-        expressionData <- as.data.frame(expressionData)
-    }
-    if (is(expressionData, "SummarizedExperiment")) {
-        if (length(assays(expressionData)) > 1) {
-            warning(paste0("ExpressionData contains multiple assays datasets,",
-                " just the first one is considered."))
-        }
-        expressionData <- as.data.frame(assays(expressionData)[[1]])
-    }
+    expressionData <- .inputConverter(expressionData)
 
     .inputCheck(expressionData, groups, nTop, nBottom, alpha, foldChange,
         groupedFoldChange, featureSel, logTransformed, parametric,

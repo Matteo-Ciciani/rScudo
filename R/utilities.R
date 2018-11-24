@@ -1,6 +1,26 @@
 #' @include class.R accessors.R
 NULL
 
+# .inputConverter --------------------------------------------------------------
+
+.inputConverter <- function(expressionData) {
+    if (is(expressionData, "ExpressionSet")) {
+        expressionData <- as.data.frame(Biobase::exprs(expressionData))
+    }
+    if (is(expressionData, "matrix")) {
+        expressionData <- as.data.frame(expressionData)
+    }
+    if (is(expressionData, "SummarizedExperiment")) {
+        if (length(SummarizedExperiment::assays(expressionData)) > 1) {
+            warning(paste0(deparse(substitute(expressionData)), 
+                " contains multiple assays datasets,",
+                " just the first one is considered."))
+        }
+        expressionData <- as.data.frame(
+            SummarizedExperiment::assays(expressionData)[[1]])
+    }
+    expressionData 
+}
 # .inputCheck ------------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,

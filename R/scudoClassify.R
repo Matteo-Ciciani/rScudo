@@ -151,19 +151,8 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
 
     # InputCheck ---------------------------------------------------------------
 
-    if (is(trainExpData, "ExpressionSet")) {
-        trainExpData <- as.data.frame(Biobase::exprs(trainExpData))
-    }
-    if (is(trainExpData, "matrix")) {
-        trainExpData <- as.data.frame(trainExpData)
-    }
-
-    if (is(testExpData, "ExpressionSet")) {
-        testExpData <- as.data.frame(Biobase::exprs(testExpData))
-    }
-    if (is(testExpData, "matrix")) {
-        testExpData <- as.data.frame(testExpData)
-    }
+    trainExpData <- .inputConverter(trainExpData)
+    testExpData <- .inputConverter(testExpData)
 
     .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
         trainGroups, maxDist, weighted, complete, beta, alpha, foldChange,

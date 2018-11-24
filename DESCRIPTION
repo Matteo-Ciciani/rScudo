@@ -45,7 +45,8 @@ Imports: methods,
     igraph,
     stringr,
     grDevices,
-    Biobase
+    Biobase,
+    SummarizedExperiment
 Suggests: testthat,
     BiocStyle,
     knitr,
