@@ -176,6 +176,13 @@ scudoTrain <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     if (is(expressionData, "matrix")) {
         expressionData <- as.data.frame(expressionData)
     }
+    if (is(expressionData, "SummarizedExperiment")) {
+        if (length(assays(expressionData)) > 1) {
+            warning(paste0("ExpressionData contains multiple assays datasets,",
+                " just the first one is considered."))
+        }
+        expressionData <- as.data.frame(assays(expressionData)[[1]])
+    }
 
     .inputCheck(expressionData, groups, nTop, nBottom, alpha, foldChange,
         groupedFoldChange, featureSel, logTransformed, parametric,
