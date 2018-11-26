@@ -12,10 +12,8 @@ NULL
 #'
 #' @param graph object of class \code{\link[igraph:aaa-igraph-package]{igraph}},
 #' like the result of \code{\link{scudoNetwork}}
-#' @param title the title of the network. If NULL it defaults to
-#'   \code{deparse(substitute(graph))}
+#' @param title the title of the network
 #' @param collection the name of the Cytoscape collection
-#' @param base.url see \code{\link[RCy3]{createNetworkFromIgraph}}
 #'
 #' @return The network SUID (an integer).
 #'
@@ -43,33 +41,23 @@ NULL
 #' \dontrun{scudoCytoscape(res, title = "scudoCytoscape output")}
 #'
 #' @export
-scudoCytoscape <- function(graph, title = NULL, collection = "SCUDO",
-    base.url = NULL) {
+scudoCytoscape <- function(graph, title = "Scudo Graph", collection = "SCUDO") {
 
     if (!requireNamespace("RCy3", quietly = TRUE)) {
         stop("Package \"RCy3\" needed for this function to work.", "
             Please install it.",  call. = FALSE)
     }
 
-    # perform checks
-    if (is.null(title)) title <- deparse(substitute(graph))
-
     stopifnot(
-        is.character(title),
-        is.character(collection)
+        S4vectors::isSingleStirng(title),
+        S4Vectors::isSingleString(collection)
     )
 
-    if (length(title) != 1) stop("title length must be 1")
-    if (length(collection) != 1) stop("collection length must be 1")
-
     # plot
-    if (is.null(base.url)) {
-        id <- RCy3::createNetworkFromIgraph(graph, title = title,
-            collection = collection)
-    } else {
-        id <- RCy3::createNetworkFromIgraph(graph, title = title,
-            collection = collection, base.url = base.url)
-    }
+
+    id <- RCy3::createNetworkFromIgraph(graph, title = title,
+        collection = collection)
+
     RCy3::setNodeShapeDefault("Ellipse")
     RCy3::lockNodeDimensions(TRUE)
     RCy3::setNodeBorderWidthDefault(1.5)
