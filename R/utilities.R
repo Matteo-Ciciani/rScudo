@@ -3,6 +3,14 @@ NULL
 
 # .inputCheck ------------------------------------------------------------------
 
+.isSingleLogical <- function(x) {
+    is.logical(x) && length(x) == 1L && !is.na(x) && is.vector(x)
+}
+
+.isSingleNumber <- function(x) {
+    S4Vectors::isSingleNumber(x) && is.finite(x) && is.vector(x)
+}
+
 .inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
     foldChange, groupedFoldChange, featureSel, logTransformed, parametric, pAdj,
     distFun) {
@@ -23,41 +31,19 @@ NULL
 
     stopifnot(is.factor(groups))
 
-    if (any(is.na(groups))) {
-        stop(paste(deparse(substitute(groups)),
-            "contains NAs."))
-    }
+    if (any(is.na(groups))) stop("groups contain NAs.")
 
     if (length(groups) != dim(expressionData)[2]) {
-        stop(paste("Length of", deparse(substitute(groups)),
-            "is different from number of columns of ",
-            deparse(substitute(expressionData))))
-    }
-
-    if (length(groups) == 0) {
-        stop("groups has length 0")
+        stop(paste("Length of groups is different from number of columns of",
+            "expressionData"))
     }
 
     # checks on nTop and nBottom
 
-    stopifnot(is.numeric(nTop),
-        is.numeric(nBottom),
-        length(nTop) == 1,
-        length(nBottom) == 1,
-        is.vector(nTop),
-        is.vector(nBottom),
-        is.finite(nTop),
-        is.finite(nBottom),
+    stopifnot(.isSingleNumber(nTop),
+        .isSingleNumber(nBottom),
         nTop > 0,
         nBottom > 0)
-
-    if (is.nan(nTop) | is.nan(nBottom)) {
-        stop("nTop and nBottom cannot be NaN.")
-    }
-
-    if (is.na(nTop) | is.na(nBottom)) {
-        stop("nTop and nBottom cannot be NA.")
-    }
 
     if ((nTop %% 1 != 0) | (nBottom %% 1 != 0)) {
         stop("nTop and nBottom must be integers.")
@@ -77,41 +63,19 @@ NULL
 .checkParams <- function(alpha, foldChange, groupedFoldChange, featureSel,
     logTransformed, parametric, pAdj, distFun) {
 
-    stopifnot(is.numeric(alpha),
-        length(alpha) == 1,
-        is.vector(alpha),
+    stopifnot(.isSingleNumber(alpha),
         alpha > 0,
         alpha <= 1)
 
-    if (is.nan(alpha)) {
-        stop("alpha cannot be NaN")
-    }
-
-    if (is.na(alpha)) {
-        stop("alpha cannot be NA.")
-    }
-
     if (!is.null(logTransformed)) {
-        stopifnot(is.logical(logTransformed),
-            is.vector(logTransformed),
-            length(logTransformed) == 1)
+        stopifnot(.isSingleLogical(logTransformed))
     }
 
-    stopifnot(is.logical(foldChange),
-        is.logical(featureSel),
-        is.logical(groupedFoldChange),
-        is.logical(parametric),
-        is.vector(foldChange),
-        is.vector(featureSel),
-        is.vector(groupedFoldChange),
-        is.vector(parametric),
-        length(foldChange) == 1,
-        length(featureSel) == 1,
-        length(groupedFoldChange) == 1,
-        length(parametric) == 1,
-        is.character(pAdj),
-        is.vector(pAdj),
-        length(pAdj) == 1)
+    stopifnot(.isSingleLogical(foldChange),
+        .isSingleLogical(featureSel),
+        .isSingleLogical(groupedFoldChange),
+        .isSingleLogical(parametric),
+        S4Vectors::isSingleString(pAdj))
 
     if (!(pAdj %in% stats::p.adjust.methods)) {
         stop(paste('pAdj should be one of "holm", "hochberg", "hommel",',

@@ -28,32 +28,13 @@ NULL
 
     # checks on N, nTop, nBottom -----------------------------------------------
 
-    stopifnot(
-        is.numeric(N),
-        is.vector(N),
-        length(N) == 1,
+    stopifnot(.isSingleNumber(N),
         N > 0,
-        N <= 1.0
-    )
-
-    stopifnot(is.numeric(nTop),
-        is.numeric(nBottom),
-        length(nTop) == 1,
-        length(nBottom) == 1,
-        is.vector(nTop),
-        is.vector(nBottom),
-        is.finite(nTop),
-        is.finite(nBottom),
+        N <= 1.0,
+        .isSingleNumber(nTop),
+        .isSingleNumber(nBottom),
         nTop > 0,
         nBottom > 0)
-
-    if (is.nan(nTop) || is.nan(nBottom)) {
-        stop("nTop and nBottom cannot be NaN.")
-    }
-
-    if (is.na(nTop) || is.na(nBottom)) {
-        stop("nTop and nBottom cannot be NA.")
-    }
 
     if ((nTop %% 1 != 0) || (nBottom %% 1 != 0)) {
         stop("nTop and nBottom must be integers.")
@@ -72,36 +53,22 @@ NULL
             "of trainExpData"))
     }
 
-    if (length(trainGroups) == 0) {
-        stop("trainGroups has length 0.")
-    }
-
     if (length(levels(trainGroups))  < 2) {
         stop("trainGroups must contain at least 2 groups")
     }
 
     # checks on neighbors ------------------------------------------------------
 
-    stopifnot(is.numeric(neighbors),
-        is.vector(neighbors),
+    stopifnot(.isSingleNumber(neighbors),
         neighbors > 0,
-        length(neighbors) == 1,
-        is.finite(neighbors),
-        (neighbors %% 1 == 0))
+        neighbors %% 1 == 0)
 
     # check beta, weighted, complete -------------------------------------------
 
-    stopifnot(is.numeric(beta),
-        length(beta) == 1,
-        is.vector(beta),
-        beta > 0)
-
-    stopifnot(is.logical(weighted),
-        is.logical(complete),
-        is.vector(weighted),
-        is.vector(complete),
-        length(weighted) == 1,
-        length(complete) == 1)
+    stopifnot(.isSingleNumber(beta),
+        beta > 0,
+        .isSingleLogical(weighted),
+        .isSingleLogical(complete))
 
     # check other parameters, use placeholder for groupedFoldChange ------------
 
