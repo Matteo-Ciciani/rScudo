@@ -4,19 +4,15 @@
 \alias{scudoCytoscape}
 \title{Create a Cytoscape network from the output of scudoNetwork}
 \usage{
-scudoCytoscape(graph, title = NULL, collection = "SCUDO",
-    base.url = NULL)
+scudoCytoscape(graph, title = NULL, collection = "SCUDO")
 }
 \arguments{
 \item{graph}{object of class \code{\link[igraph:aaa-igraph-package]{igraph}},
 like the result of \code{\link{scudoNetwork}}}
 
-\item{title}{the title of the network. If NULL it defaults to
-\code{deparse(substitute(graph))}}
+\item{title}{the title of the network}
 
 \item{collection}{the name of the Cytoscape collection}
-
-\item{base.url}{see \code{\link[RCy3]{createNetworkFromIgraph}}}
 }
 \value{
 The network SUID (an integer).

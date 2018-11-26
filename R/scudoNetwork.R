@@ -91,10 +91,7 @@ setMethod("scudoNetwork", signature = "ScudoResults", definition =
     function(object, N, colors) {
 
         # input checks
-        stopifnot(
-            is.numeric(N),
-            is.vector(N),
-            length(N) == 1,
+        stopifnot(.isSingleNumber(N),
             N > 0,
             N <= 1.0,
             is.character(colors),

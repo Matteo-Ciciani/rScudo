@@ -13,9 +13,10 @@ scudoTest(trainScudoRes, testExpData, testGroups = NULL, nTop = NULL,
 training model}
 
 \item{testExpData}{either an
-\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}} or a data.frame or
-a matrix of gene expression data, with a column for each sample and a row
-for each feature}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{
+SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
+with a column for each sample and a row for each feature}
 
 \item{testGroups}{factor containing group labels for each sample in
 \code{testExpData}}

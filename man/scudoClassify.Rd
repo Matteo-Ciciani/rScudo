@@ -11,14 +11,16 @@ scudoClassify(trainExpData, testExpData, N, nTop, nBottom,
 }
 \arguments{
 \item{trainExpData}{either an
-\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
-matrix of gene expression data, with a column for each sample and a row for
-each feature, to be used as a training set}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{
+SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
+with a column for each sample and a row for each feature}
 
 \item{testExpData}{either an
-\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
-matrix of gene expression data, with a column for each sample and a row for
-each feature, to be used as a testing set}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{
+SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
+with a column for each sample and a row for each feature}
 
 \item{N}{a number between 0 and 1, representing the fraction of the
 signature-to-signature distances that will be used to draw the graph}

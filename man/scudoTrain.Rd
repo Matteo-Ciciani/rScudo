@@ -10,9 +10,10 @@ scudoTrain(expressionData, groups, nTop, nBottom, alpha = 0.1,
 }
 \arguments{
 \item{expressionData}{either an
-\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a data.frame or a
-matrix of gene expression data, with a column for each sample and a row for
-each feature}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{
+SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
+with a column for each sample and a row for each feature}
 
 \item{groups}{factor containing group labels for each sample in
 \code{expressionData}}

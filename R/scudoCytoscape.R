@@ -7,8 +7,7 @@ NULL
 #' \code{\link{scudoNetwork}} in Cytoscape 3. Cytoscape must be open before
 #' running this function.
 #'
-#' @usage scudoCytoscape(graph, title = NULL, collection = "SCUDO",
-#'     base.url = NULL)
+#' @usage scudoCytoscape(graph, title = "Scudo Graph", collection = "SCUDO")
 #'
 #' @param graph object of class \code{\link[igraph:aaa-igraph-package]{igraph}},
 #' like the result of \code{\link{scudoNetwork}}
@@ -49,7 +48,7 @@ scudoCytoscape <- function(graph, title = "Scudo Graph", collection = "SCUDO") {
     }
 
     stopifnot(
-        S4vectors::isSingleStirng(title),
+        S4Vectors::isSingleString(title),
         S4Vectors::isSingleString(collection)
     )
 
