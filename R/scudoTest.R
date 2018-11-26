@@ -95,12 +95,7 @@ scudoTest <- function(trainScudoRes, testExpData, testGroups = NULL,
 
     # InputCheck ---------------------------------------------------------------
 
-    if (is(testExpData, "ExpressionSet")) {
-        testExpData <- as.data.frame(Biobase::exprs(testExpData))
-    }
-    if (is(testExpData, "matrix")) {
-        testExpData <- as.data.frame(testExpData)
-    }
+    testExpData <- .inputConverter(testExpData)
 
     if (is(trainScudoRes, "ScudoResults")) {
         if (is.null(nTop)) nTop <- scudoParams(trainScudoRes)$nTop

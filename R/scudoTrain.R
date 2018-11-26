@@ -170,12 +170,7 @@ scudoTrain <- function(expressionData, groups, nTop, nBottom, alpha = 0.1,
     foldChange = TRUE, groupedFoldChange = FALSE, featureSel = TRUE,
     logTransformed = NULL, parametric = FALSE, pAdj = "none", distFun = NULL) {
 
-    if (is(expressionData, "ExpressionSet")) {
-        expressionData <- as.data.frame(Biobase::exprs(expressionData))
-    }
-    if (is(expressionData, "matrix")) {
-        expressionData <- as.data.frame(expressionData)
-    }
+    expressionData <- .inputConverter(expressionData)
 
     .inputCheck(expressionData, groups, nTop, nBottom, alpha, foldChange,
         groupedFoldChange, featureSel, logTransformed, parametric,
