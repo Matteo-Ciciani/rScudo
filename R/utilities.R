@@ -12,39 +12,52 @@ NULL
     }
     if (is(expressionData, "SummarizedExperiment")) {
         if (length(SummarizedExperiment::assays(expressionData)) > 1) {
-            warning(paste(expressionData, "contains multiple assays datasets,",
+            warning(paste("Input data contains multiple assays datasets,",
                 "just the first one will be considered."))
         }
         expressionData <- as.data.frame(
             SummarizedExperiment::assays(expressionData)[[1]])
     }
+
+    if (!all(vapply(expressionData, is.numeric, logical(1)))) {
+        stop("Input data contains some non-numeric data")
+    }
+
+    if (any(is.na(expressionData))) {
+        stop("Input data contains NAs")
+    }
+
     expressionData
 }
-# .inputCheck ------------------------------------------------------------------
+
+# .inputCheck helpers ----------------------------------------------------------
 
 .isSingleLogical <- function(x) {
     is.logical(x) && length(x) == 1L && !is.na(x) && is.vector(x)
 }
 
-.isSingleNumber <- function(x) {
-    S4Vectors::isSingleNumber(x) && is.finite(x) && is.vector(x)
+.isSinglePositiveNumber <- function(x) {
+    S4Vectors::isSingleNumber(x) && is.finite(x) && is.vector(x) && x > 0
 }
+
+.isSinglePositiveInteger <- function(x) {
+    .isSinglePositiveNumber(x) && isTRUE(all.equal(x %% 1, 0))
+}
+
+.isValidDistFun <- function(x) {
+    is.null(x) || (is.function(x) && length(formals(x)) == 3)
+}
+
+.isValidInputVector <- function(x, f) {
+    f <- Vectorize(f)
+    is.vector(x) && length(x) >= 1 && all(f(x))
+}
+
+# input checks -----------------------------------------------------------------
 
 .inputCheck <- function(expressionData, groups, nTop, nBottom, alpha,
     foldChange, groupedFoldChange, featureSel, logTransformed, parametric, pAdj,
     distFun) {
-
-    # checks on expressionData
-
-    stopifnot(is.data.frame(expressionData))
-
-    if (!all(vapply(expressionData, is.numeric, logical(1)))) {
-        stop("expressionData contains some non-numeric data")
-    }
-
-    if (any(is.na(expressionData))) {
-        stop(paste(deparse(substitute(expressionData)), "contains NAs."))
-    }
 
     # checks on groups
 
@@ -59,14 +72,8 @@ NULL
 
     # checks on nTop and nBottom
 
-    stopifnot(.isSingleNumber(nTop),
-        .isSingleNumber(nBottom),
-        nTop > 0,
-        nBottom > 0)
-
-    if ((nTop %% 1 != 0) | (nBottom %% 1 != 0)) {
-        stop("nTop and nBottom must be integers.")
-    }
+    stopifnot(.isSinglePositiveInteger(nTop),
+        .isSinglePositiveInteger(nBottom))
 
     if ((nTop + nBottom) > dim(expressionData)[1]) {
         stop(paste("top and bottom signatures overlap, expressionData has",
@@ -82,8 +89,7 @@ NULL
 .checkParams <- function(alpha, foldChange, groupedFoldChange, featureSel,
     logTransformed, parametric, pAdj, distFun) {
 
-    stopifnot(.isSingleNumber(alpha),
-        alpha > 0,
+    stopifnot(.isSinglePositiveNumber(alpha),
         alpha <= 1)
 
     if (!is.null(logTransformed)) {
@@ -104,12 +110,9 @@ NULL
 
     # check on distFun
 
-    if (!is.null(distFun)){
-        stopifnot(is.function(distFun))
-        if (length(formals(distFun)) != 3) {
-            stop(paste('distFun should take as input three arguments:',
-                'expressionData, nTop, nBottom'))
-        }
+    if (!.isValidDistFun(distFun)){
+        stop(paste('distFun should take as input three arguments:',
+            'expressionData, nTop, nBottom'))
     }
 }
 
@@ -406,68 +409,20 @@ NULL
 .modelInputCheck <- function(nTop, nBottom, N, maxDist, weighted, complete,
     beta, distFun) {
 
-    #check N, nTop and nBottom
+    # check N, nTop, nBottom, maxDist, beta, weighted and complete
 
-    stopifnot(is.numeric(N),
-        is.vector(N),
-        length(N) >= 1,
-        all(N > 0),
-        all(N <= 1.0)
-    )
+    validInput <- all(unlist(BiocGenerics::Map(.isValidInputVector,
+        list(N, nTop, nBottom, maxDist, weighted, complete, beta),
+        c(.isSinglePositiveNumber, .isSinglePositiveInteger,
+            .isSinglePositiveInteger, .isSinglePositiveInteger,
+            .isSingleLogical, .isSingleLogical, .isSinglePositiveNumber))))
 
-    stopifnot(is.numeric(nTop),
-        is.numeric(nBottom),
-        length(nTop) >= 1,
-        length(nBottom) >= 1,
-        is.vector(nTop),
-        is.vector(nBottom),
-        all(is.finite(nTop)),
-        all(is.finite(nBottom)),
-        all(nTop > 0),
-        all(nBottom > 0))
-
-    if (any(is.nan(nTop)) || any(is.nan(nBottom))) {
-        stop("nTop and nBottom cannot be NaN.")
-    }
-
-    if (any(is.na(nTop)) || any(is.na(nBottom))) {
-        stop("nTop and nBottom cannot be NA.")
-    }
-
-    if (any(nTop %% 1 != 0) || any(nBottom %% 1 != 0)) {
-        stop("nTop and nBottom must be integers.")
-    }
-
-    # checks on maxDist
-
-    stopifnot(is.numeric(maxDist),
-        is.vector(maxDist),
-        all(maxDist > 0),
-        length(maxDist) >= 1,
-        all(is.finite(maxDist)),
-        all(maxDist %% 1 == 0))
-
-    # check beta, weighted, complete
-
-    stopifnot(is.numeric(beta),
-        length(beta) >= 1,
-        is.vector(beta),
-        all(beta > 0))
-
-    stopifnot(is.logical(weighted),
-        is.logical(complete),
-        is.vector(weighted),
-        is.vector(complete),
-        length(weighted) >= 1,
-        length(complete) >= 1)
+    if(!validInput && all(N <= 1.0)) stop("Invalid values in input vectors")
 
     # check distFun
 
-    if (!is.null(distFun)){
-        stopifnot(is.function(distFun))
-        if (length(formals(distFun)) != 3) {
-            stop(paste('distFun should take as input three arguments:',
-                'expressionData, nTop, nBottom'))
-        }
+    if (!.isValidDistFun(distFun)){
+        stop(paste('distFun should take as input three arguments:',
+            'expressionData, nTop, nBottom'))
     }
 }

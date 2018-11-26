@@ -156,7 +156,7 @@ scudoClassify <- function(trainExpData, testExpData, N, nTop, nBottom,
     trainExpData <- .inputConverter(trainExpData)
     testExpData <- .inputConverter(testExpData)
 
-    .classifyInputCheck(trainExpData, testExpData, N, nTop, nBottom,
+    .classifyInputCheck(trainExpData, N, nTop, nBottom,
         trainGroups, maxDist, weighted, complete, beta, alpha, foldChange,
         featureSel, logTransformed, parametric, pAdj, distFun)
 

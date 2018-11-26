@@ -1,44 +1,16 @@
 #' @include utilities.R
 NULL
 
-.classifyInputCheck <- function(trainExpData, testExpData, N, nTop, nBottom,
+.classifyInputCheck <- function(trainExpData, N, nTop, nBottom,
     trainGroups, neighbors, weighted, complete, beta, alpha, foldChange,
     featureSel, logTransformed,  parametric, pAdj, distFun) {
 
-    # checks on expressionData -------------------------------------------------
-
-    stopifnot(is.data.frame(trainExpData) &
-        is.data.frame(testExpData))
-
-    if (!all(vapply(trainExpData, is.numeric, logical(1)))) {
-        stop("trainExpData contains some non-numeric data.")
-    }
-
-    if(!all(vapply(testExpData, is.numeric, logical(1)))) {
-        stop("testExpData contains some non-numeric data.")
-    }
-
-    if (any(is.na(trainExpData))) {
-        stop("rainExpData contains NAs.")
-    }
-
-    if (any(is.na(testExpData))) {
-        stop("testExpData contains NAs")
-    }
-
     # checks on N, nTop, nBottom -----------------------------------------------
 
-    stopifnot(.isSingleNumber(N),
-        N > 0,
+    stopifnot(.isSinglePositiveNumber(N),
         N <= 1.0,
-        .isSingleNumber(nTop),
-        .isSingleNumber(nBottom),
-        nTop > 0,
-        nBottom > 0)
-
-    if ((nTop %% 1 != 0) || (nBottom %% 1 != 0)) {
-        stop("nTop and nBottom must be integers.")
-    }
+        .isSinglePositiveInteger(nTop),
+        .isSinglePositiveInteger(nBottom))
 
     # checks on trainGroups, testGroups ----------------------------------------
 
@@ -57,16 +29,10 @@ NULL
         stop("trainGroups must contain at least 2 groups")
     }
 
-    # checks on neighbors ------------------------------------------------------
+    # check neighbors, beta, weighted, complete --------------------------------
 
-    stopifnot(.isSingleNumber(neighbors),
-        neighbors > 0,
-        neighbors %% 1 == 0)
-
-    # check beta, weighted, complete -------------------------------------------
-
-    stopifnot(.isSingleNumber(beta),
-        beta > 0,
+    stopifnot(.isSinglePositiveInteger(neighbors),
+        .isSinglePositiveNumber(beta),
         .isSingleLogical(weighted),
         .isSingleLogical(complete))
 

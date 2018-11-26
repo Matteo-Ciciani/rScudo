@@ -4,7 +4,7 @@
 \alias{scudoCytoscape}
 \title{Create a Cytoscape network from the output of scudoNetwork}
 \usage{
-scudoCytoscape(graph, title = NULL, collection = "SCUDO")
+scudoCytoscape(graph, title = "Scudo Graph", collection = "SCUDO")
 }
 \arguments{
 \item{graph}{object of class \code{\link[igraph:aaa-igraph-package]{igraph}},

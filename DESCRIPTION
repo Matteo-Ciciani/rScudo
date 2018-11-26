@@ -47,7 +47,8 @@ Imports: methods,
     grDevices,
     Biobase,
     S4Vectors,
-    SummarizedExperiment
+    SummarizedExperiment,
+    BiocGenerics
 Suggests: testthat,
     BiocStyle,
     knitr,
