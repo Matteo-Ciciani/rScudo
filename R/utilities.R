@@ -59,6 +59,13 @@ NULL
     foldChange, groupedFoldChange, featureSel, logTransformed, parametric, pAdj,
     distFun) {
 
+    # check expressionData names
+
+    expColnames <- colnames(expressionData)
+    if (length(expColnames) != length(unique(expColnames))) {
+        stop("Sample names must be unique")
+    }
+
     # checks on groups
 
     stopifnot(is.factor(groups))

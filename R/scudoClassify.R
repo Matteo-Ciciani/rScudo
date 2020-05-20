@@ -59,13 +59,15 @@ NULL
 #' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
 #' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{
 #' SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
-#' with a column for each sample and a row for each feature
+#' with a column for each sample and a row for each feature. Sample names must
+#' be unique
 #'
 #' @param testExpData either an
 #' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}, a
 #' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{
 #' SummarizedExperiment}}, a data.frame or a matrix of gene expression data,
-#' with a column for each sample and a row for each feature
+#' with a column for each sample and a row for each feature. Sample names must
+#' be unique
 #'
 #' @param N a number between 0 and 1, representing the fraction of the
 #' signature-to-signature distances that will be used to draw the graph

@@ -31,6 +31,13 @@ test_that("scudoTrain raises errors on wrong inputs", {
                          b = rep(1,10),
                          c = rep(30,10),
                          d = rep(30,10))
+    colnames(exData)[4] <- "a"
+    expect_error(scudoTrain(exData, gr1, 1, 3, 0.1))
+
+    exData <- data.frame(a = rep(1,10),
+                         b = rep(1,10),
+                         c = rep(30,10),
+                         d = rep(30,10))
 
     # Test on group errors -----------------------------------------------------
 
