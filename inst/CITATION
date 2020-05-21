@@ -1,4 +1,4 @@
-citHeader("To cite lubridate in publications use:")
+citHeader("To cite rScudo in publications use:")
 
 citEntry(entry = "Article",
   title        = "Rank-based transcriptional signatures",
@@ -11,9 +11,28 @@ citEntry(entry = "Article",
   url          = "https://www.tandfonline.com/doi/abs/10.4161/sysb.25982",
 
   textVersion  =
-  paste("Mario Lauria.",
+  paste("Lauria M.",
         "Rank-based transcriptional signatures.",
         "Systems Biomedicine. 2013; 1(4):228-239.",
         "URL https://www.tandfonline.com/doi/abs/10.4161/sysb.25982")
 )
 
+citEntry(entry = "Article",
+  author       = personList(as.person("Matteo Ciciani"), as.person("Thomas Cantore"), as.person("Mario Lauria")),
+  title        = "rScudo: an R package for classification of molecular profiles using rank-based signatures",
+  journal      = "Bioinformatics",
+  year         = "2019",
+  month        = "05",
+  issn         = "1367-4803",
+  doi          = "10.1093/bioinformatics/btaa296",
+  url          = "https://doi.org/10.1093/bioinformatics/btaa296",
+  note         = "btaa296",
+  eprint       = "https://academic.oup.com/bioinformatics/advance-article-pdf/doi/10.1093/bioinformatics/btaa296/33207965/btaa296.pdf",
+
+  textVersion  =
+  paste("Ciciani M, Cantore T, Lauria M.",
+  "rScudo: an R package for classification of molecular profiles using rank-based signatures.",
+  "Bioinformatics. 2019 May 12:btaa296. doi: 10.1093/bioinformatics/btaa296.",
+  "Epub ahead of print.")
+
+)
