@@ -38,6 +38,7 @@ test_that("scudoTrain raises errors on wrong inputs", {
                          b = rep(1,10),
                          c = rep(30,10),
                          d = rep(30,10))
+    rownames(exData) <- letters[5:14]
 
     # Test on group errors -----------------------------------------------------
 
