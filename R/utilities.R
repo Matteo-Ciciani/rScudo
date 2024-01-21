@@ -384,7 +384,7 @@ NULL
 
     # generate graph using graph_from_adjacency_matrix
     result <- igraph::graph_from_adjacency_matrix(adjMatrix,
-        mode = "undirected", diag = FALSE)
+        mode = "max", diag = FALSE)
 
     # add distances
     igraph::E(result)$distance <- dMatrix[as.logical(adjMatrix)
